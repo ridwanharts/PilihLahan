@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <dimen name="size_card_home">150dp</dimen>
+  <dimen name="size_parent_linear_card_home">158dp</dimen>
+</resources>

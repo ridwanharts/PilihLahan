@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "349294115955",
+    "firebase_url": "https://carilahan-1e2dc.firebaseio.com",
+    "project_id": "carilahan-1e2dc",
+    "storage_bucket": "carilahan-1e2dc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:349294115955:android:cabaf140b8f926cacbbe06",
+        "android_client_info": {
+          "package_name": "com.labs.jangkriek.carilahan"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "349294115955-3aovgcbr4ln3gpalr1iclr4isgmq9qv2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.labs.jangkriek.carilahan",
+            "certificate_hash": "62b962f6ce232898004dcb0207be2499e6cc0a62"
+          }
+        },
+        {
+          "client_id": "349294115955-fh2aofufajpj2ddqlq7nv39frnebvhv3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCvER7nen70kmgrQIslUx7qLrrok6jemXI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "349294115955-fh2aofufajpj2ddqlq7nv39frnebvhv3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

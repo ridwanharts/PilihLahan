@@ -1,0 +1,608 @@
+Index: app/src/main/java/com/labs/jangkriek/carilahan/Coba/DatabaseHelper.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/labs/jangkriek/carilahan/Coba/DatabaseHelper.java	(date 1568090894224)
++++ app/src/main/java/com/labs/jangkriek/carilahan/Coba/DatabaseHelper.java	(date 1568090894224)
+@@ -0,0 +1,137 @@
++package com.labs.jangkriek.carilahan.Coba;
++
++import android.content.ContentValues;
++import android.content.Context;
++import android.database.Cursor;
++import android.database.sqlite.SQLiteDatabase;
++import android.database.sqlite.SQLiteOpenHelper;
++import com.labs.jangkriek.carilahan.Lokasi;
++import java.util.ArrayList;
++import java.util.List;
++
++public class DatabaseHelper extends SQLiteOpenHelper {
++
++    private static final int DATABASE_VERSION = 1;
++
++    private static final String DATABASE_NAME = "latlong_db";
++
++    public DatabaseHelper(Context context) {
++        super(context, DATABASE_NAME, null, DATABASE_VERSION);
++    }
++
++    @Override
++    public void onCreate(SQLiteDatabase db) {
++
++        db.execSQL(LatitudeLongitude.CREATE_TABLE);
++    }
++
++    @Override
++    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
++        db.execSQL("DROP TABLE IF EXISTS " + LatitudeLongitude.TABLE_NAME);
++        onCreate(db);
++    }
++
++    public long insertLokasi(int ID) {
++        // get writable database as we want to write data
++
++        SQLiteDatabase db = this.getWritableDatabase();
++
++        ContentValues values = new ContentValues();
++        // `id` and `timestamp` will be inserted automatically.
++        // no need to add them
++        values.put(LatitudeLongitude.KOLOM_ID, ID);
++
++        // insert row
++        long id = db.insert(LatitudeLongitude.TABLE_NAME, null, values);
++
++        // close db connection
++        db.close();
++
++        // return newly inserted row id
++        return id;
++    }
++
++    public LatitudeLongitude getLatLong(long id) {
++        // get readable database as we are not inserting anything
++        SQLiteDatabase db = this.getReadableDatabase();
++
++        Cursor cursor = db.query(LatitudeLongitude.TABLE_NAME,
++                new String[]{LatitudeLongitude.KOLOM_ID, LatitudeLongitude.KOLOM_LATITUDE, LatitudeLongitude.KOLOM_LONGITUDE},
++                LatitudeLongitude.KOLOM_ID + "=?",
++                new String[]{String.valueOf(id)}, null, null, null, null);
++
++        if (cursor != null)
++            cursor.moveToFirst();
++
++        // prepare note object
++        LatitudeLongitude latlong = new LatitudeLongitude(
++                cursor.getInt(cursor.getColumnIndex(LatitudeLongitude.KOLOM_ID)),
++                cursor.getDouble(cursor.getColumnIndex(LatitudeLongitude.KOLOM_LONGITUDE)),
++                cursor.getDouble(cursor.getColumnIndex(LatitudeLongitude.KOLOM_LATITUDE)));
++
++        // close the db connection
++        cursor.close();
++
++        return latlong;
++    }
++
++    public List<LatitudeLongitude> getAllLokasi() {
++        List<LatitudeLongitude> latlongs = new ArrayList<>();
++
++        // Select All Query
++        String selectQuery = "SELECT  * FROM " + LatitudeLongitude.TABLE_NAME + " ORDER BY " +
++                LatitudeLongitude.KOLOM_ID + " DESC";
++
++        SQLiteDatabase db = this.getWritableDatabase();
++        Cursor cursor = db.rawQuery(selectQuery, null);
++
++        // looping through all rows and adding to list
++        if (cursor.moveToFirst()) {
++            do {
++                LatitudeLongitude latlong = new LatitudeLongitude();
++                latlong.setId(cursor.getInt(cursor.getColumnIndex(Lokasi.KOLOM_ID)));
++                latlong.setLongitude(cursor.getDouble(cursor.getColumnIndex(Lokasi.KOLOM_LONGITUDE)));
++                latlong.setLatitude(cursor.getDouble(cursor.getColumnIndex(Lokasi.KOLOM_LATITUDE)));
++
++                latlongs.add(latlong);
++            } while (cursor.moveToNext());
++        }
++
++        // close db connection
++        db.close();
++
++        // return notes list
++        return latlongs;
++    }
++
++    public int getLokasiCount() {
++        String countQuery = "SELECT  * FROM " + LatitudeLongitude.TABLE_NAME;
++        SQLiteDatabase db = this.getReadableDatabase();
++        Cursor cursor = db.rawQuery(countQuery, null);
++
++        int count = cursor.getCount();
++        cursor.close();
++
++        // return count
++        return count;
++    }
++
++    //update nama lokasi
++    public int updateLokasi(LatitudeLongitude latlong) {
++        SQLiteDatabase db = this.getWritableDatabase();
++
++        ContentValues values = new ContentValues();
++        values.put(LatitudeLongitude.KOLOM_ID, latlong.getId());
++
++        // updating row
++        return db.update(LatitudeLongitude.TABLE_NAME, values, LatitudeLongitude.KOLOM_ID + " = ?",
++                new String[]{String.valueOf(latlong.getId())});
++    }
++
++    public void deleteLokasi(LatitudeLongitude latlong) {
++        SQLiteDatabase db = this.getWritableDatabase();
++        db.delete(LatitudeLongitude.TABLE_NAME,LatitudeLongitude.KOLOM_ID + " = ?",
++                new String[]{String.valueOf(latlong.getId())});
++        db.close();
++    }
++}
+Index: app/src/main/java/com/labs/jangkriek/carilahan/RecyclerViewOnMapActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/labs/jangkriek/carilahan/RecyclerViewOnMapActivity.java	(revision 00a6e519159067d589fd76b51af46cd899fbe450)
++++ app/src/main/java/com/labs/jangkriek/carilahan/RecyclerViewOnMapActivity.java	(date 1568150917036)
+@@ -36,6 +36,9 @@
+ import com.getbase.floatingactionbutton.FloatingActionButton;
+ import com.labs.jangkriek.carilahan.Adapter.LocationLahan;
+ import com.labs.jangkriek.carilahan.Adapter.LocationLahanAdapter;
++import com.labs.jangkriek.carilahan.Coba.DatabaseHelper;
++import com.labs.jangkriek.carilahan.Coba.LLAdapter;
++import com.labs.jangkriek.carilahan.Coba.LatitudeLongitude;
+ import com.mapbox.geojson.Feature;
+ import com.mapbox.geojson.FeatureCollection;
+ import com.mapbox.geojson.Point;
+@@ -72,17 +75,19 @@
+     public MapboxMap mapboxMap;
+     private MapView mapView;
+     private FeatureCollection featureCollection;
+-    DbHelper dbHelper;
+-    SQLiteDatabase database;
+     private FloatingActionButton fabOpAddLocation, showArea, showMarker;
+ 
+     private LokasiAdapter mAdapter;
++    private LLAdapter llAdapter;
++
+     private List<Lokasi> lokasiList = new ArrayList<>();
+-    private CoordinatorLayout coordinatorLayout;
++    private List<LatitudeLongitude> latitudeLongitude = new ArrayList<>();
++
+     private RecyclerView recyclerView;
+-    private TextView noNotesView;
++    private RecyclerView rvLatLong;
+ 
+     private DbHelper db;
++    private DatabaseHelper databaseHelper;
+ 
+     private ValueAnimator valueAnimator;
+     private LatLng currentPos = new LatLng(-7.905, 110.06);
+@@ -127,34 +132,12 @@
+             }
+         });
+ 
+-        //coordinatorLayout = findViewById(R.id.coordinator_layout);
+-        recyclerView = findViewById(R.id.rv_list_lokasi);
+-        //noNotesView = findViewById(R.id.empty_notes_view);
+         db = new DbHelper(this);
+ 
+         lokasiList.addAll(db.getAllLokasi());
+ 
+-        mAdapter = new LokasiAdapter(this, lokasiList);
+-        recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false));
+-        recyclerView.setItemAnimator(new ScaleInAnimator());
+-        recyclerView.setAdapter(mAdapter);
+-        SnapHelper snapHelper = new LinearSnapHelper();
+-        //snapHelper.attachToRecyclerView(recyclerView);
+-
+         toggleEmptyNotes();
+ 
+-        recyclerView.addOnItemTouchListener(new RecyclerTouchListener(this,
+-                recyclerView, new RecyclerTouchListener.ClickListener() {
+-            @Override
+-            public void onClick(View view, final int position) {
+-            }
+-
+-            @Override
+-            public void onLongClick(View view, int position) {
+-                showActionsDialog(position);
+-            }
+-        }));
+-
+     }
+ 
+     @Override
+@@ -170,20 +153,11 @@
+                 initMarkerIcons(style);
+                 //initRecyclerView();
+                 //Toast.makeText(RecyclerViewOnMapActivity.this, R.string.toast_instruction, Toast.LENGTH_SHORT).show();
+-                Drawable drawable = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_place, null);
+-                Bitmap bitmap = BitmapUtils.getBitmapFromDrawable(drawable);
+ 
+-                style.addImage(("marker_icon"), bitmap);
+-                style.addSource(geoJsonSource);
+-                style.addLayer(new SymbolLayer("layer-id", "source-id")
+-                        .withProperties(
+-                                iconImage("marker_icon"),
+-                                PropertyFactory.iconIgnorePlacement(true),
+-                                iconAllowOverlap(true)
+-                        ));
++                initRecyclerviewLatlong();
++                showRedMarker(style);
+ 
+-                mapboxMap.addOnMapClickListener(RecyclerViewOnMapActivity.this);
+-                RecyclerViewOnMapActivity.this.style = style;
++
+             }
+         });
+     }
+@@ -370,51 +344,6 @@
+         }
+     }
+ 
+-    // Add the mapView lifecycle to the activity's lifecycle methods
+-    @Override
+-    public void onResume() {
+-        super.onResume();
+-        mapView.onResume();
+-    }
+-
+-    @Override
+-    protected void onStart() {
+-        super.onStart();
+-
+-        mapView.onStart();
+-    }
+-
+-    @Override
+-    protected void onStop() {
+-        super.onStop();
+-        mapView.onStop();
+-    }
+-
+-    @Override
+-    public void onPause() {
+-        super.onPause();
+-
+-        mapView.onPause();
+-    }
+-
+-    @Override
+-    public void onLowMemory() {
+-        super.onLowMemory();
+-        mapView.onLowMemory();
+-    }
+-
+-    @Override
+-    protected void onDestroy() {
+-        super.onDestroy();
+-        mapView.onDestroy();
+-    }
+-
+-    @Override
+-    protected void onSaveInstanceState(Bundle outState) {
+-        super.onSaveInstanceState(outState);
+-        mapView.onSaveInstanceState(outState);
+-    }
+-
+     @Override
+     public boolean onMapClick(@NonNull LatLng point) {
+         if (!style.isFullyLoaded()) {
+@@ -487,4 +416,88 @@
+                     geoJsonSource.setGeoJson(Point.fromLngLat(animatedPosition.getLongitude(), animatedPosition.getLatitude()));
+                 }
+             };
++
++    public void showRedMarker(Style styleRed){
++        Drawable drawable = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_place, null);
++        Bitmap bitmap = BitmapUtils.getBitmapFromDrawable(drawable);
++
++        styleRed.addImage(("marker_icon"), bitmap);
++        styleRed.addSource(geoJsonSource);
++        styleRed.addLayer(new SymbolLayer("layer-id", "source-id")
++                .withProperties(
++                        iconImage("marker_icon"),
++                        PropertyFactory.iconIgnorePlacement(true),
++                        iconAllowOverlap(true)
++                ));
++
++        mapboxMap.addOnMapClickListener(RecyclerViewOnMapActivity.this);
++        RecyclerViewOnMapActivity.this.style = styleRed;
++    }
++
++    public void initRecyclerviewLatlong(){
++        recyclerView = findViewById(R.id.rv_list_lokasi);
++        mAdapter = new LokasiAdapter(this, lokasiList);
++        recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false));
++        recyclerView.setItemAnimator(new ScaleInAnimator());
++        recyclerView.setAdapter(mAdapter);
++        SnapHelper snapHelper = new LinearSnapHelper();
++        //snapHelper.attachToRecyclerView(recyclerView);
++
++        recyclerView.addOnItemTouchListener(new RecyclerTouchListener(this,
++                recyclerView, new RecyclerTouchListener.ClickListener() {
++            @Override
++            public void onClick(View view, final int position) {
++            }
++
++            @Override
++            public void onLongClick(View view, int position) {
++                showActionsDialog(position);
++            }
++        }));
++    }
++
++    // Add the mapView lifecycle to the activity's lifecycle methods
++    @Override
++    public void onResume() {
++        super.onResume();
++        mapView.onResume();
++    }
++
++    @Override
++    protected void onStart() {
++        super.onStart();
++
++        mapView.onStart();
++    }
++
++    @Override
++    protected void onStop() {
++        super.onStop();
++        mapView.onStop();
++    }
++
++    @Override
++    public void onPause() {
++        super.onPause();
++
++        mapView.onPause();
++    }
++
++    @Override
++    public void onLowMemory() {
++        super.onLowMemory();
++        mapView.onLowMemory();
++    }
++
++    @Override
++    protected void onDestroy() {
++        super.onDestroy();
++        mapView.onDestroy();
++    }
++
++    @Override
++    protected void onSaveInstanceState(Bundle outState) {
++        super.onSaveInstanceState(outState);
++        mapView.onSaveInstanceState(outState);
++    }
+ }
+\ No newline at end of file
+Index: app/src/main/java/com/labs/jangkriek/carilahan/Coba/LatitudeLongitude.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/labs/jangkriek/carilahan/Coba/LatitudeLongitude.java	(date 1568090894070)
++++ app/src/main/java/com/labs/jangkriek/carilahan/Coba/LatitudeLongitude.java	(date 1568090894070)
+@@ -0,0 +1,56 @@
++package com.labs.jangkriek.carilahan.Coba;
++
++public class LatitudeLongitude {
++
++    public static final String TABLE_NAME = "latlong";
++
++    public static final String KOLOM_ID = "id";
++    public static final String KOLOM_LONGITUDE = "longitude";
++    public static final String KOLOM_LATITUDE= "latitude";
++
++    private int id;
++    private Double longitude;
++    private Double latitude;
++
++    public static final String CREATE_TABLE =
++            "CREATE TABLE " + TABLE_NAME + "("
++                    + KOLOM_ID +" INTEGER PRIMARY KEY AUTOINCREMENT,"
++
++                    + KOLOM_LONGITUDE +" DOUBLE,"
++                    + KOLOM_LATITUDE +" DOUBLE"
++                    + ")";
++
++    public LatitudeLongitude (){
++
++    }
++    public int getId() {
++        return id;
++    }
++
++    public void setId(int id) {
++        this.id = id;
++    }
++
++    public LatitudeLongitude(int id, double longitude, double latitude){
++        this.id = id;
++        this.longitude = longitude;
++        this.latitude = latitude;
++    }
++
++    public Double getLongitude() {
++        return longitude;
++    }
++
++    public void setLongitude(Double longitude) {
++        this.longitude = longitude;
++    }
++
++    public Double getLatitude() {
++        return latitude;
++    }
++
++    public void setLatitude(Double latitude) {
++        this.latitude = latitude;
++    }
++
++}
+Index: app/src/main/java/com/labs/jangkriek/carilahan/Coba/LLAdapter.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/labs/jangkriek/carilahan/Coba/LLAdapter.java	(date 1568089057588)
++++ app/src/main/java/com/labs/jangkriek/carilahan/Coba/LLAdapter.java	(date 1568089057588)
+@@ -0,0 +1,66 @@
++package com.labs.jangkriek.carilahan.Coba;
++
++import android.content.Context;
++import android.text.Html;
++import android.view.LayoutInflater;
++import android.view.View;
++import android.view.ViewGroup;
++import android.widget.TextView;
++
++import androidx.recyclerview.widget.RecyclerView;
++
++import com.labs.jangkriek.carilahan.Lokasi;
++import com.labs.jangkriek.carilahan.R;
++
++import java.text.ParseException;
++import java.text.SimpleDateFormat;
++import java.util.Date;
++import java.util.List;
++
++public class LLAdapter extends RecyclerView.Adapter<LLAdapter.MyViewHolder> {
++
++    private Context context;
++    private List<LatitudeLongitude> llList;
++
++    public class MyViewHolder extends RecyclerView.ViewHolder {
++        public TextView latitude;
++        public TextView longitude;
++        public TextView id;
++
++        public MyViewHolder(View view) {
++            super(view);
++            latitude = view.findViewById(R.id.latitude_ll);
++            longitude = view.findViewById(R.id.longitude_ll);
++            id = view.findViewById(R.id.id_ll);
++        }
++    }
++
++    public LLAdapter(Context context, List<LatitudeLongitude> notesList) {
++        this.context = context;
++        this.llList = notesList;
++    }
++
++    @Override
++    public LLAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
++        View itemView = LayoutInflater.from(parent.getContext())
++                .inflate(R.layout.item_list_latlong, parent, false);
++
++        return new LLAdapter.MyViewHolder(itemView);
++    }
++
++    @Override
++    public void onBindViewHolder(LLAdapter.MyViewHolder holder, int position) {
++        LatitudeLongitude v = llList.get(position);
++
++        holder.id.setText(v.getId());
++        holder.latitude.setText(v.getLatitude()+"");
++        holder.longitude.setText(v.getLongitude()+"");
++
++    }
++
++    @Override
++    public int getItemCount() {
++        return llList.size();
++    }
++
++}
+Index: app/src/main/res/layout/activity_recycler_view_on_map.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/activity_recycler_view_on_map.xml	(revision 00a6e519159067d589fd76b51af46cd899fbe450)
++++ app/src/main/res/layout/activity_recycler_view_on_map.xml	(date 1568089057565)
+@@ -73,19 +73,23 @@
+ 	  android:layout_height="wrap_content"
+ 	  android:layout_marginTop="16dp" />
+ 
++	<androidx.recyclerview.widget.RecyclerView
++	  android:layout_below="@+id/rv_on_top_of_map"
++	  android:id="@+id/rv_latlong"
++	  android:layout_width="match_parent"
++	  android:layout_height="wrap_content"
++	  android:layout_marginTop="16dp" />
++
+ 	<androidx.recyclerview.widget.RecyclerView
+ 	  android:id="@+id/rv_list_lokasi"
+ 	  android:layout_width="match_parent"
+ 	  android:layout_height="wrap_content"
+ 	  android:layout_marginTop="10dp"
+ 	  android:orientation="horizontal"
+-	  android:layout_below="@+id/rv_on_top_of_map"/>
++	  android:layout_below="@+id/rv_latlong"/>
+ 
+   </RelativeLayout>
+ 
+-
+-	android:layout_marginTop="16dp" />
+-
+   <com.getbase.floatingactionbutton.FloatingActionsMenu
+ 	android:id="@+id/menu_options_map"
+ 	android:layout_width="wrap_content"
+Index: app/src/main/res/layout/item_list_latlong.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/item_list_latlong.xml	(date 1568089057530)
++++ app/src/main/res/layout/item_list_latlong.xml	(date 1568089057530)
+@@ -0,0 +1,39 @@
++<?xml version="1.0" encoding="utf-8"?>
++<androidx.cardview.widget.CardView
++  xmlns:android="http://schemas.android.com/apk/res/android"
++  android:layout_width="200dp"
++  android:layout_height="wrap_content"
++  android:id="@+id/single_location_cardview"
++  android:layout_marginEnd="8dp"
++  android:layout_marginLeft="8dp"
++  android:layout_marginRight="8dp"
++  android:layout_marginStart="8dp"
++  android:layout_marginTop="8dp">
++
++  <LinearLayout
++	android:layout_width="match_parent"
++	android:layout_height="wrap_content"
++	android:gravity="center_horizontal"
++	android:orientation="vertical">
++
++	<TextView
++	  android:id="@+id/id_ll"
++	  android:layout_width="match_parent"
++	  android:layout_marginTop="8dp"
++	  android:layout_height="wrap_content"/>
++
++	<TextView
++	  android:id="@+id/latitude_ll"
++	  android:layout_width="match_parent"
++	  android:layout_marginTop="8dp"
++	  android:layout_marginBottom="8dp"
++	  android:layout_height="wrap_content"/>
++
++	<TextView
++	  android:id="@+id/longitude_ll"
++	  android:layout_marginBottom="8dp"
++	  android:layout_width="match_parent"
++	  android:layout_height="wrap_content"/>
++  </LinearLayout>
++
++</androidx.cardview.widget.CardView>
+\ No newline at end of file

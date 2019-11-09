@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  xmlns:mapbox="http://schemas.android.com/apk/res-auto"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:background="@color/bgColor"
+  tools:context=".Activity.DetailHistoryActivity">
+
+  <LinearLayout
+	android:id="@+id/linear_input_2"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:layout_marginStart="5dp"
+	android:layout_marginEnd="5dp"
+	android:weightSum="1"
+	android:orientation="vertical">
+
+	<androidx.recyclerview.widget.RecyclerView
+	  android:layout_width="match_parent"
+	  android:layout_height="match_parent"
+	  android:id="@+id/rv_list_saved_lokasi_detil"
+	  android:layout_weight="0.1">
+
+	</androidx.recyclerview.widget.RecyclerView>
+
+	<Button
+	  android:id="@+id/btn_new_search_detil"
+	  android:layout_width="match_parent"
+	  android:layout_height="match_parent"
+	  android:layout_margin="10dp"
+	  android:layout_weight="0.9"
+	  android:background="@drawable/custom_button_blue"
+	  android:textColor="@color/mapboxWhite"
+	  android:gravity="center"
+	  android:text="Kembali" />
+  </LinearLayout>
+
+</RelativeLayout>

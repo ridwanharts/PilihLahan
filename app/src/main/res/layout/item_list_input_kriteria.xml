@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:weightSum="1"
+  android:layout_marginLeft="5dp"
+  android:layout_marginRight="5dp"
+  android:gravity="center_vertical"
+  android:background="@color/mapboxWhite"
+  android:orientation="horizontal">
+
+  <RelativeLayout
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:layout_weight="0.15">
+
+	<LinearLayout
+	  android:layout_width="match_parent"
+	  android:layout_height="wrap_content"
+	  android:orientation="horizontal"
+	  android:gravity="center"
+	  android:id="@+id/linear_input_1">
+
+	  <TextView
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginRight="5dp"
+		android:text="" />
+
+	  <TextView
+		android:id="@+id/kriteria1"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginRight="5dp"
+		android:text="1" />
+
+	  <TextView
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginRight="5dp"
+		android:text=":"/>
+
+	  <TextView
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="" />
+
+	  <TextView
+		android:id="@+id/kriteria2"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginLeft="3dp"
+		android:text="2" />
+
+	  <TextView
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginLeft="5dp"
+		android:id="@+id/nilai_kriteria"
+		android:text="0.0"
+		android:visibility="invisible"/>
+
+	</LinearLayout>
+
+	<LinearLayout
+	  android:layout_width="match_parent"
+	  android:layout_height="match_parent"
+	  android:layout_below="@+id/linear_input_1"
+	  android:gravity="center">
+	  <androidx.appcompat.widget.AppCompatSeekBar
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginStart="10dp"
+		android:layout_marginEnd="10dp"
+		android:id="@+id/seekbar"
+		android:max="19"
+		android:progress="10"/>
+
+
+	</LinearLayout>
+
+  </RelativeLayout>
+
+
+  <RelativeLayout
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:layout_weight="0.85">
+	<EditText
+	  android:layout_width="match_parent"
+	  android:layout_height="wrap_content"
+	  android:layout_alignParentEnd="true"
+	  android:inputType="numberDecimal"
+	  android:textAppearance="@style/TextAppearance.AppCompat.Small"
+	  android:gravity="center_horizontal"
+	  android:id="@+id/et_nilai_input"/>
+  </RelativeLayout>
+
+
+
+</LinearLayout>

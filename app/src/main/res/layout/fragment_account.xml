@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  xmlns:mapbox="http://schemas.android.com/apk/res-auto"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  tools:context=".mainViewFragment.AccountFragment">
+
+  <!-- TODO: Update blank fragment layout -->
+  <TextView
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:text="@string/account" />
+
+  <com.mapbox.mapboxsdk.maps.MapView
+	android:id="@+id/map_view3"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	mapbox:mapbox_cameraTargetLat="-7.905"
+	mapbox:mapbox_cameraTargetLng="110.06"
+	mapbox:mapbox_cameraZoom="12"
+	tools:layout_editor_absoluteX="130dp"
+	tools:layout_editor_absoluteY="125dp">
+
+  </com.mapbox.mapboxsdk.maps.MapView>
+
+  <com.getbase.floatingactionbutton.FloatingActionsMenu
+	android:id="@+id/multiple_actions_parent_fab"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content"
+	android:layout_alignParentEnd="true"
+	android:layout_alignParentBottom="true"
+	android:layout_margin="16dp"
+	app:fab_addButtonColorNormal="@color/mapboxRed"
+	app:fab_addButtonColorPressed="@color/mapboxWhite"
+	app:fab_addButtonPlusIconColor="@color/mapboxWhite"
+	app:fab_labelStyle="@style/menu_labels_style">
+
+	<com.getbase.floatingactionbutton.FloatingActionButton
+	  android:id="@+id/set_style"
+	  android:layout_width="wrap_content"
+	  android:layout_height="wrap_content"
+	  app:fab_colorNormal="@color/mapboxOrange"
+	  app:fab_colorPressed="@color/mapboxWhite"
+	  app:fab_size="mini"
+	  app:fab_title="Draw"/>
+
+	<com.getbase.floatingactionbutton.FloatingActionButton
+	  android:id="@+id/show_area"
+	  android:layout_width="wrap_content"
+	  android:layout_height="wrap_content"
+	  app:fab_colorNormal="@color/mapboxBlue"
+	  app:fab_colorPressed="@color/mapboxWhite"
+	  app:fab_size="mini"
+	  app:fab_title="Clear"/>
+
+	<com.getbase.floatingactionbutton.FloatingActionButton
+	  android:id="@+id/logout"
+	  android:layout_width="wrap_content"
+	  android:layout_height="wrap_content"
+	  app:fab_colorNormal="@color/mapboxGreen"
+	  app:fab_colorPressed="@color/mapboxWhite"
+	  app:fab_size="mini"
+	  app:fab_title="Logout"/>
+
+  </com.getbase.floatingactionbutton.FloatingActionsMenu>
+
+</RelativeLayout>

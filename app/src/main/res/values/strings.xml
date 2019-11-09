@@ -1,0 +1,24 @@
+<resources>
+  <string name="app_name">Cari Lahan</string>
+  <string name="tap_on_map_instruction">map</string>
+  <string name="access_token">pk.eyJ1Ijoicmlkd2FuaGFydHMiLCJhIjoiY2p5ZjdqaTV6MTlnYjNkazRsNTVvNmx2cCJ9.RLoW3ysoOOIxmPu_9N93_A</string>
+  <string name="rv_card_name">Location #%1$d</string>
+  <string name="rv_card_bed_info">This location has %1$d beds</string>
+
+  <string name="title_activity_splashscreen">SplashscreenActivity</string>
+  <string name="dummy_button">Dummy Button</string>
+  <string name="dummy_content">DUMMY\nCONTENT</string>
+  <string name="home">Home</string>
+  <string name="map">Map</string>
+  <string name="account">Account</string>
+  <string name="building_layer_not_present">This map style doesn\'t have a building layer</string>
+  <string name="move_map_around_building_out_instruction">Move map to place red dot on a building</string>
+
+  <!-- TODO: Remove or change this placeholder text -->
+  <string name="hello_blank_fragment">Hello blank fragment</string>
+
+  <string name="pref_file">com.labs.preference_file</string>
+  <string name="pref_login_status">com.labs.preference_login_status</string>
+  <string name="pref_username">com.labs.preference_username</string>
+
+</resources>

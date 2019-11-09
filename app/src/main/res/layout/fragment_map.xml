@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:mapbox="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  xmlns:fab="http://schemas.android.com/apk/res-auto"
+  tools:context=".mainViewFragment.MapFragment">
+
+  <RelativeLayout
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
+
+	<TextView
+	  android:layout_width="match_parent"
+	  android:layout_height="match_parent"
+	  android:text="MAP" />
+
+	<com.google.android.material.floatingactionbutton.FloatingActionButton
+	  android:id="@+id/change_map_style"
+	  android:layout_width="64dp"
+	  android:layout_height="64dp"
+	  android:layout_alignParentStart="true"
+	  android:layout_alignParentBottom="true"
+	  android:layout_marginStart="12dp"
+	  android:layout_marginBottom="24dp"
+	  android:clickable="true"
+	  android:focusable="true"
+	  app:maxImageSize="32dp"
+	  mapbox:srcCompat="@drawable/ic_layers" />
+
+	<com.google.android.material.floatingactionbutton.FloatingActionButton
+	  android:id="@+id/layer_kecamatan"
+	  android:layout_width="64dp"
+	  android:layout_height="64dp"
+	  android:layout_alignParentStart="true"
+	  android:layout_alignParentBottom="true"
+	  android:layout_marginStart="24dp"
+	  android:layout_marginBottom="100dp"
+	  android:clickable="true"
+	  android:focusable="true"
+	  app:backgroundTint="#2196F3"
+	  app:maxImageSize="32dp"
+	  mapbox:srcCompat="@drawable/ic_layers" />
+
+
+
+	<com.mapbox.mapboxsdk.maps.MapView
+	  android:id="@+id/map_view"
+	  android:layout_width="match_parent"
+	  android:layout_height="match_parent"
+	  mapbox:mapbox_cameraTargetLat="-7.905"
+	  mapbox:mapbox_cameraTargetLng="110.06"
+	  mapbox:mapbox_cameraZoom="12"
+	  tools:layout_editor_absoluteX="130dp"
+	  tools:layout_editor_absoluteY="125dp">
+
+	</com.mapbox.mapboxsdk.maps.MapView>
+
+  </RelativeLayout>
+
+</FrameLayout>

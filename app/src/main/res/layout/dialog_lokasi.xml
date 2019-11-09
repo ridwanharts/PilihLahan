@@ -1,0 +1,407 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:orientation="vertical"
+  android:paddingLeft="8dp"
+  android:paddingRight="8dp"
+  android:paddingTop="8dp"
+  android:paddingBottom="8dp">
+
+  <LinearLayout
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:orientation="horizontal"
+	android:weightSum="1"
+	android:layout_marginBottom="5dp">
+
+	<TextView android:id="@+id/dialog_title"
+	  android:layout_width="match_parent"
+	  android:layout_height="wrap_content"
+	  android:fontFamily="sans-serif-medium"
+	  android:lineSpacingExtra="8sp"
+	  android:text="Nama Lokasi : "
+	  android:textColor="@color/colorAccent"
+	  android:textSize="14sp"
+	  android:textStyle="normal"
+	  android:layout_weight="0.7"
+	  android:gravity="start"
+	  android:layout_marginEnd="10dp"/>
+
+	<EditText
+	  android:id="@+id/et_nama_lokasi"
+	  android:layout_width="match_parent"
+	  android:layout_height="wrap_content"
+	  android:layout_weight="0.3"
+	  android:gravity="bottom"
+	  android:textColor="#000000"
+	  android:hint="Nama Lokasi"
+	  android:textSize="14sp" />
+
+
+
+  </LinearLayout>
+
+  <!--LATITUDE-->
+  <LinearLayout
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:orientation="horizontal"
+	android:layout_marginBottom="5dp"
+	android:weightSum="1"
+	android:gravity="bottom"
+	android:id="@+id/linear_edit_latitude">
+
+	<TextView
+	  android:layout_width="match_parent"
+	  android:layout_height="wrap_content"
+	  android:fontFamily="sans-serif-medium"
+	  android:lineSpacingExtra="8sp"
+	  android:text="Latitude : "
+	  android:textColor="@color/colorAccent"
+	  android:textSize="14sp"
+	  android:textStyle="normal"
+	  android:gravity="start"
+	  android:layout_marginEnd="10dp"
+	  android:layout_weight="0.7"/>
+
+	<TextView
+	  android:id="@+id/et_latitude"
+	  android:layout_width="match_parent"
+	  android:layout_height="wrap_content"
+	  android:gravity="start"
+	  android:textColor="@color/colorPrimary"
+	  android:hint="Latitude"
+	  android:textSize="14sp"
+	  android:layout_weight="0.3"/>
+
+  </LinearLayout>
+
+  <!--longitude-->
+  <LinearLayout
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:orientation="horizontal"
+	android:layout_marginBottom="5dp"
+	android:weightSum="1"
+	android:gravity="bottom"
+	android:id="@+id/linear_edit_longitude">
+
+	<TextView
+	  android:layout_width="match_parent"
+	  android:layout_height="wrap_content"
+	  android:fontFamily="sans-serif-medium"
+	  android:lineSpacingExtra="8sp"
+	  android:text="Longitude : "
+	  android:textColor="@color/colorAccent"
+	  android:textSize="14sp"
+	  android:textStyle="normal"
+	  android:gravity="start"
+	  android:layout_marginEnd="10dp"
+	  android:layout_weight="0.7"/>
+
+	<TextView
+	  android:id="@+id/et_longitude"
+	  android:layout_width="match_parent"
+	  android:layout_height="wrap_content"
+	  android:textColor="@color/colorPrimary"
+	  android:gravity="start"
+	  android:hint="Longitude"
+	  android:textSize="14sp"
+	  android:layout_weight="0.3"/>
+
+  </LinearLayout>
+
+  <LinearLayout
+	android:layout_width="match_parent"
+	android:layout_height="32dp"
+	android:orientation="horizontal"
+	android:layout_marginBottom="5dp"
+	android:weightSum="1"
+	android:gravity="bottom">
+
+	<TextView
+	  android:layout_width="match_parent"
+	  android:layout_height="wrap_content"
+	  android:fontFamily="sans-serif-medium"
+	  android:lineSpacingExtra="8sp"
+	  android:text="Unggah gambar lokasi... "
+	  android:textColor="@color/colorAccent"
+	  android:textSize="14sp"
+	  android:textStyle="normal"
+	  android:gravity="start"
+	  android:layout_marginEnd="10dp"
+	  android:layout_weight="0.2"/>
+
+	<RelativeLayout
+	  android:layout_width="match_parent"
+	  android:layout_height="wrap_content"
+	  android:background="@drawable/rect_blue"
+	  android:layout_weight="0.8">
+
+	  <ImageButton
+		android:layout_width="24dp"
+		android:layout_height="24dp"
+		android:layout_centerInParent="true"
+		android:id="@+id/iv_upload_lokasi"
+		android:background="@drawable/ic_file_upload"/>
+
+	</RelativeLayout>
+
+
+  </LinearLayout>
+
+  <LinearLayout
+	android:layout_width="match_parent"
+	android:layout_height="2dp"
+	android:layout_marginBottom="8dp"
+	android:background="@color/colorPrimary">
+
+  </LinearLayout>
+
+	<LinearLayout
+	  android:layout_width="match_parent"
+	  android:layout_height="wrap_content"
+	  android:orientation="horizontal"
+	  android:layout_marginBottom="2dp"
+	  android:weightSum="1"
+	  android:id="@+id/linear_edit_dd_tanah">
+
+	  <TextView
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:lineSpacingExtra="8sp"
+		android:text="Daya Dukung Tanah : "
+		android:textColor="@color/colorAccent"
+		android:textSize="12sp"
+		android:textStyle="normal"
+		android:gravity="start"
+		android:layout_marginEnd="10dp"
+		android:layout_weight="0.55"/>
+
+	  <EditText
+		android:id="@+id/et_dd_tanah"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:gravity="start"
+		android:inputType="numberDecimal"
+		android:paddingStart="10dp"
+		android:hint="0.00"
+		android:textColor="@color/colorPrimary"
+		android:textSize="12sp"
+		android:layout_weight="0.45"/>
+
+	</LinearLayout>
+
+	<LinearLayout
+	  android:layout_width="match_parent"
+	  android:layout_height="wrap_content"
+	  android:orientation="horizontal"
+	  android:layout_marginBottom="5dp"
+	  android:weightSum="1"
+	  android:gravity="bottom"
+	  android:id="@+id/linear_edit_k_air">
+
+	  <TextView
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:lineSpacingExtra="8sp"
+		android:text="Ketersediaan Air : "
+		android:textColor="@color/colorAccent"
+		android:textSize="12sp"
+		android:textStyle="normal"
+		android:gravity="start"
+		android:layout_marginEnd="10dp"
+		android:layout_weight="0.55"/>
+
+	  <EditText
+		android:id="@+id/et_k_air"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:gravity="start"
+		android:inputType="numberDecimal"
+		android:hint="0.00"
+		android:paddingStart="10dp"
+		android:textColor="@color/colorPrimary"
+		android:textSize="12sp"
+		android:layout_weight="0.45"/>
+
+	</LinearLayout>
+
+	<LinearLayout
+	  android:layout_width="match_parent"
+	  android:layout_height="wrap_content"
+	  android:orientation="horizontal"
+	  android:layout_marginBottom="2dp"
+	  android:weightSum="1"
+	  android:gravity="bottom"
+	  android:id="@+id/linear_edit_k_lereng">
+
+	  <TextView
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:lineSpacingExtra="8sp"
+		android:text="Kemiringan Lereng : "
+		android:textColor="@color/colorAccent"
+		android:textSize="12sp"
+		android:textStyle="normal"
+		android:gravity="start"
+		android:layout_marginEnd="10dp"
+		android:layout_weight="0.55"/>
+
+	  <EditText
+		android:id="@+id/et_k_lereng"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:gravity="start"
+		android:inputType="numberDecimal"
+		android:hint="0.00"
+		android:paddingStart="10dp"
+		android:textColor="@color/colorPrimary"
+		android:textSize="12sp"
+		android:layout_weight="0.45"/>
+
+	</LinearLayout>
+
+	<LinearLayout
+	  android:layout_width="match_parent"
+	  android:layout_height="wrap_content"
+	  android:orientation="horizontal"
+	  android:layout_marginBottom="2dp"
+	  android:weightSum="1"
+	  android:gravity="bottom"
+	  android:id="@+id/linear_edit_aksebilitas">
+
+	  <TextView
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:lineSpacingExtra="8sp"
+		android:text="Aksebilitas : "
+		android:textColor="@color/colorAccent"
+		android:textSize="12sp"
+		android:textStyle="normal"
+		android:gravity="start"
+		android:layout_marginEnd="10dp"
+		android:layout_weight="0.55"/>
+
+	  <EditText
+		android:id="@+id/et_aksebilitas"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:gravity="start"
+		android:inputType="numberDecimal"
+		android:hint="0.00"
+		android:paddingStart="10dp"
+		android:textColor="@color/colorPrimary"
+		android:textSize="12sp"
+		android:layout_weight="0.45"/>
+
+	</LinearLayout>
+
+	<LinearLayout
+	  android:layout_width="match_parent"
+	  android:layout_height="wrap_content"
+	  android:orientation="horizontal"
+	  android:layout_marginBottom="2dp"
+	  android:weightSum="1"
+	  android:gravity="bottom"
+	  android:id="@+id/linear_edit_p_lahan">
+
+	  <TextView
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:lineSpacingExtra="8sp"
+		android:text="Perubahan Lahan : "
+		android:textColor="@color/colorAccent"
+		android:textSize="12sp"
+		android:textStyle="normal"
+		android:gravity="start"
+		android:layout_marginEnd="10dp"
+		android:layout_weight="0.55"/>
+
+	  <EditText
+		android:id="@+id/et_p_lahan"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:gravity="start"
+		android:inputType="numberDecimal"
+		android:hint="0.00"
+		android:paddingStart="10dp"
+		android:textColor="@color/colorPrimary"
+		android:textSize="12sp"
+		android:layout_weight="0.45"/>
+
+	</LinearLayout>
+
+	<LinearLayout
+	  android:layout_width="match_parent"
+	  android:layout_height="wrap_content"
+	  android:orientation="horizontal"
+	  android:layout_marginBottom="2dp"
+	  android:weightSum="1"
+	  android:gravity="bottom"
+	  android:id="@+id/linear_edit_k_bencana">
+
+	  <TextView
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:lineSpacingExtra="8sp"
+		android:text="Kerawanan Bencana : "
+		android:textColor="@color/colorAccent"
+		android:textSize="12sp"
+		android:textStyle="normal"
+		android:gravity="start"
+		android:layout_marginEnd="10dp"
+		android:layout_weight="0.55"/>
+
+	  <EditText
+		android:id="@+id/et_k_bencana"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:gravity="start"
+		android:inputType="numberDecimal"
+		android:hint="0.00"
+		android:paddingStart="10dp"
+		android:textColor="@color/colorPrimary"
+		android:textSize="12sp"
+		android:layout_weight="0.45"/>
+
+	</LinearLayout>
+
+	<LinearLayout
+	  android:layout_width="match_parent"
+	  android:layout_height="wrap_content"
+	  android:orientation="horizontal"
+	  android:layout_marginBottom="2dp"
+	  android:weightSum="1"
+	  android:gravity="bottom"
+	  android:id="@+id/linear_edit_j_bandara">
+
+	  <TextView
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:lineSpacingExtra="8sp"
+		android:text="Jarak ke Bandara : "
+		android:textColor="@color/colorAccent"
+		android:textSize="12sp"
+		android:textStyle="normal"
+		android:gravity="start"
+		android:layout_marginEnd="10dp"
+		android:layout_weight="0.55"/>
+
+	  <EditText
+		android:id="@+id/et_j_bandara"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:gravity="start"
+		android:inputType="numberDecimal"
+		android:hint="0.00"
+		android:paddingStart="10dp"
+		android:textColor="@color/colorPrimary"
+		android:textSize="12sp"
+		android:layout_weight="0.45"/>
+
+	</LinearLayout>
+
+</LinearLayout>

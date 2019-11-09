@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  xmlns:mapbox="http://schemas.android.com/apk/res-auto"
+  android:orientation="vertical"
+
+  tools:context=".Activity.RankingActivity">
+
+  <com.mapbox.mapboxsdk.maps.MapView
+	android:id="@+id/map_view_rank"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	mapbox:mapbox_cameraTargetLat="-7.894720"
+	mapbox:mapbox_cameraTargetLng="110.117703"
+	mapbox:mapbox_cameraZoom="15" />
+
+  <RelativeLayout
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:layout_marginTop="8dp"
+	android:layout_marginStart="8dp"
+	android:layout_marginEnd="8dp">
+
+  <TextView
+	android:layout_width="match_parent"
+	android:textColor="@color/colorPrimary"
+	android:layout_height="wrap_content"
+	android:id="@+id/tvBoolean"/>
+
+  <TextView
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:textColor="@color/colorPrimary"
+	android:id="@+id/tvNilai"
+	android:layout_below="@+id/tvBoolean"/>
+
+  <androidx.recyclerview.widget.RecyclerView
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:id="@+id/rv_list_rank_lokasi"
+	android:layout_marginTop="5dp"
+	android:layout_marginBottom="50dp"
+	android:layout_below="@+id/tvNilai">
+
+  </androidx.recyclerview.widget.RecyclerView>
+
+  <LinearLayout
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:padding="5dp"
+	android:layout_marginBottom="15dp"
+	android:gravity="center_horizontal"
+	android:layout_alignParentBottom="true">
+
+	<Button
+	  android:layout_width="match_parent"
+	  android:layout_height="wrap_content"
+	  android:text="Save"
+	  android:padding="15dp"
+	  android:layout_marginStart="20dp"
+	  android:layout_marginEnd="20dp"
+	  android:clickable="true"
+	  android:textColor="@color/mapboxWhite"
+	  android:background="@drawable/custom_button_blueriple"
+	  android:id="@+id/btn_save_hasil"
+	  android:focusable="true" />
+
+  </LinearLayout>
+
+  </RelativeLayout>
+</RelativeLayout>

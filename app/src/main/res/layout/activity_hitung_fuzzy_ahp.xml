@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:background="@color/bgColor"
+  tools:context=".Activity.PilihKriteria">
+
+	<LinearLayout
+	  android:id="@+id/linear_layout_perbandingan"
+	  android:layout_width="match_parent"
+	  android:layout_height="wrap_content"
+	  android:layout_marginStart="3dp"
+	  android:layout_marginTop="8dp"
+	  android:orientation="vertical">
+
+	  <RelativeLayout
+		android:id="@+id/relative_tfn"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginBottom="8dp"
+		android:layout_marginTop="8dp"
+		android:layout_below="@+id/linear_layout_skalalamda">
+
+		<Button
+		  android:id="@+id/btn_matriks_tfn"
+		  android:layout_width="match_parent"
+		  android:layout_height="wrap_content"
+		  android:layout_marginStart="20dp"
+		  android:layout_marginEnd="20dp"
+		  android:background="@drawable/custom_button_blueriple"
+		  android:textColor="@color/mapboxWhite"
+		  android:text="Hitung Matriks TFN" />
+
+		<ScrollView
+		  android:layout_width="match_parent"
+		  android:layout_height="350dp"
+		  android:layout_below="@id/btn_matriks_tfn"
+		  android:layout_marginTop="20dp"
+		  android:padding="8dp">
+
+		  <LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:orientation="vertical">
+
+			<TextView
+			  android:id="@+id/judul_matrik_tfn"
+			  android:layout_width="wrap_content"
+			  android:layout_height="wrap_content"
+			  android:layout_below="@+id/btn_matriks_tfn"
+			  android:layout_marginTop="8dp"
+			  android:layout_marginBottom="4dp"
+			  android:text="Hasil Bilangan Fuzzy"
+			  android:textStyle="bold" />
+
+			<TextView
+			  android:id="@+id/hasil_tfn"
+			  android:layout_width="match_parent"
+			  android:layout_height="wrap_content"
+			  android:layout_below="@+id/judul_matrik_tfn"
+			  android:textAlignment="viewStart"
+			  android:layout_marginTop="10dp"
+			  android:text="" />
+
+			<TextView
+			  android:id="@+id/jumlah_hasil_tfn"
+			  android:layout_width="match_parent"
+			  android:layout_height="wrap_content"
+			  android:layout_below="@+id/hasil_tfn"
+			  android:layout_marginTop="10dp"
+			  android:text="" />
+
+			<TextView
+			  android:id="@+id/nilai_s"
+			  android:layout_width="match_parent"
+			  android:layout_height="wrap_content"
+			  android:layout_below="@+id/jumlah_hasil_tfn"
+			  android:layout_marginTop="10dp"
+			  android:text="" />
+
+			<TextView
+			  android:id="@+id/nilai_kemungkinan"
+			  android:layout_width="match_parent"
+			  android:layout_height="wrap_content"
+			  android:layout_below="@+id/nilai_s"
+			  android:layout_marginTop="10dp"
+			  android:text="" />
+
+			<TextView
+			  android:id="@+id/nilai_minimum_s"
+			  android:layout_width="match_parent"
+			  android:layout_height="wrap_content"
+			  android:layout_below="@+id/nilai_s"
+			  android:layout_marginTop="10dp"
+			  android:text="" />
+
+			<TextView
+			  android:id="@+id/hasil_normalisasi"
+			  android:layout_width="match_parent"
+			  android:layout_height="wrap_content"
+			  android:layout_below="@+id/nilai_minimum_s"
+			  android:text="" />
+
+		  </LinearLayout>
+
+
+		</ScrollView>
+
+
+
+	  </RelativeLayout>
+
+	</LinearLayout>
+
+  <Button
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:id="@+id/btn_rank"
+	android:layout_margin="20dp"
+	android:text="RANKING"
+	android:textColor="@color/mapboxWhite"
+	android:background="@drawable/custom_button_blueriple"
+	android:layout_alignParentBottom="true"/>
+
+</RelativeLayout>

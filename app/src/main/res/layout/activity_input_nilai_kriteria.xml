@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:padding="3dp"
+  tools:context=".Activity.InputNilaiKriteriaActivity">
+
+  <RelativeLayout
+	android:id="@+id/relative_input_atas"
+	android:layout_width="match_parent"
+	android:layout_height="32dp"
+	android:background="@color/mapboxWhite"
+	android:paddingStart="3dp"
+	android:paddingEnd="3dp">
+
+	<ImageView
+	  android:id="@+id/iv_close"
+	  android:layout_width="24dp"
+	  android:layout_height="24dp"
+	  android:layout_centerVertical="true"
+	  android:paddingEnd="5dp"
+	  app:srcCompat="@drawable/ic_close" />
+
+	<TextView
+	  android:layout_width="wrap_content"
+	  android:layout_height="wrap_content"
+	  android:layout_centerInParent="true"
+	  android:text="Input Nilai Kriteria"
+	  android:textAppearance="@style/TextAppearance.AppCompat.Small"
+	  android:textStyle="bold" />
+
+	<TextView
+	  android:layout_width="wrap_content"
+	  android:layout_height="wrap_content"
+	  android:layout_alignParentEnd="true"
+	  android:layout_centerVertical="true"
+	  android:layout_marginEnd="5dp"
+	  android:text="Reset"
+	  android:textAppearance="@style/TextAppearance.AppCompat.Small"
+	  android:textColor="@color/colorPrimary" />
+
+  </RelativeLayout>
+
+  <LinearLayout
+	android:id="@+id/divider_input_1"
+	android:layout_width="match_parent"
+	android:layout_height="2dp"
+	android:layout_below="@+id/relative_input_atas"
+	android:layout_marginLeft="5dp"
+	android:layout_marginRight="5dp"
+	android:layout_marginBottom="3dp"
+	android:background="@color/colorPrimary"
+	android:orientation="horizontal">
+
+  </LinearLayout>
+
+  <LinearLayout
+	android:id="@+id/linear_input_2"
+	android:layout_width="match_parent"
+	android:layout_height="250dp"
+	android:layout_below="@+id/divider_input_1"
+	android:layout_marginStart="5dp"
+	android:layout_marginEnd="5dp"
+	android:orientation="vertical">
+
+	<ListView
+	  android:id="@+id/list_input_kriteria"
+	  android:layout_width="match_parent"
+	  android:layout_height="wrap_content">
+
+	</ListView>
+
+  </LinearLayout>
+
+  <LinearLayout
+	android:id="@+id/divider_input_2"
+	android:layout_width="match_parent"
+	android:layout_height="2dp"
+	android:layout_below="@+id/linear_input_2"
+	android:layout_marginLeft="5dp"
+	android:layout_marginTop="10dp"
+	android:layout_marginRight="5dp"
+	android:background="@color/colorPrimary"
+	android:orientation="horizontal">
+
+  </LinearLayout>
+
+  <ScrollView
+	android:id="@+id/scrollview_input"
+	android:layout_width="match_parent"
+	android:layout_height="30dp"
+	android:layout_below="@+id/divider_input_2"
+	android:layout_marginStart="10dp"
+	android:layout_marginTop="10dp"
+	android:layout_marginEnd="10dp"
+	android:layout_marginBottom="10dp"
+	android:scrollbars="vertical">
+
+	<LinearLayout
+	  android:id="@+id/linear_input_kriteria"
+	  android:layout_width="wrap_content"
+	  android:layout_height="wrap_content"
+	  android:layout_gravity="center_horizontal"
+	  android:orientation="horizontal"
+	  android:weightSum="1">
+
+	  <LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_weight="0.6"
+		android:orientation="horizontal">
+
+		<TextView
+		  android:layout_width="wrap_content"
+		  android:layout_height="wrap_content"
+		  android:text="Lamda Max : "
+		  android:textAppearance="@style/TextAppearance.AppCompat.Small"
+		  android:textStyle="bold" />
+
+		<TextView
+		  android:id="@+id/tv_nilai_lamdamax"
+		  android:layout_width="wrap_content"
+		  android:layout_height="wrap_content"
+		  android:text="0.5"
+		  android:textAppearance="@style/TextAppearance.AppCompat.Small"
+		  android:textStyle="bold" />
+	  </LinearLayout>
+
+	  <LinearLayout
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginStart="10dp"
+		android:layout_weight="0.2"
+		android:orientation="horizontal">
+
+		<TextView
+		  android:layout_width="wrap_content"
+		  android:layout_height="wrap_content"
+		  android:text="CI : "
+		  android:textAppearance="@style/TextAppearance.AppCompat.Small"
+		  android:textStyle="bold" />
+
+		<TextView
+		  android:id="@+id/tv_nilai_ci"
+		  android:layout_width="wrap_content"
+		  android:layout_height="wrap_content"
+		  android:text="0.5"
+		  android:textAppearance="@style/TextAppearance.AppCompat.Small"
+		  android:textStyle="bold" />
+	  </LinearLayout>
+
+	  <LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginStart="10dp"
+		android:layout_weight="0.2"
+		android:orientation="horizontal">
+
+		<TextView
+		  android:layout_width="wrap_content"
+		  android:layout_height="wrap_content"
+		  android:text="CR : "
+		  android:textAppearance="@style/TextAppearance.AppCompat.Small"
+		  android:textStyle="bold" />
+
+		<TextView
+		  android:id="@+id/tv_nilai_cr"
+		  android:layout_width="wrap_content"
+		  android:layout_height="wrap_content"
+		  android:text="0.5"
+		  android:textAppearance="@style/TextAppearance.AppCompat.Small"
+		  android:textStyle="bold" />
+	  </LinearLayout>
+
+	</LinearLayout>
+  </ScrollView>
+
+
+  <RelativeLayout
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:layout_below="@+id/scrollview_input"
+	android:layout_alignParentBottom="true"
+	android:layout_marginBottom="10dp"
+	android:gravity="bottom">
+
+	<LinearLayout
+	  android:id="@+id/linear_input_divider"
+	  android:layout_width="match_parent"
+	  android:layout_height="2dp"
+	  android:layout_marginLeft="5dp"
+	  android:layout_marginRight="5dp"
+	  android:background="@color/colorPrimary"
+	  android:orientation="horizontal">
+
+	</LinearLayout>
+
+	<TextView
+	  android:id="@+id/tv_cek"
+	  android:layout_width="match_parent"
+	  android:layout_height="wrap_content"
+	  android:layout_below="@+id/linear_input_divider"
+	  android:layout_marginTop="2dp"
+	  android:gravity="center_horizontal"
+	  android:text="Konsisten/tidak"
+	  android:textAppearance="@style/TextAppearance.AppCompat.Small"
+	  android:textStyle="bold" />
+
+	<LinearLayout
+	  android:id="@+id/linear_tombolcek"
+	  android:layout_width="match_parent"
+	  android:layout_height="64dp"
+	  android:layout_below="@+id/tv_cek"
+	  android:layout_marginLeft="10dp"
+	  android:layout_marginRight="10dp"
+	  android:gravity="center_vertical|center_horizontal"
+	  android:orientation="horizontal"
+	  android:paddingTop="5dp"
+	  android:paddingBottom="5dp"
+	  android:weightSum="1">
+
+	  <Button
+		android:id="@+id/btn_lihat_tabel"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_weight="0.4"
+		android:background="@drawable/custom_button_blueriple"
+		android:clickable="true"
+		android:focusable="true"
+		android:paddingStart="8dp"
+		android:paddingEnd="8dp"
+		android:text="Lihat Tabel Kriteria"
+		android:textColor="@color/mapboxWhite" />
+
+	  <Button
+		android:id="@+id/btn_cek"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginStart="10dp"
+		android:layout_weight="0.6"
+		android:background="@drawable/custom_button_blueriple"
+		android:clickable="true"
+		android:focusable="true"
+		android:paddingStart="8dp"
+		android:paddingEnd="8dp"
+		android:text="Cek Konsistensi"
+		android:textColor="@color/mapboxWhite" />
+
+	</LinearLayout>
+
+	<LinearLayout
+	  android:id="@+id/linear_prosesfuzzy"
+	  android:layout_width="match_parent"
+	  android:layout_height="wrap_content"
+	  android:layout_below="@+id/linear_tombolcek"
+	  android:gravity="center_vertical|center_horizontal"
+	  android:orientation="horizontal"
+	  android:paddingTop="4dp"
+	  android:paddingBottom="4dp">
+
+	  <Button
+		android:id="@+id/btn_proses_fuzzy"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginLeft="10dp"
+		android:layout_marginRight="10dp"
+		android:background="@drawable/custom_button_blueriple"
+		android:clickable="true"
+		android:focusable="true"
+		android:paddingStart="10dp"
+		android:paddingEnd="10dp"
+		android:text="Process Fuzzy"
+		android:textColor="#ffffff" />
+
+	</LinearLayout>
+
+  </RelativeLayout>
+</RelativeLayout>

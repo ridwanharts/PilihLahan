@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:dist="http://schemas.android.com/apk/distribution"
+  xmlns:tools="http://schemas.android.com/tools"
+  package="com.labs.jangkriek.carilahan">
+  <!-- <dist:module dist:instant="true" /> -->
+  <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+  <uses-permission android:name="android.permission.INTERNET" />
+  <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+  <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+
+  <application
+	android:allowBackup="true"
+	android:icon="@mipmap/ic_launcher"
+	android:label="@string/app_name"
+	android:roundIcon="@mipmap/ic_launcher_round"
+	android:supportsRtl="true"
+	android:theme="@style/AppTheme">
+	<activity android:name=".Activity.DetailLokasiActivity"></activity>
+	<activity
+	  android:name=".Activity.LogInSignUp.SignUpActivity"
+	  android:theme="@style/NoActionBar" />
+	<activity
+	  android:name=".Activity.LogInSignUp.LoginActivity"
+	  android:theme="@style/NoActionBar" />
+	<activity
+	  android:name=".Activity.UserLokasiActivity"
+	  android:theme="@style/NoActionBar" />
+	<activity android:name=".Activity.DetailHistoryActivity" />
+	<activity android:name=".Activity.RankingActivity" />
+	<activity android:name=".Activity.HitungFuzzyAHP" />
+	<activity
+	  android:name=".Activity.InputNilaiKriteriaActivity"
+	  android:theme="@style/NoActionBar" />
+	<activity android:name=".Activity.PilihKriteria" />
+	<activity
+	  android:name=".Activity.MainActivity"
+	  android:theme="@style/NoActionBar" />
+	<activity
+	  android:name=".Activity.SplashscreenActivity"
+	  android:configChanges="orientation|keyboardHidden|screenSize"
+	  android:theme="@style/FullscreenTheme">
+	  <intent-filter>
+		<action android:name="android.intent.action.MAIN" />
+		<action android:name="android.intent.action.VIEW" />
+
+		<category android:name="android.intent.category.DEFAULT" />
+		<category android:name="android.intent.category.LAUNCHER" />
+	  </intent-filter>
+	</activity>
+	<activity android:name=".Activity.LokasiActivity" />
+	<activity android:name=".SymbolActivity" />
+	<activity android:name=".Activity.HistoriActivity" />
+  </application>
+
+</manifest>

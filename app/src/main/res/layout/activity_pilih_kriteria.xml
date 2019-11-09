@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:background="@color/bgColor"
+  tools:context=".Activity.PilihKriteria">
+
+  <RelativeLayout
+	android:id="@+id/relative_layout_select_kriteria"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:layout_marginBottom="10dp"
+	android:orientation="horizontal">
+
+	<LinearLayout
+	  android:layout_width="match_parent"
+	  android:layout_height="wrap_content"
+	  android:orientation="vertical"
+	  android:layout_margin="15dp"
+	  android:id="@+id/linear_cekbox_input">
+	  <CheckBox
+		android:id="@+id/k1_daya_dukung_tanah"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginBottom="8dp"
+		android:text="Daya Dukung Tanah" />
+
+	  <CheckBox
+		android:id="@+id/k2_ketersediaan_air"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginBottom="8dp"
+		android:text="Ketersediaan Air" />
+
+	  <CheckBox
+		android:id="@+id/k3_kemiringan_lereng"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginBottom="8dp"
+		android:text="Kemiringan Lereng" />
+
+	  <CheckBox
+		android:id="@+id/k4_aksebilitas"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginBottom="8dp"
+		android:text="Aksebilitas" />
+
+	  <CheckBox
+		android:id="@+id/k5_perubahan_lahan"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginBottom="8dp"
+		android:text="Perubahan Lahan" />
+
+	  <CheckBox
+		android:id="@+id/k6_kerawanan_bencana"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginBottom="8dp"
+		android:text="Kerawanan Bencana" />
+
+	  <CheckBox
+		android:id="@+id/k7_jarakke_bandara"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginBottom="8dp"
+		android:text="Jarak ke Bandara" />
+
+	</LinearLayout>
+
+	<LinearLayout
+	  android:layout_width="match_parent"
+	  android:layout_height="2dp"
+	  android:layout_marginLeft="5dp"
+	  android:layout_marginRight="5dp"
+	  android:background="@color/colorPrimary"
+	  android:layout_below="@+id/linear_cekbox_input"
+	  android:layout_marginBottom="3dp">
+
+	</LinearLayout>
+
+	<LinearLayout
+	  android:layout_width="match_parent"
+	  android:layout_height="wrap_content"
+	  android:id="@+id/linear_cek_input"
+	  android:orientation="horizontal"
+	  android:layout_marginTop="10dp"
+	  android:layout_below="@+id/linear_cekbox_input"
+	  android:layout_marginStart="10dp"
+	  android:layout_marginEnd="10dp"
+	  android:gravity="center_horizontal">
+
+	  <TextView
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="jumlah input : "
+		android:textStyle="bold"
+		android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
+
+	  <TextView
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="0"
+		android:textStyle="bold"
+		android:id="@+id/tv_jumlahInput"
+		android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
+
+	</LinearLayout>
+
+	<LinearLayout
+	  android:layout_width="match_parent"
+	  android:layout_height="wrap_content"
+	  android:orientation="horizontal"
+	  android:layout_marginTop="5dp"
+	  android:layout_below="@+id/linear_cek_input"
+	  android:layout_marginStart="10dp"
+	  android:layout_marginEnd="10dp"
+	  android:weightSum="1">
+
+	  <Button
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:text="OK"
+		android:textColor="@color/mapboxWhite"
+		android:layout_weight="0.5"
+		android:layout_marginEnd="10dp"
+		android:background="@drawable/custom_button_blueriple"
+		android:id="@+id/btn_ok_input" />
+
+	  <Button
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:text="CANCEL"
+		android:layout_marginStart="10dp"
+		android:layout_weight="0.5"
+		android:textColor="@color/mapboxWhite"
+		android:background="@drawable/custom_button_blueriple"
+		android:id="@+id/btn_cancel_input" />
+
+	</LinearLayout>
+
+
+	<Button
+	  android:layout_width="match_parent"
+	  android:layout_height="wrap_content"
+	  android:text="Input"
+	  android:background="@drawable/custom_button_blueriple"
+	  android:id="@+id/btn_input_activity"
+	  android:layout_alignParentBottom="true"
+	  android:textColor="@color/mapboxWhite"
+	  android:layout_marginStart="20dp"
+	  android:layout_marginEnd="20dp"/>
+
+  </RelativeLayout>
+
+</RelativeLayout>

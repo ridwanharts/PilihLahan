@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:background="@color/mapboxWhite"
+  android:orientation="vertical"
+  tools:context=".Activity.LogInSignUp.SignUpActivity">
+
+  <LinearLayout
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:layout_marginLeft="29dp"
+	android:layout_marginRight="29dp"
+	android:orientation="vertical">
+
+	<TextView
+	  android:layout_width="wrap_content"
+	  android:layout_height="wrap_content"
+	  android:layout_gravity="center"
+	  android:layout_marginTop="96dp"
+	  android:text="Sign Up"
+	  android:textColor="#171717"
+	  android:textSize="32.6sp" />
+
+	<ImageView
+	  android:layout_width="64dp"
+	  android:layout_height="64dp"
+	  android:layout_marginTop="10dp"
+	  android:tint="@color/colorPrimary"
+	  android:layout_gravity="center_horizontal"
+	  app:srcCompat="@drawable/logo" />
+
+	<EditText
+	  android:layout_width="match_parent"
+	  android:layout_height="wrap_content"
+	  android:id="@+id/et_username"
+	  android:layout_marginTop="30dp"
+	  android:background="#00000000"
+	  android:hint="Username"
+	  android:inputType="text"
+	  android:textColor="@color/mapboxBlack"
+	  android:textColorHint="@color/mapboxBlack" />
+
+	<View
+	  android:layout_width="match_parent"
+	  android:layout_height="1dp"
+	  android:layout_marginTop="9dp"
+	  android:background="#b9b9b9" />
+
+	<EditText
+	  android:layout_width="match_parent"
+	  android:layout_height="wrap_content"
+	  android:id="@+id/et_email"
+	  android:layout_marginTop="30dp"
+	  android:background="#00000000"
+	  android:hint="Email Address"
+	  android:inputType="textEmailAddress"
+	  android:textColor="@color/mapboxBlack"
+	  android:textColorHint="@color/mapboxBlack" />
+
+	<View
+	  android:layout_width="match_parent"
+	  android:layout_height="1dp"
+	  android:layout_marginTop="9dp"
+	  android:background="#b9b9b9" />
+
+	<EditText
+	  android:layout_width="match_parent"
+	  android:layout_height="wrap_content"
+	  android:id="@+id/et_password"
+	  android:layout_marginTop="30dp"
+	  android:background="#00000000"
+	  android:hint="Password"
+	  android:inputType="textPassword"
+	  android:maxLength="6"
+	  android:textColor="@color/mapboxBlack"
+	  android:textColorHint="@color/mapboxBlack" />
+
+	<View
+	  android:layout_width="match_parent"
+	  android:layout_height="1dp"
+	  android:layout_marginTop="9dp"
+	  android:background="#b9b9b9" />
+
+	<TextView
+	  android:layout_width="match_parent"
+	  android:layout_height="wrap_content"
+	  android:layout_marginTop="32dp"
+	  android:id="@+id/tv_register"
+	  android:background="@drawable/rect_grayoutline"
+	  android:gravity="center"
+	  android:padding="20dp"
+	  android:text="Register"
+	  android:textColor="@color/mapboxBlack"
+	  android:textSize="15.4sp" />
+
+	<TextView
+	  android:layout_width="wrap_content"
+	  android:layout_height="wrap_content"
+	  android:layout_marginTop="24dp"
+	  android:layout_gravity="center_horizontal"
+	  android:id="@+id/back_login_activity"
+	  android:background="@drawable/rect_blue"
+	  android:gravity="center"
+	  android:paddingTop="20dp"
+	  android:paddingBottom="20dp"
+	  android:paddingRight="40dp"
+	  android:paddingLeft="40dp"
+	  android:text="Back to Login"
+	  android:textColor="@color/mapboxWhite"
+	  android:textSize="15.4sp" />
+
+  </LinearLayout>
+
+</RelativeLayout>
