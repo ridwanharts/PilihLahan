@@ -21,4 +21,17 @@
   <string name="pref_login_status">com.labs.preference_login_status</string>
   <string name="pref_username">com.labs.preference_username</string>
 
+  <string name="K1_DAYA_DUKUNG_TANAH">Daya Dukung Tanah</string>
+  <string name="K2_KETERSEDIAAN_AIR">Ketersediaan Air</string>
+  <string name="K3_KEMIRINGAN_LERENG">Kemiringan Lereng</string>
+  <string name="K4_AKSEBILITAS">Aksebilitas</string>
+  <string name="K5_HARGA_LAHAN">Harga Lahan</string>
+  <string name="K6_KERAWANAN_BENCANA">Kerawanan Bencana</string>
+  <string name="K7_JARAK_KE_BANDARA">Jarak ke Bandara</string>
+
+  <string name="INPUT_OTOMATIS">otomatis</string>
+  <string name="INPUT_MANUAL">manual</string>
+  <string name="INPUT_TIPE">tipe</string>
+
+
 </resources>

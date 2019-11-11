@@ -3,6 +3,7 @@ package com.labs.jangkriek.carilahan.Activity;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
+import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -40,8 +41,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import jp.wasabeef.recyclerview.animators.ScaleInAnimator;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
@@ -165,7 +164,7 @@ public class UserLokasiActivity extends AppCompatActivity implements OnMapReadyC
         lokasiUserAdapter = new LokasiUserAdapter(this, lokasiList, mapboxMap);
         recyclerView = findViewById(R.id.rv_list_user_lokasi);
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext(), RecyclerView.HORIZONTAL, false));
-        recyclerView.setItemAnimator(new ScaleInAnimator());
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(lokasiUserAdapter);
         progressBar.setVisibility(View.GONE);
     }

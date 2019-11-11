@@ -38,6 +38,9 @@ public class InputNilaiKriteriaActivity extends AppCompatActivity {
     double matriksVektorPrioritas [][];
     double matriksHasilVP [];
 
+    private final int OTOMATIS = 301;
+    private final int MANUAL = 303;
+
     boolean cek;
 
     @Override
@@ -109,6 +112,7 @@ public class InputNilaiKriteriaActivity extends AppCompatActivity {
                 Intent i = new Intent(InputNilaiKriteriaActivity.this, HitungFuzzyAHP.class);
                 inisiasiPerbandingan();
                 cek = true;
+                i.putExtra(getString(R.string.INPUT_TIPE), getString(R.string.INPUT_MANUAL));
                 i.putExtra("cek", cek);
                 i.putExtra("k1", k1);
                 i.putExtra("k2", k2);

@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:background="@color/color_bg"
+  android:layout_gravity="top"
+  android:orientation="vertical">
+
+  <LinearLayout
+	android:layout_width="match_parent"
+	android:layout_height="60dp"
+	android:padding="5dp"
+	android:gravity="center"
+	android:orientation="vertical"
+	android:id="@+id/rv_dialog"
+	android:background="@color/colorPrimary">
+
+	<ImageView
+	  android:layout_width="30dp"
+	  android:layout_height="30dp"
+	  android:layout_centerInParent="true"
+	  android:background="@drawable/ic_map" />
+	<TextView
+	  android:layout_width="match_parent"
+	  android:layout_height="match_parent"
+	  android:id="@+id/tv_login_user"
+	  android:gravity="center"
+	  android:layout_marginBottom="3dp"
+	  android:text="Pilih Kriteria"
+	  android:textStyle="bold"
+	  android:textColor="@color/mapboxWhite"
+	  android:textSize="14dp" />
+
+  </LinearLayout>
+
+  <LinearLayout
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:orientation="vertical"
+	android:layout_below="@+id/rv_dialog"
+	android:paddingTop="10dp"
+	android:paddingStart="20dp"
+	android:paddingEnd="20dp">
+
+	<LinearLayout
+	  android:layout_width="match_parent"
+	  android:layout_height="wrap_content"
+	  android:orientation="vertical"
+	  android:layout_margin="5dp"
+	  android:id="@+id/linear_cekbox_input">
+	  <CheckBox
+		android:id="@+id/k1_daya_dukung_tanah"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginBottom="3dp"
+		android:text="Daya Dukung Tanah" />
+
+	  <CheckBox
+		android:id="@+id/k2_ketersediaan_air"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginBottom="3dp"
+		android:text="Ketersediaan Air" />
+
+	  <CheckBox
+		android:id="@+id/k3_kemiringan_lereng"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginBottom="3dp"
+		android:text="Kemiringan Lereng" />
+
+	  <CheckBox
+		android:id="@+id/k4_aksebilitas"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginBottom="3dp"
+		android:text="Aksebilitas" />
+
+	  <CheckBox
+		android:id="@+id/k5_perubahan_lahan"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginBottom="3dp"
+		android:text="Perubahan Lahan" />
+
+	  <CheckBox
+		android:id="@+id/k6_kerawanan_bencana"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginBottom="3dp"
+		android:text="Kerawanan Bencana" />
+
+	  <CheckBox
+		android:id="@+id/k7_jarakke_bandara"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginBottom="3dp"
+		android:text="Jarak ke Bandara" />
+
+	  <TextView
+		android:id="@+id/tv_eror"
+		android:visibility="invisible"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:gravity="start"
+		android:layout_marginStart="5dp"
+		android:text="pilihan kurang dari 3 !!!"
+		android:textStyle="bold"
+		android:textColor="@color/mapboxRed"
+		android:textSize="12dp" />
+
+
+	</LinearLayout>
+
+	<LinearLayout
+	  android:layout_width="match_parent"
+	  android:layout_height="wrap_content"
+	  android:gravity="center"
+	  android:orientation="horizontal">
+
+	  <Button
+		android:id="@+id/btn_ok_otomatis"
+		android:layout_width="150dp"
+		android:layout_height="35dp"
+		android:layout_gravity="center_horizontal"
+		android:layout_marginTop="20dp"
+		android:background="@drawable/custom_button_blueriple"
+		android:text="Otomatis"
+		android:textColor="@color/mapboxWhite" />
+
+	  <Button
+		android:id="@+id/btn_ok_manual"
+		android:layout_width="150dp"
+		android:layout_height="35dp"
+		android:layout_marginStart="10dp"
+		android:layout_gravity="center_horizontal"
+		android:layout_marginTop="20dp"
+		android:background="@drawable/custom_button_blueriple"
+		android:text="Manual"
+		android:textColor="@color/mapboxWhite" />
+
+	</LinearLayout>
+
+
+  </LinearLayout>
+
+</LinearLayout>

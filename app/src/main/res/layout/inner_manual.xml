@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:paddingStart="8dp"
+  android:paddingTop="4dp"
+  android:paddingEnd="8dp">
+
+  <LinearLayout
+	android:id="@+id/linear_tv_prioritas"
+	android:layout_width="match_parent"
+	android:layout_height="50dp"
+	android:weightSum="1"
+	android:orientation="horizontal">
+	<TextView
+	  android:layout_width="match_parent"
+	  android:layout_height="match_parent"
+	  android:layout_weight="0.5"
+	  android:layout_margin="5dp"
+	  android:id="@+id/utama"
+	  android:gravity="center"
+	  android:text="Kriteria Terpilih"
+	  android:textSize="14dp" />
+
+	<TextView
+	  android:visibility="gone"
+	  android:layout_width="match_parent"
+	  android:layout_height="match_parent"
+	  android:layout_weight="0.5"
+	  android:layout_margin="5dp"
+	  android:background="@drawable/rect_prioritas"
+	  android:id="@+id/sedang"
+	  android:gravity="center"
+	  android:text="Sedang"
+	  android:textColor="@color/mapbox_plugins_white"
+	  android:textSize="14dp" />
+  </LinearLayout>
+  <LinearLayout
+	android:id="@+id/linear_cekbox_input"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:layout_below="@+id/linear_tv_prioritas"
+	android:layout_marginTop="5dp"
+	android:layout_marginStart="15dp"
+	android:layout_marginEnd="15dp"
+	android:weightSum="1"
+	android:orientation="vertical">
+
+	  <TextView
+		android:id="@+id/k1_daya_dukung_tanah_t"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginBottom="8dp"
+		android:text="Daya Dukung Tanah" />
+
+	  <TextView
+		android:id="@+id/k2_ketersediaan_air_t"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginBottom="8dp"
+		android:text="Ketersediaan Air" />
+
+	  <TextView
+		android:id="@+id/k3_kemiringan_lereng_t"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginBottom="8dp"
+		android:text="Kemiringan Lereng" />
+
+	  <TextView
+		android:id="@+id/k4_aksebilitas_t"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginBottom="8dp"
+		android:text="Aksebilitas" />
+
+	  <TextView
+		android:id="@+id/k5_perubahan_lahan_t"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginBottom="8dp"
+		android:text="Perubahan Lahan" />
+
+	  <TextView
+		android:id="@+id/k6_kerawanan_bencana_t"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginBottom="8dp"
+		android:text="Kerawanan Bencana" />
+
+	  <TextView
+		android:id="@+id/k7_jarakke_bandara_t"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginBottom="8dp"
+		android:text="Jarak ke Bandara" />
+
+  </LinearLayout>
+
+  <LinearLayout
+	android:layout_width="match_parent"
+	android:layout_height="30dp"
+	android:layout_marginStart="10dp"
+	android:layout_marginEnd="10dp"
+	android:layout_marginBottom="20dp"
+	android:gravity="end"
+	android:layout_below="@+id/linear_cekbox_input"
+	android:background="@color/color_bg"
+	android:orientation="horizontal">
+
+  </LinearLayout>
+
+</RelativeLayout>

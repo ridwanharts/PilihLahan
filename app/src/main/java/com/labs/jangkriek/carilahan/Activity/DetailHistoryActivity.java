@@ -2,6 +2,7 @@ package com.labs.jangkriek.carilahan.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -18,8 +19,6 @@ import com.labs.jangkriek.carilahan.R;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import jp.wasabeef.recyclerview.animators.SlideInUpAnimator;
 
 public class DetailHistoryActivity extends AppCompatActivity {
 
@@ -63,7 +62,7 @@ public class DetailHistoryActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.rv_list_saved_lokasi_detil);
         detailHistoryAdapter = new DetailHistoryAdapter(this, rankingLokasiList);
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext(), RecyclerView.VERTICAL, false));
-        recyclerView.setItemAnimator(new SlideInUpAnimator());
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(detailHistoryAdapter);
     }
 

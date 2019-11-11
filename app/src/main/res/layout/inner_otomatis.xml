@@ -1,0 +1,593 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:paddingStart="8dp"
+  android:paddingTop="4dp"
+  android:paddingEnd="8dp">
+
+  <LinearLayout
+	android:id="@+id/linear_tv_prioritas"
+	android:layout_width="match_parent"
+	android:layout_height="30dp"
+	android:weightSum="1"
+	android:orientation="horizontal">
+	<TextView
+	  android:layout_width="match_parent"
+	  android:layout_height="match_parent"
+	  android:layout_weight="0.5"
+	  android:layout_margin="3dp"
+	  android:id="@+id/utama"
+	  android:gravity="center"
+	  android:text="Prioritas Kriteria Pilihan"
+	  android:textSize="14dp" />
+
+	<TextView
+	  android:visibility="gone"
+	  android:layout_width="match_parent"
+	  android:layout_height="match_parent"
+	  android:layout_weight="0.5"
+	  android:layout_margin="5dp"
+	  android:background="@drawable/rect_prioritas"
+	  android:id="@+id/sedang"
+	  android:gravity="center"
+	  android:text="Sedang"
+	  android:textColor="@color/mapbox_plugins_white"
+	  android:textSize="14dp" />
+  </LinearLayout>
+
+  <LinearLayout
+	android:id="@+id/tv_no_kriteria"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:orientation="horizontal"
+	android:layout_below="@+id/linear_tv_prioritas">
+	<LinearLayout
+	  android:layout_width="match_parent"
+	  android:layout_height="wrap_content"
+	  android:layout_weight="0.6"
+	  android:layout_marginTop="5dp"
+	  android:layout_marginStart="5dp"
+	  android:layout_marginEnd="5dp"
+	  android:orientation="vertical">
+
+	</LinearLayout>
+	<LinearLayout
+	  android:layout_width="match_parent"
+	  android:layout_height="wrap_content"
+	  android:gravity="start"
+	  android:layout_weight="0.4"
+	  android:layout_marginTop="5dp"
+	  android:layout_marginStart="5dp"
+	  android:layout_marginEnd="5dp"
+	  android:orientation="horizontal">
+
+	  <TextView
+		android:layout_width="@dimen/tvDP"
+		android:layout_height="@dimen/tvDP"
+		android:textStyle="bold"
+		android:gravity="center"
+		android:text="1"/>
+	  <TextView
+		android:layout_width="@dimen/tvDP"
+		android:layout_height="@dimen/tvDP"
+		android:textStyle="bold"
+		android:gravity="center"
+		android:text="2"/>
+	  <TextView
+		android:layout_width="@dimen/tvDP"
+		android:layout_height="@dimen/tvDP"
+		android:textStyle="bold"
+		android:gravity="center"
+		android:text="3"/>
+	  <TextView
+		android:layout_width="@dimen/tvDP"
+		android:layout_height="@dimen/tvDP"
+		android:textStyle="bold"
+		android:gravity="center"
+		android:text="4"/>
+	  <TextView
+		android:layout_width="@dimen/tvDP"
+		android:layout_height="@dimen/tvDP"
+		android:textStyle="bold"
+		android:gravity="center"
+		android:text="5"/>
+	  <TextView
+		android:layout_width="@dimen/tvDP"
+		android:layout_height="@dimen/tvDP"
+		android:textStyle="bold"
+		android:gravity="center"
+		android:text="6"/>
+	  <TextView
+		android:layout_width="@dimen/tvDP"
+		android:layout_height="@dimen/tvDP"
+		android:textStyle="bold"
+		android:gravity="center"
+		android:text="7"/>
+
+	</LinearLayout>
+
+  </LinearLayout>
+
+  <LinearLayout
+	android:id="@+id/linear_tengah"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:weightSum="1"
+	android:layout_below="@+id/tv_no_kriteria"
+	android:orientation="horizontal">
+
+	<LinearLayout
+	  android:id="@+id/linear_cekbox_input"
+	  android:layout_width="match_parent"
+	  android:layout_height="wrap_content"
+	  android:layout_weight="0.6"
+	  android:layout_marginTop="5dp"
+	  android:layout_marginStart="5dp"
+	  android:layout_marginEnd="5dp"
+	  android:orientation="vertical">
+
+	  <TextView
+		android:id="@+id/k1_otomatis"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="8dp"
+		android:layout_marginBottom="5dp"
+		android:text="Daya Dukung Tanah" />
+
+	  <TextView
+		android:id="@+id/k2_otomatis"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="8dp"
+		android:layout_marginBottom="5dp"
+		android:text="Ketersediaan Air" />
+
+	  <TextView
+		android:id="@+id/k3_otomatis"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="8dp"
+		android:layout_marginBottom="5dp"
+		android:text="Kemiringan Lereng" />
+
+	  <TextView
+		android:id="@+id/k4_otomatis"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="8dp"
+		android:layout_marginBottom="5dp"
+		android:text="Aksebilitas" />
+
+	  <TextView
+		android:id="@+id/k5_otomatis"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="8dp"
+		android:layout_marginBottom="5dp"
+		android:text="Harga Lahan" />
+
+	  <TextView
+		android:id="@+id/k6_otomatis"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="8dp"
+		android:layout_marginBottom="5dp"
+		android:text="Kerawanan Bencana" />
+
+	  <TextView
+		android:id="@+id/k7_otomatis"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="8dp"
+		android:layout_marginBottom="5dp"
+		android:text="Jarak ke Bandara" />
+
+	</LinearLayout>
+
+	<LinearLayout
+	  android:layout_width="match_parent"
+	  android:layout_height="wrap_content"
+	  android:layout_weight="0.4"
+	  android:layout_marginTop="5dp"
+	  android:layout_marginStart="5dp"
+	  android:layout_marginEnd="5dp"
+	  android:orientation="horizontal">
+
+	  <LinearLayout
+		android:id="@+id/rg_1"
+		android:layout_width="wrap_content"
+		android:layout_height="match_parent"
+		android:orientation="vertical">
+
+		<RadioGroup
+		  android:layout_width="wrap_content"
+		  android:layout_height="wrap_content">
+
+		  <RadioButton
+			android:id="@+id/rb1k1"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content">
+
+		  </RadioButton>
+
+		  <RadioButton
+			android:id="@+id/rb1k2"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content">
+
+		  </RadioButton>
+
+		  <RadioButton
+			android:id="@+id/rb1k3"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content">
+
+		  </RadioButton>
+
+		  <RadioButton
+			android:id="@+id/rb1k4"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content">
+
+		  </RadioButton>
+
+		  <RadioButton
+			android:id="@+id/rb1k5"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content">
+
+		  </RadioButton>
+
+		  <RadioButton
+			android:id="@+id/rb1k6"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content">
+
+		  </RadioButton>
+
+		  <RadioButton
+			android:id="@+id/rb1k7"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content">
+
+		  </RadioButton>
+		</RadioGroup>
+	  </LinearLayout>
+	  <LinearLayout
+		android:id="@+id/rg_2"
+		android:layout_width="wrap_content"
+		android:layout_height="match_parent"
+		android:orientation="vertical">
+		<RadioGroup
+		  android:layout_width="wrap_content"
+		  android:layout_height="match_parent">
+		  <RadioButton
+			android:id="@+id/rb2k1"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content">
+
+		  </RadioButton>
+		  <RadioButton
+			android:id="@+id/rb2k2"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content">
+
+		  </RadioButton>
+		  <RadioButton
+			android:id="@+id/rb2k3"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content">
+
+		  </RadioButton>
+		  <RadioButton
+			android:id="@+id/rb2k4"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content">
+
+		  </RadioButton>
+		  <RadioButton
+			android:id="@+id/rb2k5"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content">
+
+		  </RadioButton>
+		  <RadioButton
+			android:id="@+id/rb2k6"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content">
+
+		  </RadioButton>
+		  <RadioButton
+			android:id="@+id/rb2k7"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content">
+
+		  </RadioButton>
+		</RadioGroup>
+	  </LinearLayout>
+	  <LinearLayout
+		android:id="@+id/rg_3"
+		android:layout_width="wrap_content"
+		android:layout_height="match_parent"
+		android:orientation="vertical">
+		<RadioGroup
+		  android:layout_width="wrap_content"
+		  android:layout_height="match_parent">
+		  <RadioButton
+			android:id="@+id/rb3k1"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content">
+
+		  </RadioButton>
+		  <RadioButton
+			android:id="@+id/rb3k2"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content">
+
+		  </RadioButton>
+		  <RadioButton
+			android:id="@+id/rb3k3"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content">
+
+		  </RadioButton>
+		  <RadioButton
+			android:id="@+id/rb3k4"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content">
+
+		  </RadioButton>
+		  <RadioButton
+			android:id="@+id/rb3k5"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content">
+
+		  </RadioButton>
+		  <RadioButton
+			android:id="@+id/rb3k6"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content">
+
+		  </RadioButton>
+		  <RadioButton
+			android:id="@+id/rb3k7"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content">
+
+		  </RadioButton>
+		</RadioGroup>
+	  </LinearLayout>
+	  <LinearLayout
+		android:id="@+id/rg_4"
+		android:layout_width="wrap_content"
+		android:layout_height="match_parent"
+		android:orientation="vertical">
+		<RadioGroup
+		  android:layout_width="wrap_content"
+		  android:layout_height="match_parent">
+		  <RadioButton
+			android:id="@+id/rb4k1"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content">
+
+		  </RadioButton>
+		  <RadioButton
+			android:id="@+id/rb4k2"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content">
+
+		  </RadioButton>
+		  <RadioButton
+			android:id="@+id/rb4k3"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content">
+
+		  </RadioButton>
+		  <RadioButton
+			android:id="@+id/rb4k4"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content">
+
+		  </RadioButton>
+		  <RadioButton
+			android:id="@+id/rb4k5"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content">
+
+		  </RadioButton>
+		  <RadioButton
+			android:id="@+id/rb4k6"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content">
+
+		  </RadioButton>
+		  <RadioButton
+			android:id="@+id/rb4k7"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content">
+
+		  </RadioButton>
+		</RadioGroup>
+	  </LinearLayout>
+	  <LinearLayout
+		android:id="@+id/rg_5"
+		android:layout_width="wrap_content"
+		android:layout_height="match_parent"
+		android:orientation="vertical">
+		<RadioGroup
+		  android:layout_width="wrap_content"
+		  android:layout_height="match_parent">
+		  <RadioButton
+			android:id="@+id/rb5k1"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content">
+
+		  </RadioButton>
+		  <RadioButton
+			android:id="@+id/rb5k2"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content">
+
+		  </RadioButton>
+		  <RadioButton
+			android:id="@+id/rb5k3"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content">
+
+		  </RadioButton>
+		  <RadioButton
+			android:id="@+id/rb5k4"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content">
+
+		  </RadioButton>
+		  <RadioButton
+			android:id="@+id/rb5k5"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content">
+
+		  </RadioButton>
+		  <RadioButton
+			android:id="@+id/rb5k6"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content">
+
+		  </RadioButton>
+		  <RadioButton
+			android:id="@+id/rb5k7"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content">
+
+		  </RadioButton>
+		</RadioGroup>
+	  </LinearLayout>
+	  <LinearLayout
+		android:id="@+id/rg_6"
+		android:layout_width="wrap_content"
+		android:layout_height="match_parent"
+		android:orientation="vertical">
+		<RadioGroup
+		  android:layout_width="wrap_content"
+		  android:layout_height="match_parent">
+		  <RadioButton
+			android:id="@+id/rb6k1"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content">
+
+		  </RadioButton>
+		  <RadioButton
+			android:id="@+id/rb6k2"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content">
+
+		  </RadioButton>
+		  <RadioButton
+			android:id="@+id/rb6k3"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content">
+
+		  </RadioButton>
+		  <RadioButton
+			android:id="@+id/rb6k4"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content">
+
+		  </RadioButton>
+		  <RadioButton
+			android:id="@+id/rb6k5"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content">
+
+		  </RadioButton>
+		  <RadioButton
+			android:id="@+id/rb6k6"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content">
+
+		  </RadioButton>
+		  <RadioButton
+			android:id="@+id/rb6k7"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content">
+
+		  </RadioButton>
+		</RadioGroup>
+	  </LinearLayout>
+	  <LinearLayout
+		android:id="@+id/rg_7"
+		android:layout_width="wrap_content"
+		android:layout_height="match_parent"
+		android:orientation="vertical">
+		<RadioGroup
+		  android:layout_width="wrap_content"
+		  android:layout_height="match_parent">
+		  <RadioButton
+			android:id="@+id/rb7k1"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content">
+
+		  </RadioButton>
+		  <RadioButton
+			android:id="@+id/rb7k2"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content">
+
+		  </RadioButton>
+		  <RadioButton
+			android:id="@+id/rb7k3"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content">
+
+		  </RadioButton>
+		  <RadioButton
+			android:id="@+id/rb7k4"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content">
+
+		  </RadioButton>
+		  <RadioButton
+			android:id="@+id/rb7k5"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content">
+
+		  </RadioButton>
+		  <RadioButton
+			android:id="@+id/rb7k6"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content">
+
+		  </RadioButton>
+		  <RadioButton
+			android:id="@+id/rb7k7"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content">
+
+		  </RadioButton>
+		</RadioGroup>
+	  </LinearLayout>
+
+	</LinearLayout>
+
+
+
+  </LinearLayout>
+
+  <LinearLayout
+	android:layout_width="match_parent"
+	android:layout_height="30dp"
+	android:layout_below="@+id/linear_tengah"
+	android:layout_marginStart="3dp"
+	android:layout_marginEnd="3dp"
+	android:layout_marginTop="10dp"
+	android:layout_marginBottom="20dp"
+	android:gravity="center"
+	android:background="@color/color_bg"
+	android:orientation="horizontal">
+
+  </LinearLayout>
+
+
+
+</RelativeLayout>

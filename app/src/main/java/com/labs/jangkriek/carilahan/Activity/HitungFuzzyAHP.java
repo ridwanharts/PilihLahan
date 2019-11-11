@@ -12,8 +12,11 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.labs.jangkriek.carilahan.POJO.Prioritas;
 import com.labs.jangkriek.carilahan.R;
 import com.labs.jangkriek.carilahan.Utils.Utils;
+
+import java.util.ArrayList;
 
 public class HitungFuzzyAHP extends AppCompatActivity {
 
@@ -21,10 +24,12 @@ public class HitungFuzzyAHP extends AppCompatActivity {
     private Button btnConverttoTFN, btnRank;
     private Boolean k1=false,k2=false,k3=false,k4=false,k5=false,k6=false,k7=false;
 
+    public static ArrayList<Prioritas> prioritas = new ArrayList<Prioritas>();
     double[][] matriksInputKriteria = null;
     double nilaiS[][] = null;
     boolean cekNow = false;
     private static double nilaiBobot [];
+    private String inputTipe;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +56,8 @@ public class HitungFuzzyAHP extends AppCompatActivity {
         btnRank = findViewById(R.id.btn_rank);
 
         Intent i = getIntent();
-        cekNow = i.getBooleanExtra("cek", cekNow);
+
+        inputTipe = i.getStringExtra(getString(R.string.INPUT_TIPE));
         k1 = i.getBooleanExtra("k1", k1);
         k2 = i.getBooleanExtra("k2", k2);
         k3 = i.getBooleanExtra("k3", k3);
@@ -61,23 +67,29 @@ public class HitungFuzzyAHP extends AppCompatActivity {
         k7 = i.getBooleanExtra("k7", k7);
         Toast.makeText(getApplicationContext(),""+k1, Toast.LENGTH_SHORT).show();
 
-        if(cekNow){
+        if(inputTipe.equals(getString(R.string.INPUT_MANUAL))){
             matriksInputKriteria = InputNilaiKriteriaActivity.getMatriksNilaiKriteria();
             nilaiS = new double[matriksInputKriteria.length][matriksInputKriteria.length];
             Log.i(" ", "size matriks : "+ matriksInputKriteria.length);
+        }else {
+            matriksInputKriteria = PilihKriteria.getMatriksNilaiKriteria();
+            prioritas = PilihKriteria.getPrioritasKriteria();
+            nilaiS = new double[matriksInputKriteria.length][matriksInputKriteria.length];
+            Toast.makeText(getApplicationContext(), ""+prioritas.size(),Toast.LENGTH_SHORT).show();
+            Log.e(" ", "size matriks : "+ matriksInputKriteria.length);
         }
 
         btnConverttoTFN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(cekNow && matriksInputKriteria != null){
+                if(matriksInputKriteria != null){
                     //finishActivity(101);
 
                     hitungFuzzySysntheticExtent();
 
                     hitungMinimumFuzzySynthetic();
                 }else {
-                    Toast.makeText(getApplication(),"Nilai Kriteria Maih Kosong !",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplication(),"Nilai Kriteria Masih Kosong !",Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -87,6 +99,7 @@ public class HitungFuzzyAHP extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(HitungFuzzyAHP.this, RankingActivity.class);
+                i.putExtra(getString(R.string.INPUT_TIPE), inputTipe);
                 i.putExtra("k1", k1);
                 i.putExtra("k2", k2);
                 i.putExtra("k3", k3);
@@ -97,15 +110,6 @@ public class HitungFuzzyAHP extends AppCompatActivity {
                 startActivityForResult(i, 102);
             }
         });
-    }
-
-    public static double[] getVektorBobot(){
-
-        return nilaiBobot;
-    }
-
-    private String formatDecimal(double bilangan){
-        return String.format("%.4f", bilangan);
     }
 
     private void hitungFuzzySysntheticExtent(){
@@ -175,10 +179,6 @@ public class HitungFuzzyAHP extends AppCompatActivity {
                         jumlahU[i][k]=tempU;
                     }
                 }
-                Log.i("Jumlah L  ", "ke "+ i+"-"+j + "= " + jumlahL[i][j]);
-                Log.i("Jumlah M  ", "ke "+ i+"-"+j + "= " + jumlahM[i][j]);
-                Log.i("Jumlah U  ", "ke "+ i+"-"+j + "= " + jumlahU[i][j]);
-
             }
         }
 
@@ -222,7 +222,6 @@ public class HitungFuzzyAHP extends AppCompatActivity {
                     tvNilaiS.append("Nilai S"+i+"\t\t\t"+a.formatDecimal(jumlahL[i][j]) + "\t\t" +a.formatDecimal(jumlahM[i][j+1]) + "\t\t" + a.formatDecimal(jumlahU[i][j+2]) + "\n");
                 }else{
                     tvNilaiS.append("");
-                    //tvLihatTabel.setText("\n");
                 }
             }
         }
@@ -244,21 +243,6 @@ public class HitungFuzzyAHP extends AppCompatActivity {
                 }
             }
         }
-
-        //print nilai tingkat kemungkinan fuzzy
-        //nilai perbandingan yg sama tdk dianggap
-        /*for (int i = 0; i < jumlahL.length; i++) {
-            for (int j = 0; j < 2; j++) {
-                if(j==0){
-                    if(i==0){
-                        tvNilaiKemungkinan.append("S "+"x"+""+"\t\t\t"+"L"+"\t\t\t\t\t"+"M"+"\t\t\t\t"+"U"+"\n");
-                    }
-                    tvNilaiKemungkinan.append("S "+i+"\t\t\t"+a.formatDecimal(nilaiS[i][j]) + "\t\t" +a.formatDecimal(nilaiS[i][j+1]) + "\t\t" + a.formatDecimal(nilaiS[i][j+2]) + "\n");
-                }else{
-                    tvNilaiKemungkinan.append("");
-                }
-            }
-        }*/
 
         for (int i = 0; i < nilaiS.length; i++) {
             for (int j = 0; j < nilaiS.length; j++) {
@@ -320,11 +304,24 @@ public class HitungFuzzyAHP extends AppCompatActivity {
             }
             tvHasilNormalisasi.append("Nilai Normalisasi K" + j + "\t\t\t" + a.formatDecimal(nilaiNormalisasi[j]) + "\n");
         }
-        for (int i=0;i<nilaiBobot.length;i++){
-            Log.e("n",""+nilaiBobot[i]);
+        for (int i=0;i<prioritas.size();i++){
+            prioritas.get(i).setNilai(nilaiBobot[i]);
+            Log.e(""+prioritas.get(i).getId()+""+prioritas.get(i).getKriteria()," "+prioritas.get(i).getNilai());
         }
         //tvHasilNormalisasi.setText("W(A) : "+formatDecimal(nilaiNormalisasi[0])+", "+formatDecimal(nilaiNormalisasi[1])+", "+formatDecimal(nilaiNormalisasi[2]));
 
+    }
+
+    public static double[] getVektorBobot(){
+        return nilaiBobot;
+    }
+
+    public static ArrayList<Prioritas> getPrioritasKriteriaList(){
+        return prioritas;
+    }
+
+    private String formatDecimal(double bilangan){
+        return String.format("%.4f", bilangan);
     }
 
     @Override

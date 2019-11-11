@@ -3,9 +3,9 @@
   <color name="colorPrimary">#3181ED</color>
   <color name="colorPrimaryDark">#1E74E9</color>
   <color name="colorAccent">#1C66C3</color>
-
-  <color name="black_overlay">#66000000</color>
   <color name="bgColor">#F2DDE4DD</color>
+  <color name="color_bg">#f1f5f8</color>
+  <color name="black_overlay">#66000000</color>
 
   <!-- FAB menu colors -->
   <color name="black_semi_transparent">#4B000000</color>
