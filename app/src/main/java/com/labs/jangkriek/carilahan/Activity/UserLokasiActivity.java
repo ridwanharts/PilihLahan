@@ -9,8 +9,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
@@ -126,23 +128,33 @@ public class UserLokasiActivity extends AppCompatActivity implements OnMapReadyC
         ibDownload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                     dbUserLokasi.deleteLokasi();
                     for (int i=0 ; i<lokasiListFromServer.size() ; i++){
-                        dbUserLokasi.insertLokasi(lokasiListFromServer.get(i).getNama(),
-                                lokasiListFromServer.get(i).getLatitude(),
-                                lokasiListFromServer.get(i).getLongitude(),
-                                lokasiListFromServer.get(i).getDayaDukungTanah(),
-                                lokasiListFromServer.get(i).getKetersediaanAir(),
-                                lokasiListFromServer.get(i).getKemiringanLereng(),
-                                lokasiListFromServer.get(i).getAksebilitas(),
-                                lokasiListFromServer.get(i).getPerubahanLahan(),
-                                lokasiListFromServer.get(i).getKerawananBencana(),
-                                lokasiListFromServer.get(i).getJarakKeBandara(),
-                                lokasiListFromServer.get(i).getStatus());
+
+                        //convert kembali string base64 jadi bitmap
+                        byte[] decodedString = Base64.decode(lokasiListFromServer.get(i).getGambar(), Base64.DEFAULT);
+                        Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                        String nama = lokasiListFromServer.get(i).getNama();
+                        double lat = lokasiListFromServer.get(i).getLatitude();
+                        double longi = lokasiListFromServer.get(i).getLongitude();
+                        double dayaDukungTanah = lokasiListFromServer.get(i).getDayaDukungTanah();
+                        double ketersediaanAir = lokasiListFromServer.get(i).getKetersediaanAir();
+                        double kemiringanLereng = lokasiListFromServer.get(i).getKemiringanLereng();
+                        double aksebilitas = lokasiListFromServer.get(i).getAksebilitas();
+                        double hargaLahan = lokasiListFromServer.get(i).getPerubahanLahan();
+                        double kerawananBencana = lokasiListFromServer.get(i).getKerawananBencana();
+                        double jarakKeBandara = lokasiListFromServer.get(i).getJarakKeBandara();
+                        int status = lokasiListFromServer.get(i).getStatus();
+
+                        dbUserLokasi.insertLokasi(
+                                nama, lat, longi,
+                                dayaDukungTanah,ketersediaanAir,kemiringanLereng,aksebilitas,hargaLahan,kerawananBencana,jarakKeBandara,
+                                status,decodedByte
+                        );
+
                     }
                     Toast.makeText(getApplicationContext(),"tidak sama "+lokasiList.size(), Toast.LENGTH_SHORT).show();
-                    lokasiList.addAll(lokasiListFromServer);
+                    lokasiList.addAll(dbUserLokasi.getAllLokasi());
 
                     lokasiUserAdapter.notifyDataSetChanged();
                     mapView.invalidate();
@@ -153,10 +165,11 @@ public class UserLokasiActivity extends AppCompatActivity implements OnMapReadyC
                         }
                     });
 
+                    finish();
+                    startActivity(getIntent());
+
             }
         });
-
-
 
     }
 
@@ -164,7 +177,6 @@ public class UserLokasiActivity extends AppCompatActivity implements OnMapReadyC
         lokasiUserAdapter = new LokasiUserAdapter(this, lokasiList, mapboxMap);
         recyclerView = findViewById(R.id.rv_list_user_lokasi);
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext(), RecyclerView.HORIZONTAL, false));
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(lokasiUserAdapter);
         progressBar.setVisibility(View.GONE);
     }
@@ -199,8 +211,9 @@ public class UserLokasiActivity extends AppCompatActivity implements OnMapReadyC
                     lokasiListFromServer = response.body().getLokasiList();
                     Toast.makeText(getApplicationContext(),lokasiListFromServer.size()+" : "+lokasiList.size(), Toast.LENGTH_SHORT).show();
                     if (lokasiListFromServer.size()!=lokasiList.size()){
+
                         ibDownload.setVisibility(View.VISIBLE);
-                        Toast.makeText(getApplicationContext(),"Data baru terdeteksi", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(),"Data baru terdeteksi ", Toast.LENGTH_SHORT).show();
                     }
 
                 }

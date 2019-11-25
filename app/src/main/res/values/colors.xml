@@ -4,20 +4,17 @@
   <color name="colorPrimaryDark">#1E74E9</color>
   <color name="colorAccent">#1C66C3</color>
   <color name="bgColor">#F2DDE4DD</color>
-  <color name="color_bg">#f1f5f8</color>
-  <color name="black_overlay">#66000000</color>
+  <color name="color_bg">#DFDFDF</color>
 
   <!-- FAB menu colors -->
   <color name="black_semi_transparent">#4B000000</color>
   <color name="mapboxBlack">#000000</color>
   <color name="half_black">#808080</color>
-  <color name="white_pressed">#f1f1f1</color>
 
   <color name="mapboxWhite">#FFFFFF</color>
   <color name="mapboxRed">#f74e4e</color>
   <color name="mapboxBlue">#4264fb</color>
   <color name="mapboxGreen">#33c377</color>
   <color name="mapboxOrange">#f79640</color>
-  <color name="mapboxPurple">#9C27B0</color>
 
 </resources>

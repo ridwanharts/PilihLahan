@@ -32,6 +32,7 @@ public class Prioritas {
     }
 
     public double getNilai() {
+        //ri
         return nilai;
     }
 

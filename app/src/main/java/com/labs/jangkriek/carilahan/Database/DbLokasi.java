@@ -5,15 +5,18 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 
 import com.labs.jangkriek.carilahan.POJO.Lokasi;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 public class DbLokasi extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 4;
 
     private static final String DATABASE_NAME = "lokasi_db";
     private static final String TABLE_NAME = "latlong";
@@ -30,6 +33,7 @@ public class DbLokasi extends SQLiteOpenHelper {
     private static final String PERUBAHAN_LAHAN = "perubahan_lahan";
     private static final String KERAWANAN_BENCANA = "kerawanan_bencana";
     private static final String JARAK_KE_BANDARA = "jarak_bandara";
+    private static final String GAMBAR = "gambar";
 
     public DbLokasi(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -49,7 +53,8 @@ public class DbLokasi extends SQLiteOpenHelper {
                         + PERUBAHAN_LAHAN +" DOUBLE,"
                         + KERAWANAN_BENCANA +" DOUBLE,"
                         + JARAK_KE_BANDARA +" DOUBLE,"
-                        + KOLOM_STATUS +" TINYINT"
+                        + KOLOM_STATUS +" TINYINT,"
+                        + GAMBAR +" BLOB"
                         + ")";
 
         db.execSQL(sql);
@@ -63,7 +68,7 @@ public class DbLokasi extends SQLiteOpenHelper {
 
     public long insertLokasi(String namaLokasi, double lat, double longi,
                              double ddTanah, double kAir, double kLereng, double aksebilitas,
-                             double pLahan, double kBencana, double jBandara, int a) {
+                             double pLahan, double kBencana, double jBandara, int a, Bitmap bitmap) {
         // get writable database as we want to write data
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -82,6 +87,7 @@ public class DbLokasi extends SQLiteOpenHelper {
         values.put(KERAWANAN_BENCANA, kBencana);
         values.put(JARAK_KE_BANDARA, jBandara);
         values.put(KOLOM_STATUS, a);
+        values.put(GAMBAR, getPictureByteOfArray(bitmap));
 
         // insert row
         long id = db.insert(TABLE_NAME, null, values);
@@ -100,7 +106,7 @@ public class DbLokasi extends SQLiteOpenHelper {
         Cursor cursor = db.query(TABLE_NAME,
                 new String[]{KOLOM_ID, KOLOM_NAMA, KOLOM_LATITUDE, KOLOM_LONGITUDE,
                         KOLOM_DAYA_DUKUNG_TANAH, KOLOM_KETERSEDIAAN_AIR, KEMIRINGAN_LERENG, AKSEBILITAS,
-                        PERUBAHAN_LAHAN, KERAWANAN_BENCANA, JARAK_KE_BANDARA, KOLOM_STATUS},
+                        PERUBAHAN_LAHAN, KERAWANAN_BENCANA, JARAK_KE_BANDARA, KOLOM_STATUS, GAMBAR},
                 KOLOM_ID + "=?",
                 new String[]{String.valueOf(id)}, null, null, null, null);
 
@@ -108,6 +114,7 @@ public class DbLokasi extends SQLiteOpenHelper {
             cursor.moveToFirst();
 
         // prepare note object
+        byte[] image = cursor.getBlob(cursor.getColumnIndex(GAMBAR));
         Lokasi note = new Lokasi(
                 cursor.getInt(cursor.getColumnIndex(KOLOM_ID)),
                 cursor.getString(cursor.getColumnIndex(KOLOM_NAMA)),
@@ -120,7 +127,10 @@ public class DbLokasi extends SQLiteOpenHelper {
                 cursor.getDouble(cursor.getColumnIndex(PERUBAHAN_LAHAN)),
                 cursor.getDouble(cursor.getColumnIndex(KERAWANAN_BENCANA)),
                 cursor.getDouble(cursor.getColumnIndex(JARAK_KE_BANDARA)),
-                cursor.getInt(cursor.getColumnIndex(KOLOM_STATUS)));
+                cursor.getInt(cursor.getColumnIndex(KOLOM_STATUS)),
+                getImage(image)
+
+        );
 
         // close the db connection
         cursor.close();
@@ -154,6 +164,8 @@ public class DbLokasi extends SQLiteOpenHelper {
                 note.setKerawananBencana(cursor.getDouble(cursor.getColumnIndex(KERAWANAN_BENCANA)));
                 note.setJarakKeBandara(cursor.getDouble(cursor.getColumnIndex(JARAK_KE_BANDARA)));
                 note.setStatus(cursor.getInt(cursor.getColumnIndex(KOLOM_STATUS)));
+                byte[] image = cursor.getBlob(cursor.getColumnIndex(GAMBAR));
+                note.setBitmap(getImage(image));
 
                 notes.add(note);
             } while (cursor.moveToNext());
@@ -164,6 +176,16 @@ public class DbLokasi extends SQLiteOpenHelper {
 
         // return notes list
         return notes;
+    }
+
+    public static Bitmap getImage(byte[] image) {
+        return BitmapFactory.decodeByteArray(image, 0, image.length);
+    }
+
+    public static byte[] getBytes(Bitmap bitmap) {
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 0, stream);
+        return stream.toByteArray();
     }
 
     public int getLokasiCount() {
@@ -265,5 +287,11 @@ public class DbLokasi extends SQLiteOpenHelper {
 
         // return notes list
         return loc;
+    }
+
+    private static byte[] getPictureByteOfArray(Bitmap bitmap) {
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 0, byteArrayOutputStream);
+        return byteArrayOutputStream.toByteArray();
     }
 }

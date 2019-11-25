@@ -76,15 +76,13 @@
 		android:layout_width="match_parent"
 		android:layout_height="match_parent">
 
-
-
 		<com.mapbox.mapboxsdk.maps.MapView
 		  android:id="@+id/mapView"
 		  android:layout_width="match_parent"
 		  android:layout_height="match_parent"
 		  mapbox:mapbox_cameraTargetLat="-7.8855268466"
 		  mapbox:mapbox_cameraTargetLng="110.062440920"
-		  mapbox:mapbox_cameraZoom="12" />
+		  mapbox:mapbox_cameraZoom="15" />
 
 		<com.getbase.floatingactionbutton.FloatingActionsMenu
 		  android:id="@+id/menu_options_map"
@@ -108,15 +106,6 @@
 			app:fab_plusIconColor="@color/mapboxWhite"
 			app:fab_size="mini"
 			app:fab_title="Add Point" />
-
-		  <com.getbase.floatingactionbutton.FloatingActionButton
-			android:id="@+id/op_search_location"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			app:fab_colorNormal="@color/mapboxGreen"
-			app:fab_colorPressed="@color/mapboxWhite"
-			app:fab_size="mini"
-			app:fab_title="Change Map Style" />
 
 		</com.getbase.floatingactionbutton.FloatingActionsMenu>
 	  </RelativeLayout>

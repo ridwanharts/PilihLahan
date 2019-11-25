@@ -23,7 +23,8 @@ public interface RegisterApi {
             @Field("perubahanLahan") double perubahanLahan,
             @Field("kerawananBencana") double kerawananBencana,
             @Field("jarakKeBandara") double jarakKeBandara,
-            @Field("status") int status
+            @Field("status") int status,
+            @Field("gambar") String gambar
     );
 
     @GET("/view_lokasi.php")

@@ -24,44 +24,47 @@
 	android:layout_marginStart="8dp"
 	android:layout_marginEnd="8dp">
 
-  <TextView
-	android:layout_width="match_parent"
-	android:textColor="@color/colorPrimary"
-	android:layout_height="wrap_content"
-	android:id="@+id/tvBoolean"/>
-
-  <TextView
-	android:layout_width="match_parent"
-	android:layout_height="wrap_content"
-	android:textColor="@color/colorPrimary"
-	android:id="@+id/tvNilai"
-	android:layout_below="@+id/tvBoolean"/>
+	<com.alespero.expandablecardview.ExpandableCardView
+	  android:visibility="visible"
+	  android:id="@+id/input_manual"
+	  android:layout_width="match_parent"
+	  android:layout_height="wrap_content"
+	  android:layout_toLeftOf="@+id/relative_savebtn"
+	  android:layout_marginTop="10dp"
+	  android:layout_marginBottom="10dp"
+	  android:layout_marginStart="20dp"
+	  android:layout_marginEnd="20dp"
+	  app:title="Detail Perhitungan"
+	  app:icon="@drawable/ic_delete"
+	  app:inner_view="@layout/inner_perhitungan"
+	  app:expandOnClick="true"
+	  app:animationDuration="300"
+	  app:startExpanded="false" />
 
   <androidx.recyclerview.widget.RecyclerView
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
 	android:id="@+id/rv_list_rank_lokasi"
-	android:layout_marginTop="5dp"
-	android:layout_marginBottom="50dp"
-	android:layout_below="@+id/tvNilai">
+	android:layout_alignParentBottom="true"
+	android:layout_marginBottom="15dp">
 
   </androidx.recyclerview.widget.RecyclerView>
 
   <LinearLayout
-	android:layout_width="match_parent"
+	android:id="@+id/relative_savebtn"
+	android:layout_width="wrap_content"
 	android:layout_height="wrap_content"
 	android:padding="5dp"
-	android:layout_marginBottom="15dp"
-	android:gravity="center_horizontal"
-	android:layout_alignParentBottom="true">
+	android:layout_marginTop="5dp"
+	android:layout_alignParentEnd="true"
+	android:layout_alignParentTop="true">
 
 	<Button
-	  android:layout_width="match_parent"
+	  android:layout_width="wrap_content"
 	  android:layout_height="wrap_content"
 	  android:text="Save"
-	  android:padding="15dp"
-	  android:layout_marginStart="20dp"
-	  android:layout_marginEnd="20dp"
+	  android:padding="10dp"
+	  android:layout_marginEnd="10dp"
 	  android:clickable="true"
 	  android:textColor="@color/mapboxWhite"
 	  android:background="@drawable/custom_button_blueriple"

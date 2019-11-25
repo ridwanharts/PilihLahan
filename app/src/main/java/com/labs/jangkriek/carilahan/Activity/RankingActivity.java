@@ -279,16 +279,16 @@ public class RankingActivity extends AppCompatActivity implements OnMapReadyCall
             }
             lokasiList.get(i).setJumlah(ddTanah[i] + kAir[i] + kLereng[i] + aksebilitas[i] + pLahan[i] + kBencana[i] + jBandara[i]);
             Utils a = new Utils();
-            tvNilai.append(" No." + i
-                    + "-" + a.formatDecimal(ddTanah[i])
-                    + "-" + a.formatDecimal(kAir[i])
-                    + "-" + a.formatDecimal(kLereng[i])
-                    + "-" + a.formatDecimal(aksebilitas[i])
-                    + "-" + a.formatDecimal(pLahan[i])
-                    + "-" + a.formatDecimal(kBencana[i])
-                    + "-" + a.formatDecimal(jBandara[i])
-                    + " - " + a.formatDecimal(lokasiList.get(i).getJumlah())
-                    + "\n");
+            tvNilai.append(" Alternatif " + i
+                    + "\n " + a.formatDecimal(ddTanah[i])
+                    + " " + a.formatDecimal(kAir[i])
+                    + " " + a.formatDecimal(kLereng[i])
+                    + " " + a.formatDecimal(aksebilitas[i])
+                    + " " + a.formatDecimal(pLahan[i])
+                    + " " + a.formatDecimal(kBencana[i])
+                    + " " + a.formatDecimal(jBandara[i])
+                    + "\n " + a.formatDecimal(lokasiList.get(i).getJumlah())
+                    + "\n\n");
         }
 
     }
@@ -366,16 +366,16 @@ public class RankingActivity extends AppCompatActivity implements OnMapReadyCall
             }
             lokasiList.get(i).setJumlah(ddTanah[i] + kAir[i] + kLereng[i] + aksebilitas[i] + pLahan[i] + kBencana[i] + jBandara[i]);
             Utils a = new Utils();
-            tvNilai.append(" No." + i
-                    + "-" + a.formatDecimal(ddTanah[i])
-                    + "-" + a.formatDecimal(kAir[i])
-                    + "-" + a.formatDecimal(kLereng[i])
-                    + "-" + a.formatDecimal(aksebilitas[i])
-                    + "-" + a.formatDecimal(pLahan[i])
-                    + "-" + a.formatDecimal(kBencana[i])
-                    + "-" + a.formatDecimal(jBandara[i])
-                    + " - " + a.formatDecimal(lokasiList.get(i).getJumlah())
-                    + "\n");
+            tvNilai.append(" Alternatif " + i
+                    + "\n-k1" + a.formatDecimal(ddTanah[i])
+                    + " -k2" + a.formatDecimal(kAir[i])
+                    + " -k3" + a.formatDecimal(kLereng[i])
+                    + " -k4" + a.formatDecimal(aksebilitas[i])
+                    + " -k5" + a.formatDecimal(pLahan[i])
+                    + " -k6" + a.formatDecimal(kBencana[i])
+                    + " -k7" + a.formatDecimal(jBandara[i])
+                    + "\n- " + a.formatDecimal(lokasiList.get(i).getJumlah())
+                    + "\n\n");
         }
     }
 

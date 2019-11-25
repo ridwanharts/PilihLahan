@@ -60,6 +60,7 @@ public class LokasiUserAdapter extends RecyclerView.Adapter<LokasiUserAdapter.My
         holder.namaLokasi.setText(namaLokasi.getNama());
         holder.latitude.setText(String.valueOf(namaLokasi.getLatitude()));
         holder.longitude.setText(String.valueOf(namaLokasi.getLongitude()));
+        holder.ivGambar.setImageBitmap(namaLokasi.getBitmap());
         //Log.e("b", lokasiList.get(position).getLokasi()+"");
         holder.setClickListener(new LokasiActivity.ItemClickListener() {
             @Override
@@ -78,6 +79,8 @@ public class LokasiUserAdapter extends RecyclerView.Adapter<LokasiUserAdapter.My
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(context, DetailLokasiActivity.class);
+
+
                 context.startActivity(i);
             }
         });
@@ -94,6 +97,7 @@ public class LokasiUserAdapter extends RecyclerView.Adapter<LokasiUserAdapter.My
         public TextView latitude;
         public TextView longitude;
         ImageView cekUpload;
+        ImageView ivGambar;
         CardView singleCard;
         LinearLayout linearLayoutDetailLokasi;
         LokasiActivity.ItemClickListener itemClickListener;
@@ -104,6 +108,7 @@ public class LokasiUserAdapter extends RecyclerView.Adapter<LokasiUserAdapter.My
             latitude = view.findViewById(R.id.tv_latitude);
             longitude = view.findViewById(R.id.tv_longitude);
             cekUpload = view.findViewById(R.id.iv_cek_upload);
+            ivGambar = view.findViewById(R.id.iv_gambar);
             singleCard = view.findViewById(R.id.cardview_lokasi);
             linearLayoutDetailLokasi = view.findViewById(R.id.user_detail_lokasi);
             singleCard.setOnClickListener(this);

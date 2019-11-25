@@ -1,23 +1,200 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
+  android:background="@color/color_bg"
   tools:context=".Activity.DetailLokasiActivity">
 
-  <ImageView
-	android:layout_width="320dp"
-	android:layout_height="300dp"
-	android:layout_marginStart="4dp"
-	android:layout_marginTop="8dp"
-	android:layout_marginEnd="4dp"
-	android:layout_marginBottom="8dp"
-	android:src="@drawable/local"
-	app:layout_constraintBottom_toBottomOf="parent"
-	app:layout_constraintEnd_toEndOf="parent"
-	app:layout_constraintStart_toStartOf="parent"
-	app:layout_constraintTop_toTopOf="parent"
-	android:contentDescription="image" />
+  <com.mapbox.mapboxsdk.maps.MapView
+	android:id="@+id/map_detail"
+	android:layout_width="match_parent"
+	android:layout_height="150dp">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+  </com.mapbox.mapboxsdk.maps.MapView>
+
+	<RelativeLayout
+	  android:layout_width="match_parent"
+	  android:layout_height="match_parent"
+	  android:layout_below="@+id/map_detail">
+
+		  <ImageView
+			android:id="@+id/image_detail"
+			android:layout_width="match_parent"
+			android:layout_height="200dp"
+			android:scaleType="centerCrop"
+			android:layout_marginTop="2dp"
+			android:layout_marginBottom="2dp"
+			android:src="@drawable/local"
+			android:contentDescription="image" />
+
+		  	<androidx.cardview.widget.CardView
+			android:id="@+id/cv_detail"
+			android:layout_width="match_parent"
+			android:layout_height="120dp"
+			android:layout_below="@+id/image_detail"
+			android:layout_marginStart="8dp"
+			android:layout_marginEnd="8dp"
+			android:layout_marginTop="8dp"
+			android:layout_marginBottom="8dp"
+			android:clickable="true"
+			android:focusable="true"
+			android:foreground="?android:attr/selectableItemBackground"
+			app:cardCornerRadius="4dp"
+			app:cardElevation="2dp"
+			app:contentPadding="0dp">
+
+			<LinearLayout
+			  android:id="@+id/linear_layout_user_homefr"
+			  android:layout_width="match_parent"
+			  android:layout_height="match_parent"
+			  android:layout_marginTop="8dp"
+			  android:layout_marginBottom="8dp"
+			  android:layout_marginStart="16dp"
+			  android:layout_marginEnd="16dp"
+			  android:gravity="top"
+			  android:orientation="horizontal"
+			  android:weightSum="1"
+			  android:paddingTop="3dp">
+			  <TextView
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
+				android:layout_weight="0.5"
+				android:textStyle="bold"
+				android:textSize="16sp"
+				android:text="Nama"/>
+
+			  <LinearLayout
+				android:layout_width="1dp"
+				android:layout_height="match_parent"
+				android:layout_marginStart="16dp"
+				android:layout_marginEnd="16dp"
+				android:background="@color/half_black">
+
+			  </LinearLayout>
+
+			  <LinearLayout
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
+				android:orientation="vertical"
+				android:layout_weight="0.5">
+
+				<TextView
+				  android:layout_width="match_parent"
+				  android:layout_height="match_parent"
+				  android:text="Latitude"/>
+
+				<TextView
+				  android:layout_width="match_parent"
+				  android:layout_height="match_parent"
+				  android:text="Longitude"/>
+
+			  </LinearLayout>
+
+
+
+			</LinearLayout>
+
+		  </androidx.cardview.widget.CardView>
+
+	  		<androidx.cardview.widget.CardView
+		  android:id="@+id/cv_detaily"
+		  android:layout_width="match_parent"
+		  android:layout_height="match_parent"
+		  android:layout_below="@+id/cv_detail"
+		  android:layout_marginStart="8dp"
+		  android:layout_marginEnd="8dp"
+		  android:layout_marginBottom="16dp"
+		  android:clickable="true"
+		  android:focusable="true"
+		  android:foreground="?android:attr/selectableItemBackground"
+		  app:cardCornerRadius="4dp"
+		  app:cardElevation="2dp"
+		  app:contentPadding="0dp">
+
+		  <LinearLayout
+			android:id="@+id/linear_tengah"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_below="@+id/tv_no_kriteria"
+			android:padding="8dp"
+			android:orientation="horizontal"
+			android:weightSum="1">
+
+			<LinearLayout
+			  android:id="@+id/linear_cekbox_input"
+			  android:layout_width="match_parent"
+			  android:layout_height="wrap_content"
+			  android:layout_marginStart="5dp"
+			  android:layout_marginTop="5dp"
+			  android:layout_marginEnd="5dp"
+			  android:layout_weight="0.6"
+			  android:orientation="vertical">
+
+			  <TextView
+				android:id="@+id/k1_otomatis"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="8dp"
+				android:layout_marginBottom="5dp"
+				android:text="Daya Dukung Tanah" />
+
+			  <TextView
+				android:id="@+id/k2_otomatis"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="8dp"
+				android:layout_marginBottom="5dp"
+				android:text="Ketersediaan Air" />
+
+			  <TextView
+				android:id="@+id/k3_otomatis"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="8dp"
+				android:layout_marginBottom="5dp"
+				android:text="Kemiringan Lereng" />
+
+			  <TextView
+				android:id="@+id/k4_otomatis"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="8dp"
+				android:layout_marginBottom="5dp"
+				android:text="Aksebilitas" />
+
+			  <TextView
+				android:id="@+id/k5_otomatis"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="8dp"
+				android:layout_marginBottom="5dp"
+				android:text="Harga Lahan" />
+
+			  <TextView
+				android:id="@+id/k6_otomatis"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="8dp"
+				android:layout_marginBottom="5dp"
+				android:text="Kerawanan Bencana" />
+
+			  <TextView
+				android:id="@+id/k7_otomatis"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="8dp"
+				android:layout_marginBottom="5dp"
+				android:text="Jarak ke Bandara" />
+
+			</LinearLayout>
+
+
+		  </LinearLayout>
+
+		</androidx.cardview.widget.CardView>
+
+	</RelativeLayout>
+
+</RelativeLayout>

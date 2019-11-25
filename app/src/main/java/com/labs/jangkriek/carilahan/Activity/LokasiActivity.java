@@ -1,5 +1,6 @@
 package com.labs.jangkriek.carilahan.Activity;
 
+import android.Manifest;
 import android.animation.ObjectAnimator;
 import android.animation.TypeEvaluator;
 import android.animation.ValueAnimator;
@@ -7,15 +8,19 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -56,6 +61,11 @@ import com.mapbox.mapboxsdk.style.layers.SymbolLayer;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
 import com.mapbox.mapboxsdk.utils.BitmapUtils;
 
+import org.jetbrains.annotations.NotNull;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import okhttp3.OkHttpClient;
@@ -83,14 +93,11 @@ public class LokasiActivity extends AppCompatActivity implements OnMapReadyCallb
     public MapboxMap mapboxMap;
     private MapView mapView;
     private FeatureCollection lokasiCollection;
-    private FloatingActionButton fabOpAddLocation;
     private ImageView ivCekUpload;
 
     private LokasiAdapter mAdapter;
 
     private List<Lokasi> lokasiList = new ArrayList<>();
-
-    private RecyclerView recyclerView;
 
     private DbLokasi db;
 
@@ -106,6 +113,9 @@ public class LokasiActivity extends AppCompatActivity implements OnMapReadyCallb
 
     private ImageView ivUploadGambar;
 
+    private Bitmap imageBitmap;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -113,7 +123,7 @@ public class LokasiActivity extends AppCompatActivity implements OnMapReadyCallb
         Mapbox.getInstance(this, getString(R.string.access_token));
 
         setContentView(R.layout.activity_lokasi);
-        fabOpAddLocation = findViewById(R.id.op_add_location);
+        FloatingActionButton fabOpAddLocation = findViewById(R.id.op_add_location);
 
         mapView = findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
@@ -172,7 +182,7 @@ public class LokasiActivity extends AppCompatActivity implements OnMapReadyCallb
     }
 
     private void showActionsDialog(final int position) {
-        CharSequence colors[] = new CharSequence[]{"Edit", "Delete"};
+        CharSequence[] colors = new CharSequence[]{"Edit", "Delete"};
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Choose option");
@@ -251,8 +261,6 @@ public class LokasiActivity extends AppCompatActivity implements OnMapReadyCallb
                 double tempKBencana = Double.parseDouble(etKerawananBencana.getText().toString());
                 double tempJBandara = Double.parseDouble(etJarakBandara.getText().toString());
 
-
-
                 if (TextUtils.isEmpty(inputNote.getText().toString())) {
                     Toast.makeText(LokasiActivity.this, "!", Toast.LENGTH_SHORT).show();
                     return;
@@ -262,7 +270,7 @@ public class LokasiActivity extends AppCompatActivity implements OnMapReadyCallb
 
                 // check if user updating note
                 if (shouldUpdate && lokasi != null) {
-                    // update note by it's id
+                    // update note by it's idg
                     updateLokasi(inputNote.getText().toString(), position);
                 } else {
                     // create new note
@@ -270,15 +278,7 @@ public class LokasiActivity extends AppCompatActivity implements OnMapReadyCallb
                     createLokasi(inputNote.getText().toString(), Double.parseDouble(lat), Double.parseDouble(longi),
                             tempDDTanah,tempKAir,tempKLereng,
                             tempAksebilitas,tempPLahan,tempKBencana,tempJBandara,
-                            0);
-
-                    Log.i("Daya Dukung Tanah",""+tempDDTanah);
-                    Log.i("Ketersediaan Air",""+tempKAir);
-                    Log.i("Kemiringan Lereng",""+tempKLereng);
-                    Log.i("Aksebilitas",""+tempAksebilitas);
-                    Log.i("Perubahan Lahan",""+tempPLahan);
-                    Log.i("Kerawanan Bencana",""+tempKBencana);
-                    Log.i("Jarak ke Bandara",""+tempJBandara);
+                            0, imageBitmap);
 
                 }
             }
@@ -287,10 +287,10 @@ public class LokasiActivity extends AppCompatActivity implements OnMapReadyCallb
 
     private void createLokasi(String namaLokasi, double lat, double longi,
                               double ddTanah, double kAir, double kLereng, double aksebilitas,
-                              double pLahan, double kBencana, double jBandara, int a) {
+                              double pLahan, double kBencana, double jBandara, int a, Bitmap bitmap) {
         // inserting note in db and getting
         // newly inserted note id
-        long id = db.insertLokasi(namaLokasi, lat, longi, ddTanah, kAir, kLereng, aksebilitas, pLahan, kBencana, jBandara, a);
+        long id = db.insertLokasi(namaLokasi, lat, longi, ddTanah, kAir, kLereng, aksebilitas, pLahan, kBencana, jBandara, a, bitmap);
 
         // get the newly inserted note from db
         Lokasi n = db.getLokasi(id);
@@ -326,8 +326,8 @@ public class LokasiActivity extends AppCompatActivity implements OnMapReadyCallb
         // delete pada database server
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
             @Override
-            public void log(String message) {
-                Log.d("", "message : "+message);
+            public void log(@NotNull String message) {
+                //Log.d("", "message : "+message);
             }
         });
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
@@ -361,9 +361,9 @@ public class LokasiActivity extends AppCompatActivity implements OnMapReadyCallb
             }
 
             @Override
-            public void onFailure(Call<Respon> call, Throwable t) {
+            public void onFailure(@NotNull Call<Respon> call, Throwable t) {
                 Toast.makeText(context, "Jaringan Error", Toast.LENGTH_SHORT).show();
-                Log.d("cek lagi", ""+call);
+                //Log.d("cek lagi", ""+call);
             }
         });
 
@@ -465,7 +465,7 @@ public class LokasiActivity extends AppCompatActivity implements OnMapReadyCallb
     }
 
     public void initRecyclerviewLatlong(){
-        recyclerView = findViewById(R.id.rv_list_lokasi);
+        RecyclerView recyclerView = findViewById(R.id.rv_list_lokasi);
         mAdapter = new LokasiAdapter(this, lokasiList, mapboxMap);
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -507,40 +507,100 @@ public class LokasiActivity extends AppCompatActivity implements OnMapReadyCallb
         }
     }
 
-    private void pickFromGallery(){
-        //Create an Intent with action as ACTION_PICK
-        Intent intent=new Intent(Intent.ACTION_PICK);
-        // Sets the type as image/*. This ensures only components of type image are selected
-        intent.setType("image/*");
-        //We pass an extra array with the accepted mime types. This will ensure only components with these MIME types as targeted.
-        String[] mimeTypes = {"image/jpeg", "image/png"};
-        intent.putExtra(Intent.EXTRA_MIME_TYPES,mimeTypes);
-        // Launching the Intent
-        startActivityForResult(intent,GALLERY_REQUEST_CODE);
+    private boolean checkIfAlreadyhavePermission() {
+        int result = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE);
+        return result == PackageManager.PERMISSION_GRANTED;
     }
 
-    public void onActivityResult(int requestCode,int resultCode,Intent data){
-        // Result code is RESULT_OK only if the user selects an Image
-        if (resultCode == Activity.RESULT_OK)
-            switch (requestCode){
-                case GALLERY_REQUEST_CODE:
-                    //data.getData return the content URI for the selected Image
-                    Uri selectedImage = data.getData();
-                    String[] filePathColumn = { MediaStore.Images.Media.DATA };
-                    // Get the cursor
-                    Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
-                    // Move to first row
-                    cursor.moveToFirst();
-                    //Get the column index of MediaStore.Images.Media.DATA
-                    int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-                    //Gets the String value in the column
-                    String imgDecodableString = cursor.getString(columnIndex);
-                    cursor.close();
-                    // Set the Image in ImageView after decoding the String
-                    //imageView.setImageBitmap(BitmapFactory.decodeFile(imgDecodableString));
-                    break;
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 1) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                
+            } else {
+                Toast.makeText(LokasiActivity.this, "Please give your permission.", Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
+    private void pickFromGallery(){
+
+        final CharSequence[] options = { "Buka Kamera", "Pilih dari Galeri","Batal" };
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(LokasiActivity.this);
+        builder.setTitle("Pilih Gambar Lahan");
+
+        builder.setItems(options, new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int item) {
+
+                final int MyVersion = Build.VERSION.SDK_INT;
+
+                if (MyVersion > Build.VERSION_CODES.LOLLIPOP_MR1) {
+                    if (!checkIfAlreadyhavePermission()) {
+                        ActivityCompat.requestPermissions(LokasiActivity.this, new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+                    } else {
+                        if (options[item].equals("Buka Kamera")) {
+                            Intent takePicture = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                            startActivityForResult(takePicture, 0);
+
+                        } else if (options[item].equals("Pilih dari Galeri")) {
+                            Intent pickPhoto = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                            startActivityForResult(pickPhoto , 1);
+
+                        } else if (options[item].equals("Batal")) {
+                            dialog.dismiss();
+                        }
+                    }
+                }
+
 
             }
+        });
+        builder.show();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(resultCode != RESULT_CANCELED) {
+            switch (requestCode) {
+                case 0:
+                    if (resultCode == RESULT_OK && data != null) {
+                        Bitmap selectedImage = (Bitmap) data.getExtras().get("data");
+                        //imageView.setImageBitmap(selectedImage);
+                    }
+                    break;
+                case 1:
+                    Toast.makeText(LokasiActivity.this, "case 1", Toast.LENGTH_SHORT).show();
+                    if (resultCode == RESULT_OK && data != null) {
+                        Uri selectedImage =  data.getData();
+                        String[] filePathColumn = {MediaStore.Images.Media.DATA};
+                        if (selectedImage != null) {
+                            Cursor cursor = getContentResolver().query(selectedImage,
+                                    filePathColumn, null, null, null);
+                            if (cursor != null) {
+                                cursor.moveToFirst();
+
+                                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                                String picturePath = cursor.getString(columnIndex);
+                                //imageView.setImageBitmap(BitmapFactory.decodeFile(picturePath));
+                                try {
+                                    imageBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                                cursor.close();
+                            }
+                        }
+
+                    }
+                    break;
+                default:
+                    throw new IllegalStateException("Unexpected value: " + requestCode);
+            }
+        }
     }
 
     // Add the mapView lifecycle to the activity's lifecycle methods

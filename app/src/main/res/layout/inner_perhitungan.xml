@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:paddingStart="4dp"
+  android:paddingTop="4dp"
+  android:paddingEnd="4dp">
+
+  <LinearLayout
+	android:id="@+id/linear_cekbox_input"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:layout_below="@+id/linear_tv_prioritas"
+	android:layout_marginTop="3dp"
+	android:layout_marginBottom="3dp"
+	android:layout_marginStart="5dp"
+	android:layout_marginEnd="5dp"
+	android:weightSum="1"
+	android:orientation="vertical">
+
+	<TextView
+	  android:layout_width="match_parent"
+	  android:textColor="@color/colorPrimary"
+	  android:layout_height="wrap_content"
+	  android:id="@+id/tvBoolean"/>
+
+	<TextView
+	  android:layout_width="match_parent"
+	  android:layout_height="wrap_content"
+	  android:textColor="@color/colorPrimary"
+	  android:id="@+id/tvNilai"
+	  android:layout_below="@+id/tvBoolean"/>
+
+  </LinearLayout>
+
+  <LinearLayout
+	android:layout_width="match_parent"
+	android:layout_height="10dp"
+	android:layout_marginStart="5dp"
+	android:layout_marginEnd="5dp"
+	android:layout_marginBottom="20dp"
+	android:gravity="end"
+	android:layout_below="@+id/linear_cekbox_input"
+	android:background="@color/color_bg"
+	android:orientation="horizontal">
+
+  </LinearLayout>
+
+</RelativeLayout>

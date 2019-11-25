@@ -12,7 +12,7 @@
 	  android:layout_width="match_parent"
 	  android:layout_height="wrap_content"
 	  android:layout_marginStart="3dp"
-	  android:layout_marginTop="8dp"
+	  android:layout_marginTop="3dp"
 	  android:orientation="vertical">
 
 	  <RelativeLayout
@@ -23,22 +23,11 @@
 		android:layout_marginTop="8dp"
 		android:layout_below="@+id/linear_layout_skalalamda">
 
-		<Button
-		  android:id="@+id/btn_matriks_tfn"
-		  android:layout_width="match_parent"
-		  android:layout_height="wrap_content"
-		  android:layout_marginStart="20dp"
-		  android:layout_marginEnd="20dp"
-		  android:background="@drawable/custom_button_blueriple"
-		  android:textColor="@color/mapboxWhite"
-		  android:text="Hitung Matriks TFN" />
-
 		<ScrollView
 		  android:layout_width="match_parent"
 		  android:layout_height="350dp"
-		  android:layout_below="@id/btn_matriks_tfn"
-		  android:layout_marginTop="20dp"
-		  android:padding="8dp">
+		  android:layout_marginTop="5dp"
+		  android:padding="4dp">
 
 		  <LinearLayout
 			android:layout_width="match_parent"
@@ -108,20 +97,31 @@
 
 		</ScrollView>
 
-
-
 	  </RelativeLayout>
 
 	</LinearLayout>
 
   <Button
-	android:layout_width="match_parent"
+	android:layout_width="wrap_content"
 	android:layout_height="wrap_content"
 	android:id="@+id/btn_rank"
 	android:layout_margin="20dp"
 	android:text="RANKING"
 	android:textColor="@color/mapboxWhite"
+	android:layout_alignParentEnd="true"
 	android:background="@drawable/custom_button_blueriple"
 	android:layout_alignParentBottom="true"/>
+
+  <Button
+	android:id="@+id/btn_matriks_tfn"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content"
+	android:padding="10dp"
+	android:layout_margin="20dp"
+	android:background="@drawable/custom_button_blueriple"
+	android:textColor="@color/mapboxWhite"
+	android:layout_alignParentBottom="true"
+
+	android:text="Hitung Matriks TFN" />
 
 </RelativeLayout>

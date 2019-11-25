@@ -4,6 +4,6 @@ public class Utils {
 
     public String formatDecimal(double bilangan){
 
-        return String.format("%.4f", bilangan);
+        return String.format("%.2f", bilangan);
     }
 }

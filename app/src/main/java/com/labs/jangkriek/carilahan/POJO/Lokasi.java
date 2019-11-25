@@ -1,11 +1,14 @@
 package com.labs.jangkriek.carilahan.POJO;
 
+import android.graphics.Bitmap;
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.mapbox.mapboxsdk.geometry.LatLng;
 
 public class Lokasi {
+
+    //tips jangan lupa samakan dengan nama variabel server dengna lokal pojo
 
     private int id;
     private String nama;
@@ -24,11 +27,14 @@ public class Lokasi {
     private Double kerawananBencana;
     private Double jarakKeBandara;
     private Double jumlah;
+    private Bitmap bitmap;
+    private String gambar;
+    private byte[] image;
 
     public Lokasi (){
 
     }
-    public Lokasi(int id, String nama, double latitude, double longitude,
+/*    public Lokasi(int id, String nama, double latitude, double longitude,
                   double dayaDukungTanah, double ketersediaanAir, double kemiringanLereng, double aksebilitas,
                   double perubahanLahan, double kerawananBencana, double jarakKeBandara, int status){
         this.id = id;
@@ -43,6 +49,42 @@ public class Lokasi {
         this.kerawananBencana = kerawananBencana;
         this.jarakKeBandara = jarakKeBandara;
         this.status = status;
+    }*/
+
+    public Lokasi(int id, String nama, double latitude, double longitude,
+                  double dayaDukungTanah, double ketersediaanAir, double kemiringanLereng, double aksebilitas,
+                  double perubahanLahan, double kerawananBencana, double jarakKeBandara, int status, Bitmap bitmap){
+        this.id = id;
+        this.nama = nama;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.dayaDukungTanah = dayaDukungTanah;
+        this.ketersediaanAir = ketersediaanAir;
+        this.kemiringanLereng = kemiringanLereng;
+        this.aksebilitas = aksebilitas;
+        this.perubahanLahan = perubahanLahan;
+        this.kerawananBencana = kerawananBencana;
+        this.jarakKeBandara = jarakKeBandara;
+        this.status = status;
+        this.bitmap = bitmap;
+    }
+
+    public Lokasi(int id, String nama, double latitude, double longitude,
+                  double dayaDukungTanah, double ketersediaanAir, double kemiringanLereng, double aksebilitas,
+                  double perubahanLahan, double kerawananBencana, double jarakKeBandara, int status, String gambar){
+        this.id = id;
+        this.nama = nama;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.dayaDukungTanah = dayaDukungTanah;
+        this.ketersediaanAir = ketersediaanAir;
+        this.kemiringanLereng = kemiringanLereng;
+        this.aksebilitas = aksebilitas;
+        this.perubahanLahan = perubahanLahan;
+        this.kerawananBencana = kerawananBencana;
+        this.jarakKeBandara = jarakKeBandara;
+        this.status = status;
+        this.gambar = gambar;
     }
 
     public int getId() {
@@ -153,9 +195,24 @@ public class Lokasi {
         this.jumlah = jumlah;
     }
 
+    public Bitmap getBitmap() {
+        return bitmap;
+    }
+
+    public void setBitmap(Bitmap bitmap) {
+        this.bitmap = bitmap;
+    }
+
     public LatLng getLokasi() {
         LatLng a = new LatLng(this.latitude, this.longitude);
         return a;
     }
 
+    public String getGambar() {
+        return gambar;
+    }
+
+    public void setGambar(String gambar) {
+        this.gambar = gambar;
+    }
 }
