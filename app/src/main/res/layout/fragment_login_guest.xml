@@ -24,7 +24,7 @@
 	  android:layout_width="match_parent"
 	  android:layout_height="wrap_content"
 	  android:id="@+id/tv_login_admin_fragment"
-	  android:text="Login Admin"
+	  android:text=" -   Login   - "
 	  android:textColor="#009eee"
 	  android:textSize="12dp" />
 
@@ -90,7 +90,7 @@
 	  android:id="@+id/tv_login_user"
 	  android:gravity="center"
 	  android:padding="22dp"
-	  android:text="NEXT"
+	  android:text="Login Guest"
 	  android:textColor="#009eee"
 	  android:textSize="14dp" />
   </LinearLayout>

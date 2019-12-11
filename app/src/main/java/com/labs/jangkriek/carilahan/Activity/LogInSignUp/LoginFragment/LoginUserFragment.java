@@ -14,13 +14,8 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.google.android.material.snackbar.Snackbar;
-import com.labs.jangkriek.carilahan.Activity.LogInSignUp.LoginActivity;
-import com.labs.jangkriek.carilahan.Activity.LogInSignUp.SignUpActivity;
 import com.labs.jangkriek.carilahan.Activity.MainActivity;
 import com.labs.jangkriek.carilahan.R;
-
-import java.util.zip.Inflater;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -41,7 +36,7 @@ public class LoginUserFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.fragment_login_user, container, false);
+        View v = inflater.inflate(R.layout.fragment_login_guest, container, false);
 
         tvLogin = v.findViewById(R.id.tv_login_user);
         tvLoginAdminFr = v.findViewById(R.id.tv_login_admin_fragment);

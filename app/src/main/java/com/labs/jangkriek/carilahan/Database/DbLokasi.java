@@ -99,7 +99,7 @@ public class DbLokasi extends SQLiteOpenHelper {
         return id;
     }
 
-    public Lokasi getLokasi(long id) {
+    /*public Lokasi getLokasi(long id) {
         // get readable database as we are not inserting anything
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -115,7 +115,7 @@ public class DbLokasi extends SQLiteOpenHelper {
 
         // prepare note object
         byte[] image = cursor.getBlob(cursor.getColumnIndex(GAMBAR));
-        Lokasi note = new Lokasi(
+        *//*Lokasi note = new Lokasi(
                 cursor.getInt(cursor.getColumnIndex(KOLOM_ID)),
                 cursor.getString(cursor.getColumnIndex(KOLOM_NAMA)),
                 cursor.getDouble(cursor.getColumnIndex(KOLOM_LATITUDE)),
@@ -130,13 +130,13 @@ public class DbLokasi extends SQLiteOpenHelper {
                 cursor.getInt(cursor.getColumnIndex(KOLOM_STATUS)),
                 getImage(image)
 
-        );
+        );*//*
 
         // close the db connection
         cursor.close();
 
-        return note;
-    }
+        /return note;
+    }*/
 
     public List<Lokasi> getAllLokasi() {
         List<Lokasi> notes = new ArrayList<>();
@@ -149,7 +149,7 @@ public class DbLokasi extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery(selectQuery, null);
 
         // looping through all rows and adding to list
-        if (cursor.moveToFirst()) {
+        /*if (cursor.moveToFirst()) {
             do {
                 Lokasi note = new Lokasi();
                 note.setId(cursor.getInt(cursor.getColumnIndex(KOLOM_ID)));
@@ -169,7 +169,7 @@ public class DbLokasi extends SQLiteOpenHelper {
 
                 notes.add(note);
             } while (cursor.moveToNext());
-        }
+        }*/
 
         // close db connection
         db.close();
@@ -265,7 +265,7 @@ public class DbLokasi extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery(selectQueryLat, null);
 
         // looping through all rows and adding to list
-        if (cursor.moveToFirst()) {
+        /*if (cursor.moveToFirst()) {
             do {
                 Lokasi temp = new Lokasi();
                 temp.setId(cursor.getInt(cursor.getColumnIndex(KOLOM_ID)));
@@ -281,7 +281,7 @@ public class DbLokasi extends SQLiteOpenHelper {
                 temp.setJarakKeBandara(cursor.getDouble(cursor.getColumnIndex(JARAK_KE_BANDARA)));
                 loc.add(temp);
             } while (cursor.moveToNext());
-        }
+        }*/
         // close db connection
         db.close();
 

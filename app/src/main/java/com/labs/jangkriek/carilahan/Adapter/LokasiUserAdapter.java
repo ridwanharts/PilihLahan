@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -14,8 +13,7 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.labs.jangkriek.carilahan.Activity.DetailLokasiActivity;
-import com.labs.jangkriek.carilahan.Activity.LokasiActivity;
-import com.labs.jangkriek.carilahan.Database.DbLokasi;
+import com.labs.jangkriek.carilahan.Activity.KelolaLahankuActivity;
 import com.labs.jangkriek.carilahan.Database.DbUserLokasi;
 import com.labs.jangkriek.carilahan.POJO.Lokasi;
 import com.labs.jangkriek.carilahan.R;
@@ -62,7 +60,7 @@ public class LokasiUserAdapter extends RecyclerView.Adapter<LokasiUserAdapter.My
         holder.longitude.setText(String.valueOf(namaLokasi.getLongitude()));
         holder.ivGambar.setImageBitmap(namaLokasi.getBitmap());
         //Log.e("b", lokasiList.get(position).getLokasi()+"");
-        holder.setClickListener(new LokasiActivity.ItemClickListener() {
+        holder.setClickListener(new KelolaLahankuActivity.ItemClickListener() {
             @Override
             public void onClick(View view, int position) {
                 LatLng selectedLocationLatLng = lokasiList.get(position).getLokasi();
@@ -100,7 +98,7 @@ public class LokasiUserAdapter extends RecyclerView.Adapter<LokasiUserAdapter.My
         ImageView ivGambar;
         CardView singleCard;
         LinearLayout linearLayoutDetailLokasi;
-        LokasiActivity.ItemClickListener itemClickListener;
+        KelolaLahankuActivity.ItemClickListener itemClickListener;
 
         public MyViewHolder(View view) {
             super(view);
@@ -114,7 +112,7 @@ public class LokasiUserAdapter extends RecyclerView.Adapter<LokasiUserAdapter.My
             singleCard.setOnClickListener(this);
         }
 
-        public void setClickListener(LokasiActivity.ItemClickListener itemClickListener) {
+        public void setClickListener(KelolaLahankuActivity.ItemClickListener itemClickListener) {
             this.itemClickListener = itemClickListener;
         }
 

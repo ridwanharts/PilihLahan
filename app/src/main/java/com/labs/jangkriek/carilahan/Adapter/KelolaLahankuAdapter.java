@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,29 +18,18 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.labs.jangkriek.carilahan.Activity.DetailLokasiActivity;
-import com.labs.jangkriek.carilahan.Activity.LokasiActivity;
+import com.labs.jangkriek.carilahan.Activity.KelolaLahankuActivity;
 import com.labs.jangkriek.carilahan.Database.DbLokasi;
 import com.labs.jangkriek.carilahan.POJO.Lokasi;
-import com.labs.jangkriek.carilahan.POJO.Respon;
 import com.labs.jangkriek.carilahan.R;
-import com.labs.jangkriek.carilahan.RegisterApi;
-import com.labs.jangkriek.carilahan.Utils.ImageUtils;
 import com.mapbox.mapboxsdk.camera.CameraPosition;
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 
-import java.io.ByteArrayOutputStream;
 import java.util.List;
 
-import okhttp3.OkHttpClient;
-import okhttp3.logging.HttpLoggingInterceptor;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-
-public class LokasiAdapter extends RecyclerView.Adapter<LokasiAdapter.MyViewHolder> {
+public class KelolaLahankuAdapter extends RecyclerView.Adapter<KelolaLahankuAdapter.MyViewHolder> {
 
     private Context context;
     private List<Lokasi> lokasiList;
@@ -60,7 +48,7 @@ public class LokasiAdapter extends RecyclerView.Adapter<LokasiAdapter.MyViewHold
         RelativeLayout relativeLayout;
         CardView singleCard;
         LinearLayout linearLayoutDetailLokasi;
-        LokasiActivity.ItemClickListener itemClickListener;
+        KelolaLahankuActivity.ItemClickListener itemClickListener;
 
         public MyViewHolder(View view) {
             super(view);
@@ -76,7 +64,7 @@ public class LokasiAdapter extends RecyclerView.Adapter<LokasiAdapter.MyViewHold
             singleCard.setOnClickListener(this);
         }
 
-        public void setClickListener(LokasiActivity.ItemClickListener itemClickListener) {
+        public void setClickListener(KelolaLahankuActivity.ItemClickListener itemClickListener) {
             this.itemClickListener = itemClickListener;
         }
 
@@ -87,7 +75,7 @@ public class LokasiAdapter extends RecyclerView.Adapter<LokasiAdapter.MyViewHold
     }
 
 
-    public LokasiAdapter(Context context, List<Lokasi> lokasiList, MapboxMap mapBoxMap) {
+    public KelolaLahankuAdapter(Context context, List<Lokasi> lokasiList, MapboxMap mapBoxMap) {
         this.context = context;
         this.lokasiList = lokasiList;
         this.map = mapBoxMap;
@@ -103,7 +91,7 @@ public class LokasiAdapter extends RecyclerView.Adapter<LokasiAdapter.MyViewHold
     }
 
     @Override
-    public void onBindViewHolder(LokasiAdapter.MyViewHolder holder, int position) {
+    public void onBindViewHolder(KelolaLahankuAdapter.MyViewHolder holder, int position) {
         dbLokasi = new DbLokasi(context);
         Lokasi namaLokasi = lokasiList.get(position);
 
@@ -119,7 +107,7 @@ public class LokasiAdapter extends RecyclerView.Adapter<LokasiAdapter.MyViewHold
         holder.longitude.setText(String.valueOf(namaLokasi.getLongitude()));
         holder.ivLahan.setImageBitmap(namaLokasi.getBitmap());
         //Log.e("b", lokasiList.get(position).getLokasi()+"");
-        holder.setClickListener(new LokasiActivity.ItemClickListener() {
+        holder.setClickListener(new KelolaLahankuActivity.ItemClickListener() {
             @Override
             public void onClick(View view, int position) {
                 LatLng selectedLocationLatLng = lokasiList.get(position).getLokasi();
@@ -137,10 +125,10 @@ public class LokasiAdapter extends RecyclerView.Adapter<LokasiAdapter.MyViewHold
             public void onClick(View v) {
 
                 holder.relativeLayout.setVisibility(View.VISIBLE);
-                insertUser(namaLokasi.getNama(), namaLokasi.getLatitude(), namaLokasi.getLongitude(),
+                /*insertUser(namaLokasi.getNama(), namaLokasi.getLatitude(), namaLokasi.getLongitude(),
                         namaLokasi.getDayaDukungTanah(),namaLokasi.getKetersediaanAir(),namaLokasi.getKemiringanLereng(),
                         namaLokasi.getAksebilitas(),namaLokasi.getPerubahanLahan(),namaLokasi.getKerawananBencana(),namaLokasi.getJarakKeBandara(),
-                        1, namaLokasi.getBitmap());
+                        1, namaLokasi.getBitmap());*/
                 if (kondisi){
                     holder.cekUpload.setImageResource(R.drawable.icons8_checked);
                     namaLokasi.setStatus(1);
@@ -165,13 +153,26 @@ public class LokasiAdapter extends RecyclerView.Adapter<LokasiAdapter.MyViewHold
             }
         });
 
-        holder.linearLayoutDetailLokasi.setOnClickListener(new View.OnClickListener() {
+        /*holder.linearLayoutDetailLokasi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                double lat = namaLokasi.getLatitude();
+                double longi = namaLokasi.getLongitude();
+                double harga = namaLokasi.getPerubahanLahan();
+
+                Bitmap bitmap = namaLokasi.getBitmap();
+                String nama = namaLokasi.getNama();
+
                 Intent i = new Intent(context, DetailLokasiActivity.class);
+                i.putExtra("nama", nama);
+                i.putExtra("latitude", lat);
+                i.putExtra("longitude", longi);
+                i.putExtra("harga", harga);
+                //i.putExtra("nama", nama);
                 context.startActivity(i);
             }
-        });
+        });*/
 
     }
 
@@ -180,7 +181,7 @@ public class LokasiAdapter extends RecyclerView.Adapter<LokasiAdapter.MyViewHold
         return lokasiList.size();
     }
 
-    private void insertUser(String namaLokasi, double lat, double longi,
+    /*private void insertUser(String namaLokasi, double lat, double longi,
                             double ddTanah, double kAir, double kLereng, double aksebilitas,
                             double pLahan, double kBencana, double jBandara, int a, Bitmap bitmap){
 
@@ -205,9 +206,9 @@ public class LokasiAdapter extends RecyclerView.Adapter<LokasiAdapter.MyViewHold
 
         RegisterApi api = retrofit.create(RegisterApi.class);
         Call<Respon> call = api.insert_lokasi(
-                namaLokasi,lat,longi,
+                namaLokasi,hargaLahan, lat,longi,
                 ddTanah,kAir,kLereng,
-                aksebilitas,pLahan,kBencana,jBandara,a, encodedBitmap
+                aksebilitas,kBencana,jBandara, a, encodedBitmap
         );
         call.enqueue(new Callback<Respon>() {
             @Override
@@ -229,7 +230,7 @@ public class LokasiAdapter extends RecyclerView.Adapter<LokasiAdapter.MyViewHold
                 Log.d("cek lagi", ""+call);
             }
         });
-    }
+    }*/
 
     private boolean mKondisi(boolean k){
 

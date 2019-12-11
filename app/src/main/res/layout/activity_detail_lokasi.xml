@@ -57,13 +57,43 @@
 			  android:orientation="horizontal"
 			  android:weightSum="1"
 			  android:paddingTop="3dp">
-			  <TextView
+
+			  <LinearLayout
 				android:layout_width="match_parent"
 				android:layout_height="match_parent"
 				android:layout_weight="0.5"
-				android:textStyle="bold"
-				android:textSize="16sp"
-				android:text="Nama"/>
+				android:orientation="vertical">
+				<TextView
+				  android:layout_width="match_parent"
+				  android:layout_height="wrap_content"
+				  android:textStyle="bold"
+				  android:textSize="14sp"
+				  android:text="Nama Lokasi"/>
+				<TextView
+				  android:id="@+id/tv_nama_lokasi_detail"
+				  android:layout_width="match_parent"
+				  android:layout_height="wrap_content"
+				  android:layout_marginStart="5dp"
+				  android:textSize="12sp"
+				  android:text="Nama Lokasi"/>
+
+				<TextView
+				  android:layout_width="match_parent"
+				  android:layout_height="wrap_content"
+				  android:layout_marginTop="5dp"
+				  android:textStyle="bold"
+				  android:textSize="14sp"
+				  android:text="Harga"/>
+
+				<TextView
+				  android:id="@+id/tv_harga_tanah_detail"
+				  android:layout_width="match_parent"
+				  android:layout_height="wrap_content"
+				  android:layout_marginStart="5dp"
+				  android:textSize="12sp"
+				  android:text="Rp. 2500 /h"/>
+			  </LinearLayout>
+
 
 			  <LinearLayout
 				android:layout_width="1dp"
@@ -81,13 +111,15 @@
 				android:layout_weight="0.5">
 
 				<TextView
+				  android:id="@+id/tv_detail_lat"
 				  android:layout_width="match_parent"
-				  android:layout_height="match_parent"
+				  android:layout_height="wrap_content"
 				  android:text="Latitude"/>
 
 				<TextView
+				  android:id="@+id/tv_detail_longi"
 				  android:layout_width="match_parent"
-				  android:layout_height="match_parent"
+				  android:layout_height="wrap_content"
 				  android:text="Longitude"/>
 
 			  </LinearLayout>
@@ -163,14 +195,6 @@
 				android:layout_marginTop="8dp"
 				android:layout_marginBottom="5dp"
 				android:text="Aksebilitas" />
-
-			  <TextView
-				android:id="@+id/k5_otomatis"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_marginTop="8dp"
-				android:layout_marginBottom="5dp"
-				android:text="Harga Lahan" />
 
 			  <TextView
 				android:id="@+id/k6_otomatis"

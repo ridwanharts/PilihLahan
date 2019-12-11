@@ -39,7 +39,7 @@ public class HomeUserFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_home_user, container, false);
+        View v = inflater.inflate(R.layout.fragment_home_guest, container, false);
 
         cvCari = v.findViewById(R.id.cv_user_child_top1);
         cvHitung = v.findViewById(R.id.cv_user_child_top2);

@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "349294115955-ph41vk4e3teaoq59q7adbqulor5i9jdm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.labs.jangkriek.carilahan",
+            "certificate_hash": "e20967a2f52fac385b3c822adc61528865835b2a"
+          }
+        },
+        {
           "client_id": "349294115955-3aovgcbr4ln3gpalr1iclr4isgmq9qv2.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

@@ -17,7 +17,7 @@ import com.labs.jangkriek.carilahan.Database.DbSavePencarian;
 import com.labs.jangkriek.carilahan.Activity.HistoriActivity;
 import com.labs.jangkriek.carilahan.PrefConfig;
 import com.labs.jangkriek.carilahan.R;
-import com.labs.jangkriek.carilahan.Activity.LokasiActivity;
+import com.labs.jangkriek.carilahan.Activity.KelolaLahankuActivity;
 import com.labs.jangkriek.carilahan.Activity.PilihKriteria;
 
 
@@ -41,7 +41,7 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_home, container, false);
+        View v = inflater.inflate(R.layout.fragment_home_users, container, false);
 
         prefConfig = new PrefConfig(getContext());
 
@@ -82,7 +82,7 @@ public class HomeFragment extends Fragment {
         cvLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(getActivity(), LokasiActivity.class);
+                Intent i = new Intent(getActivity(), KelolaLahankuActivity.class);
                 startActivity(i);
             }
         });

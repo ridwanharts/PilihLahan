@@ -95,13 +95,13 @@ public class UserLokasiActivity extends AppCompatActivity implements OnMapReadyC
         ibDownload.setVisibility(View.INVISIBLE);
 
         loadDataLokasiFromServer();
-        if (lokasiList.addAll(dbUserLokasi.getAllLokasi())){
+        /*if (lokasiList.addAll(dbUserLokasi.getAllLokasi())){
             if (lokasiList.size()==0){
                 Toast.makeText(getApplicationContext(), "Data Kosong", Toast.LENGTH_SHORT).show();
             }else {
                 Toast.makeText(getApplicationContext(), lokasiList.size()+" Data Termuat", Toast.LENGTH_SHORT).show();
             }
-        }
+        }*/
 
         ibDelete.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -137,24 +137,24 @@ public class UserLokasiActivity extends AppCompatActivity implements OnMapReadyC
                         String nama = lokasiListFromServer.get(i).getNama();
                         double lat = lokasiListFromServer.get(i).getLatitude();
                         double longi = lokasiListFromServer.get(i).getLongitude();
-                        double dayaDukungTanah = lokasiListFromServer.get(i).getDayaDukungTanah();
-                        double ketersediaanAir = lokasiListFromServer.get(i).getKetersediaanAir();
-                        double kemiringanLereng = lokasiListFromServer.get(i).getKemiringanLereng();
+                        //double dayaDukungTanah = lokasiListFromServer.get(i).getDayaDukungTanah();
+                        //double ketersediaanAir = lokasiListFromServer.get(i).getKetersediaanAir();
+                        //double kemiringanLereng = lokasiListFromServer.get(i).getKemiringanLereng();
                         double aksebilitas = lokasiListFromServer.get(i).getAksebilitas();
-                        double hargaLahan = lokasiListFromServer.get(i).getPerubahanLahan();
-                        double kerawananBencana = lokasiListFromServer.get(i).getKerawananBencana();
+                        //double hargaLahan = lokasiListFromServer.get(i).getPerubahanLahan();
+                        //double kerawananBencana = lokasiListFromServer.get(i).getKerawananBencana();
                         double jarakKeBandara = lokasiListFromServer.get(i).getJarakKeBandara();
                         int status = lokasiListFromServer.get(i).getStatus();
 
-                        dbUserLokasi.insertLokasi(
+                        /*dbUserLokasi.insertLokasi(
                                 nama, lat, longi,
                                 dayaDukungTanah,ketersediaanAir,kemiringanLereng,aksebilitas,hargaLahan,kerawananBencana,jarakKeBandara,
                                 status,decodedByte
-                        );
+                        );*/
 
                     }
                     Toast.makeText(getApplicationContext(),"tidak sama "+lokasiList.size(), Toast.LENGTH_SHORT).show();
-                    lokasiList.addAll(dbUserLokasi.getAllLokasi());
+                    //lokasiList.addAll(dbUserLokasi.getAllLokasi());
 
                     lokasiUserAdapter.notifyDataSetChanged();
                     mapView.invalidate();

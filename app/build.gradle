@@ -53,4 +53,3 @@ dependencies {
     //recyclerview item animator
     //implementation 'jp.wasabeef:recyclerview-animators:3.0.0'
 }
-

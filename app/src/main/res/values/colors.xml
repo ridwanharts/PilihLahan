@@ -17,4 +17,6 @@
   <color name="mapboxGreen">#33c377</color>
   <color name="mapboxOrange">#f79640</color>
 
+  <color name="text_grey">#4B000000</color>
+
 </resources>

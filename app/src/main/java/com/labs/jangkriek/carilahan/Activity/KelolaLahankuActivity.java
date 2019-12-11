@@ -4,22 +4,18 @@ import android.Manifest;
 import android.animation.ObjectAnimator;
 import android.animation.TypeEvaluator;
 import android.animation.ValueAnimator;
-import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -34,15 +30,16 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.labs.jangkriek.carilahan.POJO.Lokasi;
-import com.labs.jangkriek.carilahan.Adapter.LokasiAdapter;
+import com.labs.jangkriek.carilahan.Adapter.KelolaLahankuAdapter;
 import com.labs.jangkriek.carilahan.Database.DbLokasi;
+import com.labs.jangkriek.carilahan.POJO.PointLatLong;
 import com.labs.jangkriek.carilahan.POJO.Respon;
 import com.labs.jangkriek.carilahan.R;
 import com.labs.jangkriek.carilahan.RegisterApi;
@@ -63,8 +60,6 @@ import com.mapbox.mapboxsdk.utils.BitmapUtils;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -72,6 +67,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 import retrofit2.Callback;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -83,7 +79,7 @@ import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconOffset;
 /**
  * Use a recyclerview with a Mapbox map to easily explore content all on one screen
  */
-public class LokasiActivity extends AppCompatActivity implements OnMapReadyCallback, MapboxMap.OnMapClickListener {
+public class KelolaLahankuActivity extends AppCompatActivity implements OnMapReadyCallback, MapboxMap.OnMapClickListener {
 
     private static final String URL = "https://ridwanharts.000webhostapp.com/";
     private static final String SYMBOL_ICON_ID = "SYMBOL_ICON_ID";
@@ -95,9 +91,11 @@ public class LokasiActivity extends AppCompatActivity implements OnMapReadyCallb
     private FeatureCollection lokasiCollection;
     private ImageView ivCekUpload;
 
-    private LokasiAdapter mAdapter;
+    private KelolaLahankuAdapter mAdapter;
 
     private List<Lokasi> lokasiList = new ArrayList<>();
+    private List<Lokasi> lokasiListFromServer = new ArrayList<>();
+    private List<PointLatLong> userLatLongListFromServer = new ArrayList<>();
 
     private DbLokasi db;
 
@@ -111,9 +109,11 @@ public class LokasiActivity extends AppCompatActivity implements OnMapReadyCallb
     private String lat, longi;
     private Context context;
 
-    private ImageView ivUploadGambar;
+    private ImageView ivUploadGambar, ivReloadServer;
 
     private Bitmap imageBitmap;
+
+    private RelativeLayout rvLoading;
 
 
     @Override
@@ -122,7 +122,7 @@ public class LokasiActivity extends AppCompatActivity implements OnMapReadyCallb
 
         Mapbox.getInstance(this, getString(R.string.access_token));
 
-        setContentView(R.layout.activity_lokasi);
+        setContentView(R.layout.activity_kelola_lahanku);
         FloatingActionButton fabOpAddLocation = findViewById(R.id.op_add_location);
 
         mapView = findViewById(R.id.mapView);
@@ -135,12 +135,28 @@ public class LokasiActivity extends AppCompatActivity implements OnMapReadyCallb
         tvLongitudeLokasi.setText("110.062440920");
         ivCekUpload = findViewById(R.id.iv_cek_upload);
         ivUploadGambar = findViewById(R.id.iv_upload_lokasi);
+        ivReloadServer = findViewById(R.id.reload_data_server);
+        rvLoading = findViewById(R.id.rv_loading);
 
         fabOpAddLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showNoteDialog(false, null, -1);
+                //showNoteDialog(false, null, -1);
+                double latitude = Double.parseDouble(tvLatitudeLokasi.getText().toString());
+                double longitude = Double.parseDouble(tvLongitudeLokasi.getText().toString());
+                Intent i = new Intent(getApplicationContext(), TambahLahanActivity.class);
+                i.putExtra("latitude", latitude);
+                i.putExtra("longitude", longitude);
+                //i.putExtra("nama", nama);
+                startActivity(i);
 
+            }
+        });
+
+        ivReloadServer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadDataLokasiFromServer();
             }
         });
 
@@ -152,10 +168,12 @@ public class LokasiActivity extends AppCompatActivity implements OnMapReadyCallb
 
     @Override
     public void onMapReady(@NonNull MapboxMap mapboxMap) {
-        LokasiActivity.this.mapboxMap = mapboxMap;
+        KelolaLahankuActivity.this.mapboxMap = mapboxMap;
         geoJsonSource = new GeoJsonSource("source-id",
                 Feature.fromGeometry(Point.fromLngLat(currentPos.getLongitude(),
                         currentPos.getLatitude())));
+
+        //new Style.Builder().fromUri("mapbox://styles/ridwanharts/cjytgnl6o073w1cnv460nfx46"
         mapboxMap.setStyle(new Style.Builder().fromUri("mapbox://styles/ridwanharts/cjytgnl6o073w1cnv460nfx46"), new Style.OnStyleLoaded() {
             @Override
             public void onStyleLoaded(@NonNull Style style) {
@@ -203,7 +221,7 @@ public class LokasiActivity extends AppCompatActivity implements OnMapReadyCallb
         LayoutInflater layoutInflaterAndroid = LayoutInflater.from(getApplicationContext());
         View view = layoutInflaterAndroid.inflate(R.layout.dialog_lokasi, null);
 
-        AlertDialog.Builder alertDialogBuilderUserInput = new AlertDialog.Builder(LokasiActivity.this);
+        AlertDialog.Builder alertDialogBuilderUserInput = new AlertDialog.Builder(KelolaLahankuActivity.this);
         alertDialogBuilderUserInput.setView(view);
 
         final EditText inputNote = view.findViewById(R.id.et_nama_lokasi);
@@ -221,7 +239,7 @@ public class LokasiActivity extends AppCompatActivity implements OnMapReadyCallb
         ivUploadGambar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                pickFromGallery();
+
             }
         });
 
@@ -262,7 +280,7 @@ public class LokasiActivity extends AppCompatActivity implements OnMapReadyCallb
                 double tempJBandara = Double.parseDouble(etJarakBandara.getText().toString());
 
                 if (TextUtils.isEmpty(inputNote.getText().toString())) {
-                    Toast.makeText(LokasiActivity.this, "!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(KelolaLahankuActivity.this, "!", Toast.LENGTH_SHORT).show();
                     return;
                 } else {
                     alertDialog.dismiss();
@@ -293,9 +311,9 @@ public class LokasiActivity extends AppCompatActivity implements OnMapReadyCallb
         long id = db.insertLokasi(namaLokasi, lat, longi, ddTanah, kAir, kLereng, aksebilitas, pLahan, kBencana, jBandara, a, bitmap);
 
         // get the newly inserted note from db
-        Lokasi n = db.getLokasi(id);
+        //Lokasi n = db.getLokasi(id);
 
-        if (n != null) {
+        /*if (n != null) {
             // adding new note to array list at 0 position
             lokasiList.add(0, n);
 
@@ -303,7 +321,7 @@ public class LokasiActivity extends AppCompatActivity implements OnMapReadyCallb
             mAdapter.notifyDataSetChanged();
 
             toggleEmptyNotes();
-        }
+        }*/
     }
 
     private void updateLokasi(String note, int position) {
@@ -460,13 +478,13 @@ public class LokasiActivity extends AppCompatActivity implements OnMapReadyCallb
                         iconAllowOverlap(true)
                 ));
 
-        mapboxMap.addOnMapClickListener(LokasiActivity.this);
-        LokasiActivity.this.style = styleRed;
+        mapboxMap.addOnMapClickListener(KelolaLahankuActivity.this);
+        KelolaLahankuActivity.this.style = styleRed;
     }
 
     public void initRecyclerviewLatlong(){
         RecyclerView recyclerView = findViewById(R.id.rv_list_lokasi);
-        mAdapter = new LokasiAdapter(this, lokasiList, mapboxMap);
+        mAdapter = new KelolaLahankuAdapter(this, lokasiList, mapboxMap);
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(mAdapter);
@@ -519,47 +537,9 @@ public class LokasiActivity extends AppCompatActivity implements OnMapReadyCallb
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 
             } else {
-                Toast.makeText(LokasiActivity.this, "Please give your permission.", Toast.LENGTH_LONG).show();
+                Toast.makeText(KelolaLahankuActivity.this, "Please give your permission.", Toast.LENGTH_LONG).show();
             }
         }
-    }
-
-    private void pickFromGallery(){
-
-        final CharSequence[] options = { "Buka Kamera", "Pilih dari Galeri","Batal" };
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(LokasiActivity.this);
-        builder.setTitle("Pilih Gambar Lahan");
-
-        builder.setItems(options, new DialogInterface.OnClickListener() {
-
-            @Override
-            public void onClick(DialogInterface dialog, int item) {
-
-                final int MyVersion = Build.VERSION.SDK_INT;
-
-                if (MyVersion > Build.VERSION_CODES.LOLLIPOP_MR1) {
-                    if (!checkIfAlreadyhavePermission()) {
-                        ActivityCompat.requestPermissions(LokasiActivity.this, new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
-                    } else {
-                        if (options[item].equals("Buka Kamera")) {
-                            Intent takePicture = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                            startActivityForResult(takePicture, 0);
-
-                        } else if (options[item].equals("Pilih dari Galeri")) {
-                            Intent pickPhoto = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                            startActivityForResult(pickPhoto , 1);
-
-                        } else if (options[item].equals("Batal")) {
-                            dialog.dismiss();
-                        }
-                    }
-                }
-
-
-            }
-        });
-        builder.show();
     }
 
     @Override
@@ -573,7 +553,7 @@ public class LokasiActivity extends AppCompatActivity implements OnMapReadyCallb
                     }
                     break;
                 case 1:
-                    Toast.makeText(LokasiActivity.this, "case 1", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(KelolaLahankuActivity.this, "case 1", Toast.LENGTH_SHORT).show();
                     if (resultCode == RESULT_OK && data != null) {
                         Uri selectedImage =  data.getData();
                         String[] filePathColumn = {MediaStore.Images.Media.DATA};
@@ -601,6 +581,72 @@ public class LokasiActivity extends AppCompatActivity implements OnMapReadyCallb
                     throw new IllegalStateException("Unexpected value: " + requestCode);
             }
         }
+    }
+
+    private void loadDataLokasiFromServer(){
+
+        rvLoading.setVisibility(View.VISIBLE);
+        lokasiListFromServer.clear();
+        userLatLongListFromServer.clear();
+
+        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
+            @Override
+            public void log(String message) {
+                Log.e("", "message : "+message);
+            }
+        });
+        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        OkHttpClient client = new OkHttpClient.Builder()
+                .addInterceptor(interceptor)
+                .build();
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(client)
+                .build();
+
+        RegisterApi api = retrofit.create(RegisterApi.class);
+        Call<Respon> call = api.view();
+        call.enqueue(new Callback<Respon>() {
+            @Override
+            public void onResponse(Call<Respon> call, Response<Respon> response) {
+                String value = response.body().getValue();
+                if (value.equals("1")){
+                    lokasiListFromServer = response.body().getLokasiList();
+                    //Toast.makeText(getApplicationContext(),lokasiListFromServer.size()+" : "+lokasiList.size(), Toast.LENGTH_SHORT).show();
+                    if (lokasiListFromServer.size() != 0){
+                        //ibDownload.setVisibility(View.VISIBLE);
+                        Toast.makeText(getApplicationContext(),"Data lahan berhasil didownload "+lokasiListFromServer.size(), Toast.LENGTH_SHORT).show();
+                        Call<Respon> getUserLatLong = api.get_user_latlong();
+                        getUserLatLong.enqueue(new Callback<Respon>() {
+                            @Override
+                            public void onResponse(Call<Respon> call, Response<Respon> response) {
+                                String value = response.body().getValue();
+
+                                if (value.equals("1")) {
+                                    userLatLongListFromServer = response.body().getPoint();
+                                }
+                                Toast.makeText(getApplicationContext(),"Data plot berhasil didownload "+userLatLongListFromServer.size(), Toast.LENGTH_SHORT).show();
+                                rvLoading.setVisibility(View.INVISIBLE);
+                            }
+
+                            @Override
+                            public void onFailure(Call<Respon> call, Throwable t) {
+
+                            }
+                        });
+                    }
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Respon> call, Throwable t) {
+                Toast.makeText(getApplicationContext(),"Koneksi internet bermasalah", Toast.LENGTH_SHORT).show();
+
+            }
+        });
     }
 
     // Add the mapView lifecycle to the activity's lifecycle methods

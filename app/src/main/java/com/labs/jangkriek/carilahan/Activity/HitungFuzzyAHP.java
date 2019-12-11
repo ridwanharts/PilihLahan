@@ -321,7 +321,7 @@ public class HitungFuzzyAHP extends AppCompatActivity {
     }
 
     private String formatDecimal(double bilangan){
-        return String.format("%.4f", bilangan);
+        return String.format("%.6f", bilangan);
     }
 
     @Override

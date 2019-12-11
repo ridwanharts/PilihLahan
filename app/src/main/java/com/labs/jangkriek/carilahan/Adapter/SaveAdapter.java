@@ -10,7 +10,7 @@ import android.widget.TextView;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.labs.jangkriek.carilahan.Activity.LokasiActivity;
+import com.labs.jangkriek.carilahan.Activity.KelolaLahankuActivity;
 import com.labs.jangkriek.carilahan.POJO.SavePencarian;
 import com.labs.jangkriek.carilahan.Activity.DetailHistoryActivity;
 import com.labs.jangkriek.carilahan.R;
@@ -31,7 +31,7 @@ public class SaveAdapter extends RecyclerView.Adapter<SaveAdapter.MyViewHolder> 
         public TextView longitude;
         public Button btnSeeDetail;
         CardView singleCard;
-        LokasiActivity.ItemClickListener itemClickListener;
+        KelolaLahankuActivity.ItemClickListener itemClickListener;
 
         public MyViewHolder(View view) {
             super(view);
@@ -45,7 +45,7 @@ public class SaveAdapter extends RecyclerView.Adapter<SaveAdapter.MyViewHolder> 
             singleCard.setOnClickListener(this);
         }
 
-        public void setClickListener(LokasiActivity.ItemClickListener itemClickListener) {
+        public void setClickListener(KelolaLahankuActivity.ItemClickListener itemClickListener) {
             this.itemClickListener = itemClickListener;
         }
 
@@ -78,7 +78,7 @@ public class SaveAdapter extends RecyclerView.Adapter<SaveAdapter.MyViewHolder> 
         holder.id.setText("id "+savePencarian.getIdGroup());
         holder.latitude.setText(String.valueOf(savePencarian.getLatitude()));
         holder.longitude.setText(String.valueOf(savePencarian.getLongitude()));
-        holder.setClickListener(new LokasiActivity.ItemClickListener() {
+        holder.setClickListener(new KelolaLahankuActivity.ItemClickListener() {
             @Override
             public void onClick(View view, int position) {
 

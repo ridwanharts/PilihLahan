@@ -7,6 +7,15 @@ public class Respon {
     String value;
     String message;
     List<Lokasi> result;
+    List<PointLatLong> point;
+
+    public List<PointLatLong> getPoint() {
+        return point;
+    }
+
+    public void setPoint(List<PointLatLong> point) {
+        this.point = point;
+    }
 
     public List<Lokasi> getLokasiList() {
         return result;

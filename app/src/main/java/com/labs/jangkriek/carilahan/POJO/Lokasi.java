@@ -12,19 +12,21 @@ public class Lokasi {
 
     private int id;
     private String nama;
+    private double hargaLahan;
+    private double luasLahan;
     private Double longitude;
     private Double latitude;
     private int status;
+    private String created_at;
     private String waktu;
     private LatLng lokasi;
 
+    private String dayaDukungTanah;
+    private String ketersediaanAir;
+    private String kemiringanLereng;
+    private String kerawananBencana;
 
-    private Double dayaDukungTanah;
-    private Double ketersediaanAir;
-    private Double kemiringanLereng;
     private Double aksebilitas;
-    private Double perubahanLahan;
-    private Double kerawananBencana;
     private Double jarakKeBandara;
     private Double jumlah;
     private Bitmap bitmap;
@@ -34,57 +36,82 @@ public class Lokasi {
     public Lokasi (){
 
     }
-/*    public Lokasi(int id, String nama, double latitude, double longitude,
-                  double dayaDukungTanah, double ketersediaanAir, double kemiringanLereng, double aksebilitas,
-                  double perubahanLahan, double kerawananBencana, double jarakKeBandara, int status){
-        this.id = id;
-        this.nama = nama;
-        this.latitude = latitude;
-        this.longitude = longitude;
-        this.dayaDukungTanah = dayaDukungTanah;
-        this.ketersediaanAir = ketersediaanAir;
-        this.kemiringanLereng = kemiringanLereng;
-        this.aksebilitas = aksebilitas;
-        this.perubahanLahan = perubahanLahan;
-        this.kerawananBencana = kerawananBencana;
-        this.jarakKeBandara = jarakKeBandara;
-        this.status = status;
-    }*/
 
-    public Lokasi(int id, String nama, double latitude, double longitude,
-                  double dayaDukungTanah, double ketersediaanAir, double kemiringanLereng, double aksebilitas,
-                  double perubahanLahan, double kerawananBencana, double jarakKeBandara, int status, Bitmap bitmap){
+    public Lokasi(int id, String nama, double hargaLahan, double luasLahan, double latitude, double longitude,
+                  String dayaDukungTanah, String ketersediaanAir, String kemiringanLereng, double aksebilitas,
+                  String kerawananBencana, double jarakKeBandara, String created_at, String gambar){
         this.id = id;
         this.nama = nama;
+        this.hargaLahan = hargaLahan;
+        this.luasLahan = luasLahan;
+
         this.latitude = latitude;
         this.longitude = longitude;
         this.dayaDukungTanah = dayaDukungTanah;
         this.ketersediaanAir = ketersediaanAir;
         this.kemiringanLereng = kemiringanLereng;
         this.aksebilitas = aksebilitas;
-        this.perubahanLahan = perubahanLahan;
         this.kerawananBencana = kerawananBencana;
         this.jarakKeBandara = jarakKeBandara;
-        this.status = status;
-        this.bitmap = bitmap;
+
+        this.created_at = created_at;
+        this.gambar = gambar;
     }
 
-    public Lokasi(int id, String nama, double latitude, double longitude,
-                  double dayaDukungTanah, double ketersediaanAir, double kemiringanLereng, double aksebilitas,
-                  double perubahanLahan, double kerawananBencana, double jarakKeBandara, int status, String gambar){
-        this.id = id;
-        this.nama = nama;
-        this.latitude = latitude;
-        this.longitude = longitude;
+    public String getDayaDukungTanah() {
+        return dayaDukungTanah;
+    }
+
+    public void setDayaDukungTanah(String dayaDukungTanah) {
         this.dayaDukungTanah = dayaDukungTanah;
+    }
+
+    public String getKetersediaanAir() {
+        return ketersediaanAir;
+    }
+
+    public void setKetersediaanAir(String ketersediaanAir) {
         this.ketersediaanAir = ketersediaanAir;
+    }
+
+    public String getKemiringanLereng() {
+        return kemiringanLereng;
+    }
+
+    public void setKemiringanLereng(String kemiringanLereng) {
         this.kemiringanLereng = kemiringanLereng;
-        this.aksebilitas = aksebilitas;
-        this.perubahanLahan = perubahanLahan;
+    }
+
+    public String getKerawananBencana() {
+        return kerawananBencana;
+    }
+
+    public void setKerawananBencana(String kerawananBencana) {
         this.kerawananBencana = kerawananBencana;
-        this.jarakKeBandara = jarakKeBandara;
-        this.status = status;
-        this.gambar = gambar;
+    }
+
+    public double getLuasLahan() {
+        return luasLahan;
+    }
+
+    public void setLuasLahan(double luasLahan) {
+        this.luasLahan = luasLahan;
+    }
+
+    public double getHargaLahan() {
+        return hargaLahan;
+    }
+
+    public void setHargaLahan(double hargaLahan) {
+        this.hargaLahan = hargaLahan;
+    }
+
+    public String getCreated_at() {
+        return created_at;
+    }
+
+    public void setCreated_at(String created_at) {
+        this.created_at = created_at;
     }
 
     public int getId() {
@@ -127,52 +154,12 @@ public class Lokasi {
         this.status = status;
     }
 
-    public Double getDayaDukungTanah() {
-        return dayaDukungTanah;
-    }
-
-    public void setDayaDukungTanah(Double dayaDukungTanah) {
-        this.dayaDukungTanah = dayaDukungTanah;
-    }
-
-    public Double getKetersediaanAir() {
-        return ketersediaanAir;
-    }
-
-    public void setKetersediaanAir(Double ketersediaanAir) {
-        this.ketersediaanAir = ketersediaanAir;
-    }
-
-    public Double getKemiringanLereng() {
-        return kemiringanLereng;
-    }
-
-    public void setKemiringanLereng(Double kemiringanLereng) {
-        this.kemiringanLereng = kemiringanLereng;
-    }
-
     public Double getAksebilitas() {
         return aksebilitas;
     }
 
     public void setAksebilitas(Double aksebilitas) {
         this.aksebilitas = aksebilitas;
-    }
-
-    public Double getPerubahanLahan() {
-        return perubahanLahan;
-    }
-
-    public void setPerubahanLahan(Double perubahanLahan) {
-        this.perubahanLahan = perubahanLahan;
-    }
-
-    public Double getKerawananBencana() {
-        return kerawananBencana;
-    }
-
-    public void setKerawananBencana(Double kerawananBencana) {
-        this.kerawananBencana = kerawananBencana;
     }
 
     public Double getJarakKeBandara() {

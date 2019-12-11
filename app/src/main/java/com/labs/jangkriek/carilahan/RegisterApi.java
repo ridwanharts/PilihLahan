@@ -14,21 +14,36 @@ public interface RegisterApi {
     @POST("/insert_lokasi.php")
     Call<Respon> insert_lokasi(
             @Field("nama") String nama,
+            @Field("hargaLahan") double hargaLahan,
+            @Field("luasLahan") double luasLahan,
             @Field("latitude") double latitude,
             @Field("longitude") double longitude,
-            @Field("dayaDukungTanah") double dayaDukungTanah,
-            @Field("ketersediaanAir") double ketersediaanAir,
-            @Field("kemiringanLereng") double kemiringanLereng,
+            @Field("dayaDukungTanah") String dayaDukungTanah,
+            @Field("ketersediaanAir") String ketersediaanAir,
+            @Field("kemiringanLereng") String kemiringanLereng,
             @Field("aksebilitas") double aksebilitas,
-            @Field("perubahanLahan") double perubahanLahan,
-            @Field("kerawananBencana") double kerawananBencana,
+            @Field("kerawananBencana") String kerawananBencana,
             @Field("jarakKeBandara") double jarakKeBandara,
-            @Field("status") int status,
+            @Field("created_at") String created_at,
             @Field("gambar") String gambar
+    );
+
+    @FormUrlEncoded
+    @POST("/insert_latlong.php")
+    Call<Respon> insert_latlong(
+            @Field("no_point") int no_point,
+            @Field("latitude") double latitude,
+            @Field("longitude") double longitude,
+            @Field("id_user") String id_user,
+            @Field("created_at") String created_at
     );
 
     @GET("/view_lokasi.php")
     Call<Respon> view();
+
+    @GET("/get_user_latlong.php")
+    Call<Respon> get_user_latlong();
+
 
     @FormUrlEncoded
     @POST("/delete_lokasi.php")

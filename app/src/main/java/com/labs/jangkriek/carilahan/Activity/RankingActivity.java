@@ -22,11 +22,10 @@ import android.widget.Toast;
 
 import com.labs.jangkriek.carilahan.Database.DbUserLokasi;
 import com.labs.jangkriek.carilahan.POJO.Lokasi;
-import com.labs.jangkriek.carilahan.Adapter.LokasiAdapter;
+import com.labs.jangkriek.carilahan.Adapter.KelolaLahankuAdapter;
 import com.labs.jangkriek.carilahan.POJO.Prioritas;
 import com.labs.jangkriek.carilahan.POJO.RankingLokasi;
 import com.labs.jangkriek.carilahan.Adapter.RankingLokasiAdapter;
-import com.labs.jangkriek.carilahan.Database.DbLokasi;
 import com.labs.jangkriek.carilahan.Database.DbRangkingLokasi;
 import com.labs.jangkriek.carilahan.Database.DbSavePencarian;
 import com.labs.jangkriek.carilahan.R;
@@ -54,8 +53,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import timber.log.Timber;
-
 import static com.labs.jangkriek.carilahan.Activity.MainActivity.getLoginType;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconAllowOverlap;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconImage;
@@ -70,7 +67,7 @@ public class RankingActivity extends AppCompatActivity implements OnMapReadyCall
     private DbSavePencarian dbSavePencarian;
     private List<Lokasi> lokasiList = new ArrayList<>();
     private List<Lokasi> rangkingLokasiList = new ArrayList<>();
-    private LokasiAdapter lokasiAdapter;
+    private KelolaLahankuAdapter kelolaLahankuAdapter;
     private Boolean k1 = false, k2 = false, k3 = false, k4 = false, k5 = false, k6 = false, k7 = false;
     double nilaiK1 = 1, nilaiK2 = 1, nilaiK3 = 1, nilaiK4 = 1, nilaiK5 = 1, nilaiK6 = 1, nilaiK7 = 1;
     private RecyclerView recyclerView;
@@ -122,7 +119,7 @@ public class RankingActivity extends AppCompatActivity implements OnMapReadyCall
         dbLokasi = new DbUserLokasi(this);
         dbRangkingLokasi = new DbRangkingLokasi(this);
         dbSavePencarian = new DbSavePencarian(this);
-        lokasiList.addAll(dbLokasi.getDataForRank());
+        //lokasiList.addAll(dbLokasi.getDataForRank());
 
         dateIdGroup = new SimpleDateFormat("HHmmssSSS", Locale.getDefault());
         dateCreateAt = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
@@ -255,7 +252,7 @@ public class RankingActivity extends AppCompatActivity implements OnMapReadyCall
         double kBencana[] = new double[lokasiList.size()];
         double jBandara[] = new double[lokasiList.size()];
 
-        for (int i = 0; i < lokasiList.size(); i++) {
+        /*for (int i = 0; i < lokasiList.size(); i++) {
             if (k1) {
                 ddTanah[i] = lokasiList.get(i).getDayaDukungTanah() * nilaiK1;
             }
@@ -289,7 +286,7 @@ public class RankingActivity extends AppCompatActivity implements OnMapReadyCall
                     + " " + a.formatDecimal(jBandara[i])
                     + "\n " + a.formatDecimal(lokasiList.get(i).getJumlah())
                     + "\n\n");
-        }
+        }*/
 
     }
 
@@ -342,7 +339,7 @@ public class RankingActivity extends AppCompatActivity implements OnMapReadyCall
         Log.e("nilai bobot 6"," "+nilaiBobotK6);
         Log.e("nilai bobot 7"," "+nilaiBobotK7);
 
-        for (int i = 0; i < lokasiList.size(); i++) {
+        /*for (int i = 0; i < lokasiList.size(); i++) {
             if (k1) {
                 ddTanah[i] = lokasiList.get(i).getDayaDukungTanah() * nilaiBobotK1;
             }
@@ -376,7 +373,7 @@ public class RankingActivity extends AppCompatActivity implements OnMapReadyCall
                     + " -k7" + a.formatDecimal(jBandara[i])
                     + "\n- " + a.formatDecimal(lokasiList.get(i).getJumlah())
                     + "\n\n");
-        }
+        }*/
     }
 
 

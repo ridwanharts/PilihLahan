@@ -100,7 +100,7 @@ public class DbUserLokasi extends SQLiteOpenHelper {
         return id;
     }
 
-    public Lokasi getLokasi(long id) {
+    /*public Lokasi getLokasi(long id) {
         // get readable database as we are not inserting anything
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -136,7 +136,7 @@ public class DbUserLokasi extends SQLiteOpenHelper {
         cursor.close();
 
         return note;
-    }
+    }*/
 
     public static Bitmap getImage(byte[] image) {
         return BitmapFactory.decodeByteArray(image, 0, image.length);
@@ -148,7 +148,7 @@ public class DbUserLokasi extends SQLiteOpenHelper {
         return stream.toByteArray();
     }
 
-    public List<Lokasi> getAllLokasi() {
+    /*public List<Lokasi> getAllLokasi() {
         List<Lokasi> notes = new ArrayList<>();
 
         // Select All Query
@@ -186,7 +186,7 @@ public class DbUserLokasi extends SQLiteOpenHelper {
 
         // return notes list
         return notes;
-    }
+    }*/
 
     public int getLokasiCount() {
         String countQuery = "SELECT  * FROM " + TABLE_NAME;
@@ -255,7 +255,7 @@ public class DbUserLokasi extends SQLiteOpenHelper {
         return loc;
     }
 
-    public List<Lokasi> getDataForRank() {
+    /*public List<Lokasi> getDataForRank() {
         List<Lokasi> loc = new ArrayList<>();
         // Select All Query
         String selectQueryLat = "SELECT  * FROM " + TABLE_NAME;
@@ -286,7 +286,7 @@ public class DbUserLokasi extends SQLiteOpenHelper {
 
         // return notes list
         return loc;
-    }
+    }*/
 
     private static byte[] getPictureByteOfArray(Bitmap bitmap) {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();

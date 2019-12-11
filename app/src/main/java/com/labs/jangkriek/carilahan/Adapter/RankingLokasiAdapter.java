@@ -97,7 +97,7 @@ public class RankingLokasiAdapter extends RecyclerView.Adapter<RankingLokasiAdap
                 map.easeCamera(CameraUpdateFactory.newCameraPosition(newCameraPosition));
             }
         });
-        /*holder.setClickListener(new LokasiActivity.ItemClickListener() {
+        /*holder.setClickListener(new KelolaLahankuActivity.ItemClickListener() {
             @Override
             public void onClick(View view, int position) {
                 LatLng selectedLocationLatLng = rangkingLokasiList.get(position).getLokasi();
