@@ -19,6 +19,7 @@ Aplikasi pencarian lahan kosong menggunakan Mapbox API.
 * Web Service
 * SQLite
 * MySQL
+* 00webhost (hosting)
 
 
 ```java
