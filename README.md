@@ -1,5 +1,5 @@
 # PilihLahan
-Aplikasi pencarian lahan kosong menggunakan Mapbox API.
+Aplikasi pencarian lahan kosong yang menerapkan SIG menggunakan Mapbox API.
 
 ## Screenshoot
 
@@ -19,6 +19,7 @@ Aplikasi pencarian lahan kosong menggunakan Mapbox API.
 * Web Service
 * SQLite
 * MySQL
+* 
 * 00webhost (hosting)
 
 
