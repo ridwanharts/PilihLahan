@@ -2,7 +2,7 @@ package com.labs.jangkriek.carilahan.POJO;
 
 import com.google.gson.annotations.SerializedName;
 
-public class Admin {
+public class Users {
 
     @SerializedName("value")
     private String value;

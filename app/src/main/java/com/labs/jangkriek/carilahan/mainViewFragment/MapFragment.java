@@ -51,7 +51,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, MapboxM
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_map, container, false);
 
-        // Inflate the layout for this fragment
+        // Inflate the bubble_info for this fragment
         mMapView = view.findViewById(R.id.map_view);
         mMapView.onCreate(savedInstanceState);
         mMapView.getMapAsync(this);

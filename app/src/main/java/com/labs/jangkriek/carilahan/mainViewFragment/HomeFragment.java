@@ -12,12 +12,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.labs.jangkriek.carilahan.Activity.SemuaLahanActivity;
 import com.labs.jangkriek.carilahan.Database.DbLokasi;
 import com.labs.jangkriek.carilahan.Database.DbSavePencarian;
-import com.labs.jangkriek.carilahan.Activity.HistoriActivity;
+import com.labs.jangkriek.carilahan.Activity.Users.HistoriActivity;
 import com.labs.jangkriek.carilahan.PrefConfig;
 import com.labs.jangkriek.carilahan.R;
-import com.labs.jangkriek.carilahan.Activity.KelolaLahankuActivity;
+import com.labs.jangkriek.carilahan.Activity.Users.KelolaLahankuActivity;
 import com.labs.jangkriek.carilahan.Activity.PilihKriteria;
 
 
@@ -28,7 +29,7 @@ public class HomeFragment extends Fragment {
 
     private DbSavePencarian dbSavePencarian;
     private DbLokasi dbLokasi;
-    private CardView cvCari, cvHitung, cvLocation;
+    private CardView cvCari, cvHistory, cvKelolaLahanku, cvSemuaLahan;
     private TextView tvCountLokasi, tvCountHistory, tvUsernameHome;
     private static PrefConfig prefConfig;
 
@@ -45,9 +46,10 @@ public class HomeFragment extends Fragment {
 
         prefConfig = new PrefConfig(getContext());
 
-        cvCari = v.findViewById(R.id.cv_child_top1);
-        cvHitung = v.findViewById(R.id.cv_child_top2);
-        cvLocation = v.findViewById(R.id.cv_child_location);
+        cvCari = v.findViewById(R.id.cv_child_cari_lahan);
+        cvHistory = v.findViewById(R.id.cv_child_history);
+        cvKelolaLahanku = v.findViewById(R.id.cv_child_lahanku);
+        cvSemuaLahan = v.findViewById(R.id.cv_child_view_all_lahan);
 
         tvCountLokasi = v.findViewById(R.id.tv_count_lokasi);
         tvCountHistory = v.findViewById(R.id.tv_count_history);
@@ -62,16 +64,21 @@ public class HomeFragment extends Fragment {
 
         dbLokasi.getLokasiCount();
 
+        ButtonClick();
 
-        cvCari.setOnClickListener(new View.OnClickListener() {
+        return v;
+    }
+
+    private void ButtonClick(){
+        cvSemuaLahan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(getActivity(), HistoriActivity.class);
+                Intent i = new Intent(getActivity(), SemuaLahanActivity.class);
                 startActivity(i);
             }
         });
 
-        cvHitung.setOnClickListener(new View.OnClickListener() {
+        cvCari.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(getActivity(), PilihKriteria.class);
@@ -79,16 +86,21 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        cvLocation.setOnClickListener(new View.OnClickListener() {
+        cvHistory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getActivity(), HistoriActivity.class);
+                startActivity(i);
+            }
+        });
+
+        cvKelolaLahanku.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(getActivity(), KelolaLahankuActivity.class);
                 startActivity(i);
             }
         });
-
-        // Inflate the layout for this fragment
-        return v;
     }
 
 }

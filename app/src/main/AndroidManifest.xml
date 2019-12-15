@@ -16,9 +16,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activity.LihatKriteriaOnMap"></activity>
-        <activity android:name=".Activity.PlottingAreaActivity" />
-        <activity android:name=".Activity.TambahLahanActivity" />
+        <activity android:name=".Activity.Users.LihatKriteriaOnMap"></activity>
+        <activity android:name=".Activity.Users.PlottingAreaActivity" />
+        <activity android:name=".Activity.Users.TambahLahanActivity" />
         <activity android:name=".Activity.DetailLokasiActivity" />
         <activity
             android:name=".Activity.LogInSignUp.SignUpActivity"
@@ -29,7 +29,7 @@
         <activity
             android:name=".Activity.UserLokasiActivity"
             android:theme="@style/NoActionBar" />
-        <activity android:name=".Activity.DetailHistoryActivity" />
+        <activity android:name=".Activity.Users.DetailHistoryActivity" />
         <activity android:name=".Activity.RankingActivity" />
         <activity android:name=".Activity.HitungFuzzyAHP" />
         <activity
@@ -51,9 +51,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activity.KelolaLahankuActivity" />
+        <activity android:name=".Activity.Users.KelolaLahankuActivity" />
+        <activity android:name=".Activity.SemuaLahanActivity" />
         <activity android:name=".SymbolActivity" />
-        <activity android:name=".Activity.HistoriActivity" />
+        <activity android:name=".Activity.Users.HistoriActivity" />
     </application>
 
 </manifest>

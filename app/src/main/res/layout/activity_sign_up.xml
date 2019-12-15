@@ -114,4 +114,33 @@
 
   </LinearLayout>
 
+	<RelativeLayout
+		android:id="@+id/rv_loading"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:layout_centerInParent="true"
+		android:padding="10dp"
+		android:visibility="invisible"
+		android:background="@color/black_semi_transparent">
+
+		<androidx.cardview.widget.CardView
+			android:id="@+id/cardview_loading"
+			android:layout_width="80dp"
+			android:layout_height="80dp"
+			android:layout_centerInParent="true"
+			app:cardCornerRadius="8dp"
+			app:cardElevation="4dp">
+
+			<ProgressBar
+				android:id="@+id/pb_loading"
+				android:layout_width="55dp"
+				android:layout_height="55dp"
+				android:layout_gravity="center">
+
+			</ProgressBar>
+		</androidx.cardview.widget.CardView>
+
+
+	</RelativeLayout>
+
 </RelativeLayout>

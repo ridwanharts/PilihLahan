@@ -1,4 +1,4 @@
-package com.labs.jangkriek.carilahan.Activity;
+package com.labs.jangkriek.carilahan.Activity.Users;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
@@ -31,7 +31,7 @@ import android.widget.Toast;
 
 import com.labs.jangkriek.carilahan.POJO.Respon;
 import com.labs.jangkriek.carilahan.R;
-import com.labs.jangkriek.carilahan.RegisterApi;
+import com.labs.jangkriek.carilahan.Utils.RegisterApi;
 import com.labs.jangkriek.carilahan.Utils.ImageUtils;
 import com.labs.jangkriek.carilahan.Utils.Utils;
 import com.mapbox.geojson.Point;
@@ -42,7 +42,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -286,7 +285,7 @@ public class TambahLahanActivity extends AppCompatActivity implements AdapterVie
         ArrayAdapter<String> dataAdapterKair = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, catKair);
         ArrayAdapter<String> dataAdapterKerawanan = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, catKerawanan);
 
-        // Drop down layout style - list view with radio button
+        // Drop down bubble_info style - list view with radio button
         dataAdapterJenisTanah.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         dataAdapterKemiringan.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         dataAdapterKair.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -421,7 +420,7 @@ public class TambahLahanActivity extends AppCompatActivity implements AdapterVie
                 .client(client)
                 .build();
 
-        String encodedBitmap = ImageUtils.bitmapToBase64String(bitmap, 100);
+        String encodedBitmap = ImageUtils.bitmapToBase64String(bitmap, 50);
 
         RegisterApi api = retrofit.create(RegisterApi.class);
 

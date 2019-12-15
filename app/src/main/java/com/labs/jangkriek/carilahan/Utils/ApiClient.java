@@ -1,4 +1,4 @@
-package com.labs.jangkriek.carilahan;
+package com.labs.jangkriek.carilahan.Utils;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;

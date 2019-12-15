@@ -1,4 +1,4 @@
-package com.labs.jangkriek.carilahan.Activity.LogInSignUp.LoginFragment;
+package com.labs.jangkriek.carilahan.Activity.LogInSignUp;
 
 
 import android.content.Intent;
@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.labs.jangkriek.carilahan.Activity.MainActivity;
@@ -20,26 +21,23 @@ import com.labs.jangkriek.carilahan.R;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class LoginUserFragment extends Fragment {
+public class LoginGuestFragment extends Fragment {
 
-    private TextView tvLogin, tvLoginAdminFr;
+    private TextView tvLogin;
     private ProgressBar pb;
     private View relativeLayout;
 
-    public LoginUserFragment() {
+    public LoginGuestFragment() {
         // Required empty public constructor
-
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+        // Inflate the bubble_info for this fragment
         View v = inflater.inflate(R.layout.fragment_login_guest, container, false);
 
         tvLogin = v.findViewById(R.id.tv_login_user);
-        tvLoginAdminFr = v.findViewById(R.id.tv_login_admin_fragment);
         relativeLayout = v.findViewById(R.id.relativeLayout);
         pb = v.findViewById(R.id.progressBar_login);
         relativeLayout = v.findViewById(R.id.relativeLayout);
@@ -47,25 +45,17 @@ public class LoginUserFragment extends Fragment {
         tvLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                relativeLayout.setVisibility(View.VISIBLE);
+                pb.setVisibility(View.VISIBLE);
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        relativeLayout.setVisibility(View.VISIBLE);
-                        pb.setVisibility(View.VISIBLE);
-                        relativeLayout.setVisibility(View.VISIBLE);
                         Intent i = new Intent(getActivity(), MainActivity.class);
                         i.putExtra("LOGIN","USER");
                         startActivity(i);
                         getActivity().finish();
                     }
                 }, 800L);
-            }
-        });
-
-        tvLoginAdminFr.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
             }
         });
 

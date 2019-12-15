@@ -3,7 +3,6 @@ package com.labs.jangkriek.carilahan.Activity;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
-import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -25,7 +24,7 @@ import com.labs.jangkriek.carilahan.Database.DbUserLokasi;
 import com.labs.jangkriek.carilahan.POJO.Lokasi;
 import com.labs.jangkriek.carilahan.POJO.Respon;
 import com.labs.jangkriek.carilahan.R;
-import com.labs.jangkriek.carilahan.RegisterApi;
+import com.labs.jangkriek.carilahan.Utils.RegisterApi;
 import com.mapbox.geojson.Feature;
 import com.mapbox.geojson.FeatureCollection;
 import com.mapbox.geojson.Point;

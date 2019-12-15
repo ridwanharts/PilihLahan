@@ -311,7 +311,7 @@ public class InputNilaiKriteriaActivity extends AppCompatActivity {
 
         Utils a = new Utils();
 
-        //before inflating the custom alert dialog layout, we will get the current activity viewgroup
+        //before inflating the custom alert dialog bubble_info, we will get the current activity viewgroup
         ViewGroup viewGroup = findViewById(android.R.id.content);
 
         //then we will inflate the custom alert dialog xml that we created

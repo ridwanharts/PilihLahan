@@ -1,4 +1,4 @@
-package com.labs.jangkriek.carilahan.Activity;
+package com.labs.jangkriek.carilahan.Activity.Users;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;

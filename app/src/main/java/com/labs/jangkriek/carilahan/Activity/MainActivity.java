@@ -8,12 +8,9 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.snackbar.Snackbar;
-import com.labs.jangkriek.carilahan.Activity.LogInSignUp.LoginFragment.LoginAdminFragment;
+import com.labs.jangkriek.carilahan.Activity.LogInSignUp.LoginUsersFragment;
 import com.labs.jangkriek.carilahan.PrefConfig;
 import com.labs.jangkriek.carilahan.R;
 import com.labs.jangkriek.carilahan.mainViewFragment.AccountFragment;
@@ -38,7 +35,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
         if(findViewById(R.id.fragment_container) != null){
             if (prefConfig.readLoginStatus()){
-                getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, new LoginAdminFragment());
+                getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, new LoginUsersFragment());
             }
         }
 
@@ -49,7 +46,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         if(loginType.equals("USER")){
             //Toast.makeText(getApplicationContext(),"Masuk USER = "+loginType, Toast.LENGTH_SHORT).show();
             loadFragment(new HomeUserFragment());
-        }else if (loginType.equals("ADMIN")){
+        }else if (loginType.equals("USERS")){
             //Toast.makeText(getApplicationContext(),"Masuk ADMIN = "+loginType, Toast.LENGTH_SHORT).show();
             loadFragment(new HomeFragment());
         }
@@ -90,7 +87,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
             case R.id.home_menu:
                 if(loginType.equals("USER")){
                     fragment = new HomeUserFragment();
-                }else if (loginType.equals("ADMIN")){
+                }else if (loginType.equals("USERS")){
                     fragment = new HomeFragment();
                 }
                 //getSupportActionBar().show();

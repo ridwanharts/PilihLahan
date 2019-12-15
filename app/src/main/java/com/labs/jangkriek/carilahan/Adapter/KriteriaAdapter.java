@@ -47,7 +47,7 @@ public class KriteriaAdapter extends BaseAdapter {
         if (listItemView==null){
             holder = new ViewHolder();
             /*listItemView = LayoutInflater.from(getContext()).inflate(
-                    R.layout.item_list_input_kriteria,parent,false);*/
+                    R.bubble_info.item_list_input_kriteria,parent,false);*/
 
             LayoutInflater inflater = (LayoutInflater) context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);

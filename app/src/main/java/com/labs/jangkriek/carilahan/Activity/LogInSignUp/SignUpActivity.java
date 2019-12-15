@@ -6,13 +6,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.labs.jangkriek.carilahan.Activity.ApiInterface;
-import com.labs.jangkriek.carilahan.Activity.MainActivity;
-import com.labs.jangkriek.carilahan.ApiClient;
-import com.labs.jangkriek.carilahan.POJO.Admin;
+import com.labs.jangkriek.carilahan.Utils.ApiInterface;
+import com.labs.jangkriek.carilahan.Utils.ApiClient;
+import com.labs.jangkriek.carilahan.POJO.Users;
 import com.labs.jangkriek.carilahan.PrefConfig;
 import com.labs.jangkriek.carilahan.R;
 
@@ -24,6 +24,7 @@ public class SignUpActivity extends AppCompatActivity {
 
     TextView tvRegister, tvBackLogin;
     EditText etUsername, etEmail, etPassword;
+    RelativeLayout rlLoading;
 
     public static PrefConfig prefConfig;
     public static ApiInterface apiInterface;
@@ -41,6 +42,7 @@ public class SignUpActivity extends AppCompatActivity {
         etUsername = findViewById(R.id.et_username);
         etEmail = findViewById(R.id.et_email);
         etPassword = findViewById(R.id.et_password);
+        rlLoading = findViewById(R.id.rv_loading);
 
         tvBackLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -53,25 +55,27 @@ public class SignUpActivity extends AppCompatActivity {
         tvRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                rlLoading.setVisibility(View.VISIBLE);
                 if (etUsername != null){
-                    Call<Admin> call = apiInterface.register(
+                    Call<Users> call = apiInterface.register(
                             etUsername.getText().toString(),
                             etEmail.getText().toString(),
                             etPassword.getText().toString());
-                    call.enqueue(new Callback<Admin>() {
+                    call.enqueue(new Callback<Users>() {
                         @Override
-                        public void onResponse(Call<Admin> call, Response<Admin> response) {
+                        public void onResponse(Call<Users> call, Response<Users> response) {
                             Toast.makeText(getApplicationContext(), "Sukses mendaftar", Toast.LENGTH_SHORT).show();
-
+                            rlLoading.setVisibility(View.INVISIBLE);
                         }
-
                         @Override
-                        public void onFailure(Call<Admin> call, Throwable t) {
+                        public void onFailure(Call<Users> call, Throwable t) {
                             Toast.makeText(getApplicationContext(), "Jaringan Error", Toast.LENGTH_SHORT).show();
+                            rlLoading.setVisibility(View.INVISIBLE);
                         }
                     });
                 }else {
                     Toast.makeText(getApplicationContext(), "Username tidak boleh kosong", Toast.LENGTH_SHORT).show();
+                    rlLoading.setVisibility(View.INVISIBLE);
                 }
 
 

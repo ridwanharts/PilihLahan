@@ -50,6 +50,7 @@ dependencies {
     implementation 'com.alespero:expandable-cardview:0.8'
 
     implementation 'com.squareup.okhttp3:logging-interceptor:3.11.0'
-    //recyclerview item animator
-    //implementation 'jp.wasabeef:recyclerview-animators:3.0.0'
+
+    //bubble bubble_info
+    implementation 'com.github.MasayukiSuda:BubbleLayout:v1.2.1'
 }

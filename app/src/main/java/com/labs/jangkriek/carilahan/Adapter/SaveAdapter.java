@@ -10,9 +10,9 @@ import android.widget.TextView;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.labs.jangkriek.carilahan.Activity.KelolaLahankuActivity;
+import com.labs.jangkriek.carilahan.Activity.Users.KelolaLahankuActivity;
 import com.labs.jangkriek.carilahan.POJO.SavePencarian;
-import com.labs.jangkriek.carilahan.Activity.DetailHistoryActivity;
+import com.labs.jangkriek.carilahan.Activity.Users.DetailHistoryActivity;
 import com.labs.jangkriek.carilahan.R;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import java.util.List;

@@ -12,7 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.labs.jangkriek.carilahan.Activity.HistoriActivity;
+import com.labs.jangkriek.carilahan.Activity.Users.HistoriActivity;
 import com.labs.jangkriek.carilahan.Activity.PilihKriteria;
 import com.labs.jangkriek.carilahan.Database.DbLokasi;
 import com.labs.jangkriek.carilahan.Database.DbSavePencarian;
@@ -80,7 +80,7 @@ public class HomeUserFragment extends Fragment {
             }
         });
 
-        // Inflate the layout for this fragment
+        // Inflate the bubble_info for this fragment
         return v;
     }
 

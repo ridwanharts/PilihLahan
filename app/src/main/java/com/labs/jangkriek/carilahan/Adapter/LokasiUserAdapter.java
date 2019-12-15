@@ -13,7 +13,7 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.labs.jangkriek.carilahan.Activity.DetailLokasiActivity;
-import com.labs.jangkriek.carilahan.Activity.KelolaLahankuActivity;
+import com.labs.jangkriek.carilahan.Activity.Users.KelolaLahankuActivity;
 import com.labs.jangkriek.carilahan.Database.DbUserLokasi;
 import com.labs.jangkriek.carilahan.POJO.Lokasi;
 import com.labs.jangkriek.carilahan.R;

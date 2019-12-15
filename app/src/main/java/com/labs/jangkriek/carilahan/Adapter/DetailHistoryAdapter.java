@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.labs.jangkriek.carilahan.Activity.DetailHistoryActivity;
+import com.labs.jangkriek.carilahan.Activity.Users.DetailHistoryActivity;
 import com.labs.jangkriek.carilahan.POJO.RankingLokasi;
 import com.labs.jangkriek.carilahan.R;
 

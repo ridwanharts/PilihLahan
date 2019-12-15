@@ -1,4 +1,4 @@
-package com.labs.jangkriek.carilahan.Activity.LogInSignUp.LoginFragment;
+package com.labs.jangkriek.carilahan.Activity.LogInSignUp;
 
 
 import android.content.Context;
@@ -13,14 +13,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.labs.jangkriek.carilahan.Activity.ApiInterface;
-import com.labs.jangkriek.carilahan.Activity.LogInSignUp.SignUpActivity;
+import com.labs.jangkriek.carilahan.Utils.ApiInterface;
 import com.labs.jangkriek.carilahan.Activity.MainActivity;
-import com.labs.jangkriek.carilahan.ApiClient;
-import com.labs.jangkriek.carilahan.POJO.Admin;
+import com.labs.jangkriek.carilahan.Utils.ApiClient;
+import com.labs.jangkriek.carilahan.POJO.Users;
 import com.labs.jangkriek.carilahan.PrefConfig;
 import com.labs.jangkriek.carilahan.R;
 
@@ -33,15 +33,16 @@ import static com.mapbox.mapboxsdk.Mapbox.getApplicationContext;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class LoginAdminFragment extends Fragment {
+public class LoginUsersFragment extends Fragment {
 
     private TextView tvSignUp, tvLogin;
     private EditText etUsernameLogin, etPasswordLogin;
     public static ApiInterface apiInterface;
     public static PrefConfig prefConfig;
     private Context context;
+    private RelativeLayout rlLoading;
 
-    public LoginAdminFragment() {
+    public LoginUsersFragment() {
         // Required empty public constructor
     }
 
@@ -49,7 +50,7 @@ public class LoginAdminFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+        // Inflate the bubble_info for this fragment
         View v = inflater.inflate(R.layout.fragment_login_users, container, false);
 
         prefConfig = new PrefConfig(getContext());
@@ -59,6 +60,7 @@ public class LoginAdminFragment extends Fragment {
         tvLogin = v.findViewById(R.id.tv_login_admin);
         etUsernameLogin = v.findViewById(R.id.username_login);
         etPasswordLogin = v.findViewById(R.id.password_login);
+        rlLoading = v.findViewById(R.id.rv_loading);
 
         tvSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,7 +73,8 @@ public class LoginAdminFragment extends Fragment {
         tvLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*if (etUsernameLogin.getText() == null || etPasswordLogin.getText() == null){
+                rlLoading.setVisibility(View.VISIBLE);
+                if (etUsernameLogin.getText() == null || etPasswordLogin.getText() == null){
                     if (etUsernameLogin == null){
                         Toast.makeText(getApplicationContext(), "Username tidak boleh kosong", Toast.LENGTH_SHORT).show();
                     }
@@ -81,38 +84,36 @@ public class LoginAdminFragment extends Fragment {
 
                 }else {
 
-                    Call<Admin> c = apiInterface.login(
+                    Call<Users> c = apiInterface.login(
                             etUsernameLogin.getText().toString(),
                             etPasswordLogin.getText().toString()
                     );
-                    c.enqueue(new Callback<Admin>() {
+                    c.enqueue(new Callback<Users>() {
                         @Override
-                        public void onResponse(Call<Admin> call, Response<Admin> response) {
+                        public void onResponse(Call<Users> call, Response<Users> response) {
                             String value = response.body().getValue();
                             String message = response.body().getMessage();
                             if(value.equals("0")){
                                 Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+                                rlLoading.setVisibility(View.INVISIBLE);
                             }else {
                                 Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+                                rlLoading.setVisibility(View.INVISIBLE);
                                 prefConfig.writeName(message);
                                 Intent i = new Intent(getActivity(), MainActivity.class);
-                                i.putExtra("LOGIN","ADMIN");
+                                i.putExtra("LOGIN","USERS");
                                 startActivity(i);
                                 getActivity().finish();
                             }
                         }
 
                         @Override
-                        public void onFailure(Call<Admin> call, Throwable t) {
+                        public void onFailure(Call<Users> call, Throwable t) {
                             Toast.makeText(getActivity(), "Jaringan Error", Toast.LENGTH_SHORT).show();
+                            rlLoading.setVisibility(View.INVISIBLE);
                         }
                     });
-                }*/
-
-                Intent i = new Intent(getActivity(), MainActivity.class);
-                i.putExtra("LOGIN","ADMIN");
-                startActivity(i);
-                getActivity().finish();
+                }
             }
         });
 
