@@ -53,4 +53,9 @@ dependencies {
 
     //bubble bubble_info
     implementation 'com.github.MasayukiSuda:BubbleLayout:v1.2.1'
+
+    //upload image
+    implementation 'net.gotev:uploadservice:2.1'
+
+    implementation 'com.android.volley:volley:1.1.1'
 }

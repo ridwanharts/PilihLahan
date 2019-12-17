@@ -29,7 +29,6 @@ import com.labs.jangkriek.carilahan.Adapter.RankingLokasiAdapter;
 import com.labs.jangkriek.carilahan.Database.DbRangkingLokasi;
 import com.labs.jangkriek.carilahan.Database.DbSavePencarian;
 import com.labs.jangkriek.carilahan.R;
-import com.labs.jangkriek.carilahan.Utils.Utils;
 import com.mapbox.geojson.Feature;
 import com.mapbox.geojson.FeatureCollection;
 import com.mapbox.geojson.Point;
@@ -53,7 +52,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import static com.labs.jangkriek.carilahan.Activity.MainActivity.getLoginType;
+import static com.labs.jangkriek.carilahan.Activity.MainActivity.getUsername;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconAllowOverlap;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconImage;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconOffset;
@@ -526,7 +525,7 @@ public class RankingActivity extends AppCompatActivity implements OnMapReadyCall
         super.onBackPressed();
         if (selesai) {
             Intent a = new Intent(this, MainActivity.class);
-            a.putExtra("LOGIN", getLoginType());
+            a.putExtra("LOGIN", getUsername());
             a.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(a);
             finish();

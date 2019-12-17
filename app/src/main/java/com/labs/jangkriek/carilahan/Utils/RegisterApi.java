@@ -25,6 +25,7 @@ public interface RegisterApi {
             @Field("kerawananBencana") String kerawananBencana,
             @Field("jarakKeBandara") double jarakKeBandara,
             @Field("created_at") String created_at,
+            @Field("id_user") int id_user,
             @Field("gambar") String gambar
     );
 
@@ -34,7 +35,7 @@ public interface RegisterApi {
             @Field("no_point") int no_point,
             @Field("latitude") double latitude,
             @Field("longitude") double longitude,
-            @Field("id_user") String id_user,
+            @Field("id_user") int id_user,
             @Field("created_at") String created_at
     );
 

@@ -6,8 +6,10 @@ public class Respon {
 
     String value;
     String message;
+
     List<Lokasi> result;
     List<PointLatLong> point;
+
 
     public List<PointLatLong> getPoint() {
         return point;

@@ -12,6 +12,7 @@ public class Lokasi {
 
     private int id;
     private String nama;
+    private int id_user;
     private double hargaLahan;
     private double luasLahan;
     private Double longitude;
@@ -39,7 +40,7 @@ public class Lokasi {
 
     public Lokasi(int id, String nama, double hargaLahan, double luasLahan, double latitude, double longitude,
                   String dayaDukungTanah, String ketersediaanAir, String kemiringanLereng, double aksebilitas,
-                  String kerawananBencana, double jarakKeBandara, String created_at, String gambar){
+                  String kerawananBencana, double jarakKeBandara, String created_at, int id_user, String gambar){
         this.id = id;
         this.nama = nama;
         this.hargaLahan = hargaLahan;
@@ -55,6 +56,7 @@ public class Lokasi {
         this.jarakKeBandara = jarakKeBandara;
 
         this.created_at = created_at;
+        this.id_user = id_user;
         this.gambar = gambar;
     }
 
@@ -201,5 +203,13 @@ public class Lokasi {
 
     public void setGambar(String gambar) {
         this.gambar = gambar;
+    }
+
+    public int getId_user() {
+        return id_user;
+    }
+
+    public void setId_user(int id_user) {
+        this.id_user = id_user;
     }
 }

@@ -37,6 +37,7 @@ import com.labs.jangkriek.carilahan.Utils.Utils;
 import com.mapbox.geojson.Point;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -50,10 +51,11 @@ import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 import retrofit2.Callback;
-import retrofit2.Response;
+
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import static com.labs.jangkriek.carilahan.Activity.MainActivity.getIdUser;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconAllowOverlap;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconImage;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconOffset;
@@ -76,6 +78,8 @@ public class TambahLahanActivity extends AppCompatActivity implements AdapterVie
     private String createdAt;
     private EditText etNamaLahan, etHargaLahan, etLuasLahan;
     private RelativeLayout rvLoading;
+    private String filePath;
+    private String ImagePath;
 
     private Spinner spJenisTanah, spKemiringan, spKerawanan, spKair;
 
@@ -208,20 +212,30 @@ public class TambahLahanActivity extends AppCompatActivity implements AdapterVie
         btnKirimDataKeServer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                rvLoading.setVisibility(View.VISIBLE);
-                String namaLahan = etNamaLahan.getText().toString();
-                double hargaLahan = Double.parseDouble(etHargaLahan.getText().toString());
-                double luasLahan = Double.parseDouble(etLuasLahan.getText().toString());
-                String dayaDukungT = spJenisTanah.getSelectedItem().toString();
-                String ketersediaanAir = spKair.getSelectedItem().toString();
-                double aksebilitas = Double.parseDouble(tvAksebilitas.getText().toString());
-                String kemiringanLereng = spKemiringan.getSelectedItem().toString();
-                String kerawananBencana = spKerawanan.getSelectedItem().toString();
-                double jarakKeBandara = Double.parseDouble(tvJarakBandara.getText().toString());
+                if (imageBitmap != null){
+                    rvLoading.setVisibility(View.VISIBLE);
+                    String namaLahan = etNamaLahan.getText().toString();
+                    double hargaLahan = Double.parseDouble(etHargaLahan.getText().toString());
+                    double luasLahan = Double.parseDouble(etLuasLahan.getText().toString());
+                    String dayaDukungT = spJenisTanah.getSelectedItem().toString();
+                    String ketersediaanAir = spKair.getSelectedItem().toString();
+                    double aksebilitas = Double.parseDouble(tvAksebilitas.getText().toString());
+                    String kemiringanLereng = spKemiringan.getSelectedItem().toString();
+                    String kerawananBencana = spKerawanan.getSelectedItem().toString();
+                    double jarakKeBandara = Double.parseDouble(tvJarakBandara.getText().toString());
+                    int idUser = getIdUser();
+                    ByteArrayOutputStream out = new ByteArrayOutputStream();
 
-                kirimKeServer(namaLahan, hargaLahan, luasLahan, lat, longi,
-                        dayaDukungT, ketersediaanAir, kemiringanLereng, aksebilitas, kerawananBencana, jarakKeBandara,
-                        createdAt, imageBitmap);
+                    if (imageBitmap.compress(Bitmap.CompressFormat.JPEG, 80, out)){
+                        kirimKeServer(namaLahan, hargaLahan, luasLahan, lat, longi,
+                                dayaDukungT, ketersediaanAir, kemiringanLereng, aksebilitas, kerawananBencana, jarakKeBandara,
+                                createdAt, idUser, imageBitmap);
+                    }
+
+                }else {
+                    Toast.makeText(getApplicationContext(), "Foto lahan tidak boleh kosong", Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
 
@@ -400,8 +414,70 @@ public class TambahLahanActivity extends AppCompatActivity implements AdapterVie
         return result == PackageManager.PERMISSION_GRANTED;
     }
 
+    /*public void uploadBitmap(final Bitmap bitmap) {
+
+        //getting the tag from the edittext
+        final String tags = createdAt;
+
+        //our custom volley request
+        VolleyMultipartRequest volleyMultipartRequest = new VolleyMultipartRequest(Request.Method.POST, "https://ridwanharts.000webhostapp.com/upload_images.php",
+                new Response.Listener<NetworkResponse>() {
+                    @Override
+                    public void onResponse(NetworkResponse response) {
+                        try {
+                            JSONObject obj = new JSONObject(new String(response.data));
+                            Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
+                            filePath = "https://ridwanharts.000webhostapp.com/"+obj.getString("file_path");
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                }) {
+
+            *//*
+             * If you want to add more parameters with the image
+             * you can do it here
+             * here we have only one parameter with the image
+             * which is tags
+             * *//*
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("tags", tags);
+                return params;
+            }
+
+            *//*
+             * Here we are passing image by renaming it with a unique name
+             * *//*
+            @Override
+            protected Map<String, DataPart> getByteData() {
+                Map<String, DataPart> params = new HashMap<>();
+                long imagename = System.currentTimeMillis();
+                params.put("pic", new DataPart(imagename + ".png", getFileDataFromDrawable(bitmap)));
+                return params;
+            }
+        };
+
+        //adding the request to volley
+        Volley.newRequestQueue(this).add(volleyMultipartRequest);
+    }*/
+
+    public byte[] getFileDataFromDrawable(Bitmap bitmap) {
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 70, byteArrayOutputStream);
+        return byteArrayOutputStream.toByteArray();
+    }
+
     private void kirimKeServer(String namaLokasi, double hargaLahan, double luasLahan, double lat, double longi,
-                               String ddTanah, String kAir, String kLereng, double aksebilitas, String kBencana, double jBandara, String createdAt, Bitmap bitmap){
+                               String ddTanah, String kAir, String kLereng, double aksebilitas, String kBencana, double jBandara,
+                               String createdAt, int id_user, Bitmap bitmap){
 
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
             @Override
@@ -420,7 +496,7 @@ public class TambahLahanActivity extends AppCompatActivity implements AdapterVie
                 .client(client)
                 .build();
 
-        String encodedBitmap = ImageUtils.bitmapToBase64String(bitmap, 50);
+        String encodedBitmap = ImageUtils.bitmapToBase64String(bitmap, 100);
 
         RegisterApi api = retrofit.create(RegisterApi.class);
 
@@ -429,7 +505,7 @@ public class TambahLahanActivity extends AppCompatActivity implements AdapterVie
                 namaLokasi, hargaLahan, luasLahan, lat,longi,
                 ddTanah,kAir,kLereng,
                 aksebilitas,kBencana,jBandara,
-                createdAt, encodedBitmap
+                createdAt, id_user, encodedBitmap
         );
         call.enqueue(new Callback<Respon>() {
             @Override
@@ -438,13 +514,14 @@ public class TambahLahanActivity extends AppCompatActivity implements AdapterVie
                 String value = response.body().getValue();
                 String message = response.body().getMessage();
                 if(value.equals("1")){
+
                     //insert data plot area
                     for (int i=0;i<fillLayerPointList.size();i++){
                         Call<Respon> callInsertPlot = api.insert_latlong(i,
-                                fillLayerPointList.get(i).latitude(),fillLayerPointList.get(i).longitude(), "min",createdAt);
+                                fillLayerPointList.get(i).latitude(),fillLayerPointList.get(i).longitude(), getIdUser(),createdAt);
                         callInsertPlot.enqueue(new Callback<Respon>() {
                             @Override
-                            public void onResponse(Call<Respon> call, Response<Respon> response) {
+                            public void onResponse(Call<Respon> call, retrofit2.Response<Respon> response) {
                                 Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
                                 rvLoading.setVisibility(View.INVISIBLE);
                                 finish();

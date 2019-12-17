@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,13 +18,15 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.labs.jangkriek.carilahan.POJO.ResponUsers;
 import com.labs.jangkriek.carilahan.Utils.ApiInterface;
 import com.labs.jangkriek.carilahan.Activity.MainActivity;
 import com.labs.jangkriek.carilahan.Utils.ApiClient;
-import com.labs.jangkriek.carilahan.POJO.Users;
 import com.labs.jangkriek.carilahan.PrefConfig;
 import com.labs.jangkriek.carilahan.R;
 
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -54,7 +57,7 @@ public class LoginUsersFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_login_users, container, false);
 
         prefConfig = new PrefConfig(getContext());
-        apiInterface = ApiClient.getApiClient().create(ApiInterface.class);
+        apiInterface = ApiClient.getApiClientWithLog().create(ApiInterface.class);
 
         tvSignUp = v.findViewById(R.id.tv_signup_admin);
         tvLogin = v.findViewById(R.id.tv_login_admin);
@@ -84,31 +87,33 @@ public class LoginUsersFragment extends Fragment {
 
                 }else {
 
-                    Call<Users> c = apiInterface.login(
+                    Call<ResponUsers> c = apiInterface.login(
                             etUsernameLogin.getText().toString(),
                             etPasswordLogin.getText().toString()
                     );
-                    c.enqueue(new Callback<Users>() {
+                    c.enqueue(new Callback<ResponUsers>() {
                         @Override
-                        public void onResponse(Call<Users> call, Response<Users> response) {
+                        public void onResponse(Call<ResponUsers> call, Response<ResponUsers> response) {
                             String value = response.body().getValue();
                             String message = response.body().getMessage();
+                            int idUser = response.body().getId_user();
                             if(value.equals("0")){
                                 Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
                                 rlLoading.setVisibility(View.INVISIBLE);
                             }else {
-                                Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getActivity(), idUser+"", Toast.LENGTH_SHORT).show();
                                 rlLoading.setVisibility(View.INVISIBLE);
                                 prefConfig.writeName(message);
                                 Intent i = new Intent(getActivity(), MainActivity.class);
-                                i.putExtra("LOGIN","USERS");
+                                i.putExtra("LOGIN", message);
+                                i.putExtra("ID_USER", idUser);
                                 startActivity(i);
                                 getActivity().finish();
                             }
                         }
 
                         @Override
-                        public void onFailure(Call<Users> call, Throwable t) {
+                        public void onFailure(Call<ResponUsers> call, Throwable t) {
                             Toast.makeText(getActivity(), "Jaringan Error", Toast.LENGTH_SHORT).show();
                             rlLoading.setVisibility(View.INVISIBLE);
                         }

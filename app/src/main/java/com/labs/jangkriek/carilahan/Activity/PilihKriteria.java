@@ -21,9 +21,8 @@ import com.labs.jangkriek.carilahan.POJO.Prioritas;
 import com.labs.jangkriek.carilahan.R;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
-import static com.labs.jangkriek.carilahan.Activity.MainActivity.getLoginType;
+import static com.labs.jangkriek.carilahan.Activity.MainActivity.getUsername;
 
 public class PilihKriteria extends AppCompatActivity {
 
@@ -1017,7 +1016,7 @@ public class PilihKriteria extends AppCompatActivity {
         setResult(RESULT_OK);
         super.onBackPressed();
         Intent a = new Intent(this, MainActivity.class);
-        a.putExtra("LOGIN", getLoginType());
+        a.putExtra("LOGIN", getUsername());
         a.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(a);
         finish();

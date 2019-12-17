@@ -10,9 +10,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.labs.jangkriek.carilahan.POJO.ResponUsers;
 import com.labs.jangkriek.carilahan.Utils.ApiInterface;
 import com.labs.jangkriek.carilahan.Utils.ApiClient;
-import com.labs.jangkriek.carilahan.POJO.Users;
 import com.labs.jangkriek.carilahan.PrefConfig;
 import com.labs.jangkriek.carilahan.R;
 
@@ -57,18 +57,18 @@ public class SignUpActivity extends AppCompatActivity {
             public void onClick(View v) {
                 rlLoading.setVisibility(View.VISIBLE);
                 if (etUsername != null){
-                    Call<Users> call = apiInterface.register(
+                    Call<ResponUsers> call = apiInterface.register(
                             etUsername.getText().toString(),
                             etEmail.getText().toString(),
                             etPassword.getText().toString());
-                    call.enqueue(new Callback<Users>() {
+                    call.enqueue(new Callback<ResponUsers>() {
                         @Override
-                        public void onResponse(Call<Users> call, Response<Users> response) {
+                        public void onResponse(Call<ResponUsers> call, Response<ResponUsers> response) {
                             Toast.makeText(getApplicationContext(), "Sukses mendaftar", Toast.LENGTH_SHORT).show();
                             rlLoading.setVisibility(View.INVISIBLE);
                         }
                         @Override
-                        public void onFailure(Call<Users> call, Throwable t) {
+                        public void onFailure(Call<ResponUsers> call, Throwable t) {
                             Toast.makeText(getApplicationContext(), "Jaringan Error", Toast.LENGTH_SHORT).show();
                             rlLoading.setVisibility(View.INVISIBLE);
                         }

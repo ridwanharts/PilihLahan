@@ -72,7 +72,8 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-import static com.labs.jangkriek.carilahan.Activity.MainActivity.getLoginType;
+import static com.labs.jangkriek.carilahan.Activity.MainActivity.getIdUser;
+import static com.labs.jangkriek.carilahan.Activity.MainActivity.getUsername;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.fillColor;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.fillOpacity;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.fillOutlineColor;
@@ -94,11 +95,13 @@ public class KelolaLahankuActivity extends AppCompatActivity implements OnMapRea
     private MapView mapView;
     private FeatureCollection lokasiCollection;
     private ImageView ivCekUpload;
+    private Boolean reset;
 
     private KelolaLahankuAdapter mAdapter;
 
     //private List<Lokasi> lokasiList = new ArrayList<>();
     private List<Lokasi> lokasiListFromServer = new ArrayList<>();
+    private List<Lokasi> lokasiListUser = new ArrayList<>();
     private List<PointLatLong> userLatLongListFromServer = new ArrayList<>();
     private static HashMap<String, List<Point>> dataPointHash = new HashMap<String, List<Point>>();
     ArrayList<String> listCreatedAt = new ArrayList<String>();
@@ -145,6 +148,7 @@ public class KelolaLahankuActivity extends AppCompatActivity implements OnMapRea
         ivUploadGambar = findViewById(R.id.iv_upload_lokasi);
         ivReloadServer = findViewById(R.id.reload_data_server);
         rvLoading = findViewById(R.id.rv_loading);
+        reset = false;
 
         fabOpAddLocation.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -194,7 +198,7 @@ public class KelolaLahankuActivity extends AppCompatActivity implements OnMapRea
     }
 
     private void loadDataLokasiFromServer(){
-
+        reset = true;
         rvLoading.setVisibility(View.VISIBLE);
         lokasiListFromServer.clear();
         userLatLongListFromServer.clear();
@@ -249,9 +253,13 @@ public class KelolaLahankuActivity extends AppCompatActivity implements OnMapRea
 
                             @Override
                             public void onFailure(Call<Respon> call, Throwable t) {
-
+                                Toast.makeText(getApplicationContext(),"Internet Problem", Toast.LENGTH_SHORT).show();
+                                rvLoading.setVisibility(View.INVISIBLE);
                             }
                         });
+                    }else{
+                        Toast.makeText(getApplicationContext(),"Anda belum menambahkan data lahan", Toast.LENGTH_SHORT).show();
+                        rvLoading.setVisibility(View.INVISIBLE);
                     }
 
                 }
@@ -260,6 +268,7 @@ public class KelolaLahankuActivity extends AppCompatActivity implements OnMapRea
             @Override
             public void onFailure(Call<Respon> call, Throwable t) {
                 Toast.makeText(getApplicationContext(),"Koneksi internet bermasalah", Toast.LENGTH_SHORT).show();
+                rvLoading.setVisibility(View.INVISIBLE);
 
             }
         });
@@ -270,7 +279,13 @@ public class KelolaLahankuActivity extends AppCompatActivity implements OnMapRea
         LatLng[] lokasi = new LatLng[lokasiListFromServer.size()];
 
         for (int i=0;i<lokasiListFromServer.size();i++){
-            listCreatedAt.add(lokasiListFromServer.get(i).getCreated_at());
+
+            //if data lahan sama dgn id user
+            if (lokasiListFromServer.get(i).getId_user() == getIdUser()){
+                //get data created at disimpan ke list
+                lokasiListUser.add(lokasiListFromServer.get(i));
+                listCreatedAt.add(lokasiListFromServer.get(i).getCreated_at());
+            }
         }
 
         for (int i=0;i<listCreatedAt.size();i++){
@@ -296,19 +311,21 @@ public class KelolaLahankuActivity extends AppCompatActivity implements OnMapRea
             }
         }
 
-        Log.e("size L", listCreatedAt.size()+"");
+/*        Log.e("size L", listCreatedAt.size()+"");
         Log.e("L0", listCreatedAt.get(0)+"");
         Log.e("data hash", dataPointHash.size()+"");
-        Log.e("data hash", dataPointHash.get(listCreatedAt.get(0))+"");
+        Log.e("data hash", dataPointHash.get(listCreatedAt.get(0))+"");*/
 
 
         for(int i=0;i<lokasiListFromServer.size();i++) {
-            lokasi[i] = new LatLng(lokasiListFromServer.get(i).getLatitude(),lokasiListFromServer.get(i).getLongitude());
+            if (lokasiListFromServer.get(i).getId_user() == getIdUser()) {
+                lokasi[i] = new LatLng(lokasiListFromServer.get(i).getLatitude(), lokasiListFromServer.get(i).getLongitude());
+            }
         }
 
         lokasiCollection = FeatureCollection.fromFeatures(new Feature[] {});
         List<Feature> lokasiList = new ArrayList<>();
-        if (lokasiCollection != null) {
+        if (lokasiList.size() != 0) {
             for (LatLng latLngLoc : lokasi) {
                 lokasiList.add(Feature.fromGeometry(Point.fromLngLat(latLngLoc.getLongitude(), latLngLoc.getLatitude())));
             }
@@ -317,6 +334,11 @@ public class KelolaLahankuActivity extends AppCompatActivity implements OnMapRea
     }
 
     private void initFillLayer(@NonNull Style loadedMapStyle) {
+
+        if (reset){
+            loadedMapStyle.removeLayer("layer-id11");
+            loadedMapStyle.removeSource("source-id11");
+        }
 
         for (int i=0;i<listCreatedAt.size();i++){
             POINTS.add(dataPointHash.get(listCreatedAt.get(i)));
@@ -332,6 +354,11 @@ public class KelolaLahankuActivity extends AppCompatActivity implements OnMapRea
     }
 
     private void initMarkerIcons(@NonNull Style loadedMapStyle) {
+
+        if (reset){
+            loadedMapStyle.removeLayer(LAYER_ID);
+            loadedMapStyle.removeSource(SOURCE_ID);
+        }
 
         Drawable drawable = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_loc_blue, null);
         Bitmap bitmap = BitmapUtils.getBitmapFromDrawable(drawable);
@@ -422,7 +449,7 @@ public class KelolaLahankuActivity extends AppCompatActivity implements OnMapRea
 
     public void initRecyclerviewLatlong(){
         RecyclerView recyclerView = findViewById(R.id.rv_list_lokasi);
-        mAdapter = new KelolaLahankuAdapter(this, lokasiListFromServer, mapboxMap);
+        mAdapter = new KelolaLahankuAdapter(this, lokasiListUser, mapboxMap);
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(mAdapter);
@@ -552,7 +579,7 @@ public class KelolaLahankuActivity extends AppCompatActivity implements OnMapRea
         setResult(RESULT_OK);
         super.onBackPressed();
         Intent a = new Intent(this, MainActivity.class);
-        a.putExtra("LOGIN", getLoginType());
+        a.putExtra("LOGIN", getUsername());
         a.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(a);
         finish();

@@ -14,14 +14,15 @@ import com.labs.jangkriek.carilahan.Activity.LogInSignUp.LoginUsersFragment;
 import com.labs.jangkriek.carilahan.PrefConfig;
 import com.labs.jangkriek.carilahan.R;
 import com.labs.jangkriek.carilahan.mainViewFragment.AccountFragment;
-import com.labs.jangkriek.carilahan.mainViewFragment.HomeFragment;
-import com.labs.jangkriek.carilahan.mainViewFragment.HomeUserFragment;
+import com.labs.jangkriek.carilahan.mainViewFragment.UsersHomeFragment;
+import com.labs.jangkriek.carilahan.mainViewFragment.GuestHomeFragment;
 import com.labs.jangkriek.carilahan.mainViewFragment.MapFragment;
 import com.mapbox.mapboxsdk.Mapbox;
 
 public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
 
     public static String loginType;
+    public static int idUser;
     private ProgressDialog progressDialog;
     public static PrefConfig prefConfig;
 
@@ -41,14 +42,15 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
         Intent i = getIntent();
         loginType = i.getStringExtra("LOGIN");
+        idUser = i.getIntExtra("ID_USER", idUser);
 
         // kita set default nya Home Fragment
-        if(loginType.equals("USER")){
+        if(loginType.equals("GUEST")){
             //Toast.makeText(getApplicationContext(),"Masuk USER = "+loginType, Toast.LENGTH_SHORT).show();
-            loadFragment(new HomeUserFragment());
-        }else if (loginType.equals("USERS")){
+            loadFragment(new GuestHomeFragment());
+        }else {
             //Toast.makeText(getApplicationContext(),"Masuk ADMIN = "+loginType, Toast.LENGTH_SHORT).show();
-            loadFragment(new HomeFragment());
+            loadFragment(new UsersHomeFragment());
         }
         // inisialisasi BottomNavigaionView
         BottomNavigationView bottomNavigationView = findViewById(R.id.bn_main);
@@ -58,8 +60,12 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
     }
 
-    public static String getLoginType(){
+    public static String getUsername(){
         return loginType;
+    }
+
+    public static int getIdUser(){
+        return idUser;
     }
 
     private boolean loadFragment(Fragment fragment) {
@@ -86,9 +92,9 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         switch (menuItem.getItemId()){
             case R.id.home_menu:
                 if(loginType.equals("USER")){
-                    fragment = new HomeUserFragment();
+                    fragment = new GuestHomeFragment();
                 }else if (loginType.equals("USERS")){
-                    fragment = new HomeFragment();
+                    fragment = new UsersHomeFragment();
                 }
                 //getSupportActionBar().show();
                 break;

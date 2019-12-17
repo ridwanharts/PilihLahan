@@ -23,7 +23,7 @@ import com.labs.jangkriek.carilahan.Activity.UserLokasiActivity;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class HomeUserFragment extends Fragment {
+public class GuestHomeFragment extends Fragment {
 
     private DbSavePencarian dbSavePencarian;
     private DbLokasi dbLokasi;
@@ -31,7 +31,7 @@ public class HomeUserFragment extends Fragment {
     private CardView cvCari, cvHitung, cvLocation;
     private TextView tvCountLokasi, tvCountHistory;
 
-    public HomeUserFragment() {
+    public GuestHomeFragment() {
         // Required empty public constructor
     }
 

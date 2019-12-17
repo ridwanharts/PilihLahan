@@ -51,7 +51,7 @@ public class LoginGuestFragment extends Fragment {
                     @Override
                     public void run() {
                         Intent i = new Intent(getActivity(), MainActivity.class);
-                        i.putExtra("LOGIN","USER");
+                        i.putExtra("LOGIN","GUEST");
                         startActivity(i);
                         getActivity().finish();
                     }

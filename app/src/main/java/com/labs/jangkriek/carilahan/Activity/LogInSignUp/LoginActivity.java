@@ -38,7 +38,7 @@ public class LoginActivity extends AppCompatActivity {
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new LoginGuestFragment(), "User");
-        adapter.addFragment(new LoginUsersFragment(), "Users");
+        adapter.addFragment(new LoginUsersFragment(), "ResponUsers");
         viewPager.setAdapter(adapter);
     }
 

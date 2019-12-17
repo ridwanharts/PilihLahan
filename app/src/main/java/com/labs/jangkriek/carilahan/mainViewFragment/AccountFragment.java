@@ -1,47 +1,25 @@
 package com.labs.jangkriek.carilahan.mainViewFragment;
 
 
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.PointF;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.FrameLayout;
-import android.widget.Toast;
 
-import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.labs.jangkriek.carilahan.Activity.LogInSignUp.LoginActivity;
 import com.labs.jangkriek.carilahan.R;
-import com.mapbox.geojson.Feature;
-import com.mapbox.geojson.FeatureCollection;
-import com.mapbox.geojson.LineString;
-import com.mapbox.geojson.Point;
-import com.mapbox.geojson.Polygon;
-import com.mapbox.mapboxsdk.annotations.MarkerOptions;
 import com.mapbox.mapboxsdk.geometry.LatLng;
-import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
-import com.mapbox.mapboxsdk.maps.Style;
-import com.mapbox.mapboxsdk.style.layers.LineLayer;
-import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static com.labs.jangkriek.carilahan.Activity.MainActivity.getLoginType;
-import static com.mapbox.mapboxsdk.style.layers.Property.LINE_CAP_ROUND;
-import static com.mapbox.mapboxsdk.style.layers.Property.LINE_JOIN_BEVEL;
+import static com.labs.jangkriek.carilahan.Activity.MainActivity.getUsername;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.lineCap;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.lineColor;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.lineJoin;
@@ -94,7 +72,7 @@ public class AccountFragment extends Fragment implements OnMapReadyCallback, Map
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(getActivity(), LoginActivity.class);
-                i.putExtra("LOGIN", getLoginType());
+                i.putExtra("LOGIN", getUsername());
                 startActivity(i);
                 getActivity().finish();
             }

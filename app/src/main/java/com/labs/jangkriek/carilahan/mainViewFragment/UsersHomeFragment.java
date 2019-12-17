@@ -25,7 +25,7 @@ import com.labs.jangkriek.carilahan.Activity.PilihKriteria;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class HomeFragment extends Fragment {
+public class UsersHomeFragment extends Fragment {
 
     private DbSavePencarian dbSavePencarian;
     private DbLokasi dbLokasi;
@@ -34,7 +34,7 @@ public class HomeFragment extends Fragment {
     private static PrefConfig prefConfig;
 
 
-    public HomeFragment() {
+    public UsersHomeFragment() {
         // Required empty public constructor
     }
 

@@ -50,7 +50,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-import static com.labs.jangkriek.carilahan.Activity.MainActivity.getLoginType;
+import static com.labs.jangkriek.carilahan.Activity.MainActivity.getUsername;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconAllowOverlap;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconImage;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconOffset;
@@ -334,7 +334,7 @@ public class UserLokasiActivity extends AppCompatActivity implements OnMapReadyC
     public void onBackPressed() {
         super.onBackPressed();
         Intent a = new Intent(this, MainActivity.class);
-        a.putExtra("LOGIN", getLoginType());
+        a.putExtra("LOGIN", getUsername());
         a.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(a);
         finish();

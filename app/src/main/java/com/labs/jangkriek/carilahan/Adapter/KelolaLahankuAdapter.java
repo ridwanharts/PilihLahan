@@ -34,6 +34,8 @@ import com.mapbox.mapboxsdk.maps.MapboxMap;
 import java.io.ByteArrayOutputStream;
 import java.util.List;
 
+import static com.labs.jangkriek.carilahan.Activity.MainActivity.getUsername;
+
 public class KelolaLahankuAdapter extends RecyclerView.Adapter<KelolaLahankuAdapter.MyViewHolder> {
 
     private Context context;
@@ -44,7 +46,7 @@ public class KelolaLahankuAdapter extends RecyclerView.Adapter<KelolaLahankuAdap
     private boolean kondisi = true;
 
     public static class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView namaLokasi;
+        TextView namaLokasi, pemilikLahan;
         public TextView hargaLahan;
         public TextView luasLahan;
         ImageView cekUpload;
@@ -58,6 +60,7 @@ public class KelolaLahankuAdapter extends RecyclerView.Adapter<KelolaLahankuAdap
         public MyViewHolder(View view) {
             super(view);
             namaLokasi = view.findViewById(R.id.tv_nama_lokasi);
+            pemilikLahan = view.findViewById(R.id.tv_pemilik);
             luasLahan = view.findViewById(R.id.tv_luas_lahan);
             hargaLahan = view.findViewById(R.id.tv_harga_lahan);
             cekUpload = view.findViewById(R.id.iv_cek_upload);
@@ -112,6 +115,7 @@ public class KelolaLahankuAdapter extends RecyclerView.Adapter<KelolaLahankuAdap
         Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
 
         holder.namaLokasi.setText(namaLokasi.getNama());
+        holder.pemilikLahan.setText(getUsername());
         holder.luasLahan.setText(String.valueOf(namaLokasi.getLuasLahan()));
         holder.hargaLahan.setText(String.valueOf(namaLokasi.getHargaLahan()));
         holder.ivLahan.setImageBitmap(decodedByte);
@@ -218,16 +222,6 @@ public class KelolaLahankuAdapter extends RecyclerView.Adapter<KelolaLahankuAdap
     @Override
     public int getItemCount() {
         return lokasiList.size();
-    }
-
-    public static Bitmap getImage(byte[] image) {
-        return BitmapFactory.decodeByteArray(image, 0, image.length);
-    }
-
-    public static byte[] getBytes(Bitmap bitmap) {
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 0, stream);
-        return stream.toByteArray();
     }
 
 }

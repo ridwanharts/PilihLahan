@@ -25,7 +25,6 @@ import androidx.recyclerview.widget.LinearSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SnapHelper;
 
-import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.labs.jangkriek.carilahan.Adapter.KelolaLahankuAdapter;
 import com.labs.jangkriek.carilahan.POJO.Lokasi;
 import com.labs.jangkriek.carilahan.POJO.PointLatLong;
@@ -61,7 +60,8 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-import static com.labs.jangkriek.carilahan.Activity.MainActivity.getLoginType;
+import static com.labs.jangkriek.carilahan.Activity.MainActivity.getIdUser;
+import static com.labs.jangkriek.carilahan.Activity.MainActivity.getUsername;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.fillColor;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.fillOpacity;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconAllowOverlap;
@@ -79,6 +79,7 @@ public class SemuaLahanActivity extends AppCompatActivity implements OnMapReadyC
     public MapboxMap mapboxMap;
     private MapView mapView;
     private FeatureCollection lokasiCollection;
+    private Boolean reset;
 
     private KelolaLahankuAdapter mAdapter;
 
@@ -114,6 +115,7 @@ public class SemuaLahanActivity extends AppCompatActivity implements OnMapReadyC
         mapView = findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(this);
+        reset = false;
 
         ivReloadServer = findViewById(R.id.reload_data_server);
         rvLoading = findViewById(R.id.rv_loading);
@@ -127,20 +129,15 @@ public class SemuaLahanActivity extends AppCompatActivity implements OnMapReadyC
         mapboxMap.setStyle(new Style.Builder().fromUri("mapbox://styles/ridwanharts/cjytgnl6o073w1cnv460nfx46"), new Style.OnStyleLoaded() {
             @Override
             public void onStyleLoaded(@NonNull Style style) {
-                ivReloadServer.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        mStyle = style;
-                        loadDataLokasiFromServer();
-                    }
-                });
-
+                mStyle = style;
+                rvLoading.setVisibility(View.VISIBLE);
+                loadDataLokasiFromServer();
             }
         });
     }
 
     private void loadDataLokasiFromServer(){
-
+        reset = true;
         rvLoading.setVisibility(View.VISIBLE);
         lokasiListFromServer.clear();
         userLatLongListFromServer.clear();
@@ -173,7 +170,7 @@ public class SemuaLahanActivity extends AppCompatActivity implements OnMapReadyC
                     //Toast.makeText(getApplicationContext(),lokasiListFromServer.size()+" : "+lokasiList.size(), Toast.LENGTH_SHORT).show();
                     if (lokasiListFromServer.size() != 0){
                         //ibDownload.setVisibility(View.VISIBLE);
-                        //Toast.makeText(getApplicationContext(),"Data lahan berhasil didownload "+lokasiListFromServer.size(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(),"Data lahan berhasil didownload : "+lokasiListFromServer.size(), Toast.LENGTH_SHORT).show();
                         Call<Respon> getUserLatLong = api.get_user_latlong();
                         getUserLatLong.enqueue(new Callback<Respon>() {
                             @Override
@@ -183,7 +180,7 @@ public class SemuaLahanActivity extends AppCompatActivity implements OnMapReadyC
                                 if (value.equals("1")) {
                                     userLatLongListFromServer = response.body().getPoint();
                                 }
-                                Toast.makeText(getApplicationContext(),"Data berhasil didownload "+userLatLongListFromServer.size(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(),"Data plot berhasil didownload : "+userLatLongListFromServer.size(), Toast.LENGTH_SHORT).show();
                                 rvLoading.setVisibility(View.INVISIBLE);
 
                                 initDataLokasiCollection();
@@ -195,10 +192,13 @@ public class SemuaLahanActivity extends AppCompatActivity implements OnMapReadyC
 
                             @Override
                             public void onFailure(Call<Respon> call, Throwable t) {
+                                Toast.makeText(getApplicationContext(),"Internet Problem", Toast.LENGTH_SHORT).show();
                                 rvLoading.setVisibility(View.INVISIBLE);
-
                             }
                         });
+                    }else{
+                        Toast.makeText(getApplicationContext(),"Anda belum menambahkan data lahan", Toast.LENGTH_SHORT).show();
+                        rvLoading.setVisibility(View.INVISIBLE);
                     }
 
                 }
@@ -218,7 +218,13 @@ public class SemuaLahanActivity extends AppCompatActivity implements OnMapReadyC
         LatLng[] lokasi = new LatLng[lokasiListFromServer.size()];
 
         for (int i=0;i<lokasiListFromServer.size();i++){
-            listCreatedAt.add(lokasiListFromServer.get(i).getCreated_at());
+
+            //if data lahan sama dgn id user
+            //if (lokasiListFromServer.get(i).getId_user() == getIdUser()){
+                //get data created at disimpan ke list
+                //lokasiListUser.add(lokasiListFromServer.get(i));
+                listCreatedAt.add(lokasiListFromServer.get(i).getCreated_at());
+            //}
         }
 
         for (int i=0;i<listCreatedAt.size();i++){
@@ -244,19 +250,21 @@ public class SemuaLahanActivity extends AppCompatActivity implements OnMapReadyC
             }
         }
 
-        Log.e("size L", listCreatedAt.size()+"");
+/*        Log.e("size L", listCreatedAt.size()+"");
         Log.e("L0", listCreatedAt.get(0)+"");
         Log.e("data hash", dataPointHash.size()+"");
-        Log.e("data hash", dataPointHash.get(listCreatedAt.get(0))+"");
+        Log.e("data hash", dataPointHash.get(listCreatedAt.get(0))+"");*/
 
 
         for(int i=0;i<lokasiListFromServer.size();i++) {
-            lokasi[i] = new LatLng(lokasiListFromServer.get(i).getLatitude(),lokasiListFromServer.get(i).getLongitude());
+            //if (lokasiListFromServer.get(i).getId_user() == getIdUser()) {
+                lokasi[i] = new LatLng(lokasiListFromServer.get(i).getLatitude(), lokasiListFromServer.get(i).getLongitude());
+            //}
         }
 
         lokasiCollection = FeatureCollection.fromFeatures(new Feature[] {});
         List<Feature> lokasiList = new ArrayList<>();
-        if (lokasiCollection != null) {
+        if (lokasiList.size() != 0) {
             for (LatLng latLngLoc : lokasi) {
                 lokasiList.add(Feature.fromGeometry(Point.fromLngLat(latLngLoc.getLongitude(), latLngLoc.getLatitude())));
             }
@@ -265,6 +273,11 @@ public class SemuaLahanActivity extends AppCompatActivity implements OnMapReadyC
     }
 
     private void initFillLayer(@NonNull Style loadedMapStyle) {
+
+        if (reset){
+            loadedMapStyle.removeLayer("layer-id11");
+            loadedMapStyle.removeSource("source-id11");
+        }
 
         for (int i=0;i<listCreatedAt.size();i++){
             POINTS.add(dataPointHash.get(listCreatedAt.get(i)));
@@ -281,6 +294,11 @@ public class SemuaLahanActivity extends AppCompatActivity implements OnMapReadyC
 
     private void initMarkerIcons(@NonNull Style loadedMapStyle) {
 
+        if (reset){
+            loadedMapStyle.removeLayer(LAYER_ID);
+            loadedMapStyle.removeSource(SOURCE_ID);
+        }
+
         Drawable drawable = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_loc_blue, null);
         Bitmap bitmap = BitmapUtils.getBitmapFromDrawable(drawable);
 
@@ -292,7 +310,6 @@ public class SemuaLahanActivity extends AppCompatActivity implements OnMapReadyC
                 iconOffset(new Float[] {0f, -4f})
         ));
     }
-
     @Override
     public void onPointerCaptureChanged(boolean hasCapture) {
 
@@ -327,8 +344,6 @@ public class SemuaLahanActivity extends AppCompatActivity implements OnMapReadyC
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(mAdapter);
-        SnapHelper snapHelper = new LinearSnapHelper();
-        //snapHelper.attachToRecyclerView(recyclerView);
 
     }
 
@@ -399,7 +414,7 @@ public class SemuaLahanActivity extends AppCompatActivity implements OnMapReadyC
         setResult(RESULT_OK);
         super.onBackPressed();
         Intent a = new Intent(this, MainActivity.class);
-        a.putExtra("LOGIN", getLoginType());
+        a.putExtra("LOGIN", getUsername());
         a.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(a);
         finish();
