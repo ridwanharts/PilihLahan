@@ -2,22 +2,31 @@ package com.labs.jangkriek.carilahan.Activity.Users;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.res.ResourcesCompat;
 
+import android.animation.ObjectAnimator;
+import android.animation.TypeEvaluator;
+import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.PointF;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.JsonElement;
+import com.labs.jangkriek.carilahan.Activity.MainActivity;
 import com.labs.jangkriek.carilahan.R;
 import com.mapbox.geojson.Feature;
 import com.mapbox.geojson.FeatureCollection;
@@ -34,16 +43,20 @@ import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.mapboxsdk.maps.Style;
 import com.mapbox.mapboxsdk.style.layers.FillLayer;
 import com.mapbox.mapboxsdk.style.layers.LineLayer;
+import com.mapbox.mapboxsdk.style.layers.PropertyFactory;
 import com.mapbox.mapboxsdk.style.layers.SymbolLayer;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
 import com.mapbox.mapboxsdk.style.sources.VectorSource;
+import com.mapbox.mapboxsdk.utils.BitmapUtils;
 
+import java.io.Serializable;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.labs.jangkriek.carilahan.Activity.MainActivity.getUsername;
 import static com.mapbox.mapboxsdk.style.layers.Property.ICON_ANCHOR_BOTTOM;
 import static com.mapbox.mapboxsdk.style.layers.Property.LINE_CAP_ROUND;
 import static com.mapbox.mapboxsdk.style.layers.Property.LINE_JOIN_BEVEL;
@@ -87,7 +100,14 @@ public class LihatKriteriaOnMap extends AppCompatActivity implements OnMapReadyC
     private MapView mapView;
     private MapboxMap mapboxMap;
     private double latitude, longitude;
-    private String tipeKriteria;
+    private String tipeKriteria, lat, longi;
+    private ValueAnimator valueAnimator;
+    private GeoJsonSource geoJsonSource;
+    private Style mStyle;
+    private LatLng currentPos = new LatLng(-7.8855268466, 110.062440920);
+    private TextView tvLatitudeLokasi,tvLongitudeLokasi;
+    private RelativeLayout rlLatLong;
+    private Button btnPilih;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,76 +119,153 @@ public class LihatKriteriaOnMap extends AppCompatActivity implements OnMapReadyC
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(this);
 
+        Toolbar toolbar = findViewById(R.id.toolbar);
+
         Intent intent = getIntent();
         latitude = intent.getDoubleExtra("latitude", latitude);
         longitude = intent.getDoubleExtra("longitude", longitude);
         tipeKriteria = intent.getStringExtra("tipe_kriteria");
+
+        if (getSupportActionBar() == null){
+            setSupportActionBar(toolbar);
+        }
+        if (getSupportActionBar() != null){
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+            switch (tipeKriteria) {
+                case "pilih_lokasi":
+                    getSupportActionBar().setTitle("Pilih Lokasi Lahan");
+                    break;
+                case JENIS_TANAH:
+                    getSupportActionBar().setTitle(JENIS_TANAH);
+                    break;
+                case KEMIRINGAN_LERENG:
+                    getSupportActionBar().setTitle(KEMIRINGAN_LERENG);
+                    break;
+            }
+
+        }
 
     }
 
     @Override
     public void onMapReady(@NonNull final MapboxMap mapboxMap) {
         LihatKriteriaOnMap.this.mapboxMap = mapboxMap;
+        geoJsonSource = new GeoJsonSource("source-red-marker",
+                Feature.fromGeometry(Point.fromLngLat(currentPos.getLongitude(),
+                        currentPos.getLatitude())));
         mapboxMap.setStyle(new Style.Builder().fromUri("mapbox://styles/ridwanharts/cjytgnl6o073w1cnv460nfx46"), new Style.OnStyleLoaded() {
             @Override
             public void onStyleLoaded(@NonNull Style style) {
-                MarkerOptions options = new MarkerOptions();
-                options.title("Temon");
-                options.position(new LatLng(latitude, longitude));
-                mapboxMap.addMarker(options);
-                mapboxMap.addOnMapClickListener(LihatKriteriaOnMap.this);
-                Toast.makeText(LihatKriteriaOnMap.this,
-                        "Arahkan titik merah mendekati lokasi lahan anda", Toast.LENGTH_LONG).show();
+                if (tipeKriteria.equals("pilih_lokasi")){
+                    tvLatitudeLokasi = findViewById(R.id.tv_latitude_lokasi);
+                    tvLongitudeLokasi = findViewById(R.id.tv_longitude_lokasi);
+                    tvLatitudeLokasi.setText("-7.8855268466");
+                    tvLongitudeLokasi.setText("110.062440920");
+                    btnPilih = findViewById(R.id.btn_red_marker_pilih);
+                    btnPilih.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent();
+                            intent.putExtra("latitude", lat);
+                            intent.putExtra("longitude", longi);
+                            setResult(RESULT_OK, intent);
+                            finish();
+                        }
+                    });
+
+                    showRedMarker(style);
+                }else {
+                    rlLatLong = findViewById(R.id.linear_latlong);
+                    rlLatLong.setVisibility(View.INVISIBLE);
+
+                    MarkerOptions options = new MarkerOptions();
+                    options.title("Temon");
+                    options.position(new LatLng(latitude, longitude));
+                    mapboxMap.addMarker(options);
+                    mapboxMap.addOnMapClickListener(LihatKriteriaOnMap.this);
+                    Toast.makeText(LihatKriteriaOnMap.this,
+                            "Arahkan titik merah mendekati lokasi lahan anda", Toast.LENGTH_LONG).show();
 
 
-                String idSource = "";
-                String uri = "";
-                String sourceLayer = "";
-                if (tipeKriteria.equals(JENIS_TANAH)) {
-                    idSource = JENIS_TANAH;
-                    uri = URI_JENIS_TANAH;
-                    sourceLayer = SCL_JENIS_TANAH;
+                    String idSource = "";
+                    String uri = "";
+                    String sourceLayer = "";
+                    if (tipeKriteria.equals(JENIS_TANAH)) {
+                        idSource = JENIS_TANAH;
+                        uri = URI_JENIS_TANAH;
+                        sourceLayer = SCL_JENIS_TANAH;
+                    }
+                    if (tipeKriteria.equals(KEMIRINGAN_LERENG)) {
+                        idSource = KEMIRINGAN_LERENG;
+                        uri = URI_KEMIRINGAN_LERENG;
+                        sourceLayer = SCL_KEMIRINGAN_LERENG;
+                    }
+                    if (tipeKriteria.equals(KETERSEDIAAN_AIR)) {
+                        idSource = KETERSEDIAAN_AIR;
+                        uri = URI_KETERSEDIAAN_AIR;
+                        sourceLayer = SCL_KETERSEDIAAN_AIR;
+                    }
+                    if (tipeKriteria.equals(KERAWANAN_BENCANA)) {
+                        idSource = KERAWANAN_BENCANA;
+                        uri = URI_KERAWANAN_BENCANA;
+                        sourceLayer = SCL_KERAWANAN_BENCANA;
+                    }
+
+                    style.addSource(new VectorSource(idSource, uri)
+                    );
+
+                    FillLayer terrainData = new FillLayer(idSource, idSource);
+                    terrainData.setSourceLayer(sourceLayer);
+                    terrainData.setProperties(
+                            fillColor("#197901"),
+                            fillOpacity(0.4f),
+                            fillAntialias(true)
+                    );
+
+                    //style.addLayerBelow(terrainData, CALLOUT_LAYER_ID);
+                    style.addLayerAt(terrainData, 3);
+
+                    setUpLineLayer(style);
+                    mapboxMap.addOnCameraIdleListener(LihatKriteriaOnMap.this);
+                    showCrosshair();
+                    setupSource(style);
+                    setUpInfoWindowLayer(style);
+                    updateOutline(style);
                 }
-                if (tipeKriteria.equals(KEMIRINGAN_LERENG)) {
-                    idSource = KEMIRINGAN_LERENG;
-                    uri = URI_KEMIRINGAN_LERENG;
-                    sourceLayer = SCL_KEMIRINGAN_LERENG;
-                }
-                if (tipeKriteria.equals(KETERSEDIAAN_AIR)) {
-                    idSource = KETERSEDIAAN_AIR;
-                    uri = URI_KETERSEDIAAN_AIR;
-                    sourceLayer = SCL_KETERSEDIAAN_AIR;
-                }
-                if (tipeKriteria.equals(KERAWANAN_BENCANA)) {
-                    idSource = KERAWANAN_BENCANA;
-                    uri = URI_KERAWANAN_BENCANA;
-                    sourceLayer = SCL_KERAWANAN_BENCANA;
-                }
-
-                style.addSource(new VectorSource(idSource, uri)
-                );
-
-                FillLayer terrainData = new FillLayer(idSource, idSource);
-                terrainData.setSourceLayer(sourceLayer);
-                terrainData.setProperties(
-                        fillColor("#197901"),
-                        fillOpacity(0.4f),
-                        fillAntialias(true)
-                );
-
-                //style.addLayerBelow(terrainData, CALLOUT_LAYER_ID);
-                style.addLayerAt(terrainData, 3);
-
-                setUpLineLayer(style);
-                mapboxMap.addOnCameraIdleListener(LihatKriteriaOnMap.this);
-                showCrosshair();
-                setupSource(style);
-                setUpInfoWindowLayer(style);
-                updateOutline(style);
-
             }
         });
     }
+
+    public void showRedMarker(Style styleRed){
+        Drawable drawable = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_place, null);
+        Bitmap bitmap = BitmapUtils.getBitmapFromDrawable(drawable);
+
+        styleRed.addImage(("marker_red"), bitmap);
+        styleRed.addSource(geoJsonSource);
+        styleRed.addLayer(new SymbolLayer("layer-red-marker", "source-red-marker")
+                .withProperties(
+                        iconImage("marker_red"),
+                        PropertyFactory.iconIgnorePlacement(true),
+                        iconAllowOverlap(true)
+                ));
+
+        mapboxMap.addOnMapClickListener(LihatKriteriaOnMap.this);
+        LihatKriteriaOnMap.this.mStyle = styleRed;
+    }
+
+    private final ValueAnimator.AnimatorUpdateListener animatorUpdateListener =
+            new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                    LatLng animatedPosition = (LatLng) valueAnimator.getAnimatedValue();
+
+                    geoJsonSource.setGeoJson(Point.fromLngLat(animatedPosition.getLongitude(), animatedPosition.getLatitude()));
+                }
+            };
+
+
 
     private void setUpLineLayer(@NonNull Style loadedMapStyle) {
 // Create a GeoJSONSource from an empty FeatureCollection
@@ -316,8 +413,52 @@ public class LihatKriteriaOnMap extends AppCompatActivity implements OnMapReadyC
 
     @Override
     public boolean onMapClick(@NonNull LatLng point) {
-        return handleClickIcon(mapboxMap.getProjection().toScreenLocation(point));
+
+        if (tipeKriteria.equals("pilih_lokasi")){
+            if (!mStyle.isFullyLoaded()) {
+                return false;
+            }
+            if (valueAnimator != null && valueAnimator.isStarted()) {
+                currentPos = (LatLng) valueAnimator.getAnimatedValue();
+                valueAnimator.cancel();
+            }
+
+            valueAnimator = ObjectAnimator
+                    .ofObject(latLngEvaluator, currentPos, point)
+                    .setDuration(1000);
+            valueAnimator.addUpdateListener(animatorUpdateListener);
+            valueAnimator.start();
+
+            currentPos = point;
+
+            tvLatitudeLokasi.setText(String.valueOf(currentPos.getLatitude()));
+            tvLongitudeLokasi.setText(String.valueOf(currentPos.getLongitude()));
+            lat = tvLatitudeLokasi.getText().toString();
+            longi = tvLongitudeLokasi.getText().toString();
+
+            return true;
+        }else {
+
+            return handleClickIcon(mapboxMap.getProjection().toScreenLocation(point));
+        }
+
+
+
     }
+
+    private static final TypeEvaluator<LatLng> latLngEvaluator = new TypeEvaluator<LatLng>() {
+
+        private final LatLng latLng = new LatLng();
+
+        @Override
+        public LatLng evaluate(float fraction, LatLng startValue, LatLng endValue) {
+            latLng.setLatitude(startValue.getLatitude()
+                    + ((endValue.getLatitude() - startValue.getLatitude()) * fraction));
+            latLng.setLongitude(startValue.getLongitude()
+                    + ((endValue.getLongitude() - startValue.getLongitude()) * fraction));
+            return latLng;
+        }
+    };
 
     /**
      * Invoked when the bitmap has been generated from a view.
@@ -478,5 +619,12 @@ public class LihatKriteriaOnMap extends AppCompatActivity implements OnMapReadyC
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         mapView.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onBackPressed() {
+        setResult(RESULT_OK);
+        super.onBackPressed();
+        finish();
     }
 }

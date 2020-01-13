@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DbRangkingLokasi extends SQLiteOpenHelper {
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
 
     private static final String DATABASE_NAME = "rangking_lokasi_db";
     private static final String TABLE_NAME = "rangking";

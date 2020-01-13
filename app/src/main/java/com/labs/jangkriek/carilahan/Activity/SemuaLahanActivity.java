@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -19,6 +20,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.res.ResourcesCompat;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSnapHelper;
@@ -29,8 +31,13 @@ import com.labs.jangkriek.carilahan.Adapter.KelolaLahankuAdapter;
 import com.labs.jangkriek.carilahan.POJO.Lokasi;
 import com.labs.jangkriek.carilahan.POJO.PointLatLong;
 import com.labs.jangkriek.carilahan.POJO.Respon;
+import com.labs.jangkriek.carilahan.POJO.Users;
 import com.labs.jangkriek.carilahan.R;
 import com.labs.jangkriek.carilahan.Utils.RegisterApi;
+import com.labs.jangkriek.carilahan.mainViewFragment.AccountFragment;
+import com.labs.jangkriek.carilahan.mainViewFragment.GuestHomeFragment;
+import com.labs.jangkriek.carilahan.mainViewFragment.MapFragment;
+import com.labs.jangkriek.carilahan.mainViewFragment.UsersHomeFragment;
 import com.mapbox.geojson.Feature;
 import com.mapbox.geojson.FeatureCollection;
 import com.mapbox.geojson.Point;
@@ -80,6 +87,8 @@ public class SemuaLahanActivity extends AppCompatActivity implements OnMapReadyC
     private MapView mapView;
     private FeatureCollection lokasiCollection;
     private Boolean reset;
+    private static Boolean isSemuaLahan;
+    private static List<Users> userList = new ArrayList<Users>();
 
     private KelolaLahankuAdapter mAdapter;
 
@@ -91,7 +100,6 @@ public class SemuaLahanActivity extends AppCompatActivity implements OnMapReadyC
     List<List<Point>> POINTS = new ArrayList<>();
 
     private Style mStyle;
-    private ImageView ivReloadServer;
     private RelativeLayout rvLoading;
 
 
@@ -105,20 +113,30 @@ public class SemuaLahanActivity extends AppCompatActivity implements OnMapReadyC
 
         if (getSupportActionBar() == null){
             setSupportActionBar(toolbar);
-            toolbar.setTitle("Daftar Seluruh Lahan");
         }
         if (getSupportActionBar() != null){
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
+            getSupportActionBar().setTitle("Daftar Seluruh Lahan");
         }
 
         mapView = findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(this);
         reset = false;
-
-        ivReloadServer = findViewById(R.id.reload_data_server);
         rvLoading = findViewById(R.id.rv_loading);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.refresh_menu, menu);
+
+        return true;
+    }
+
+    public static Boolean getIsSemuaLahan(){
+        return isSemuaLahan;
     }
 
     @Override
@@ -129,6 +147,7 @@ public class SemuaLahanActivity extends AppCompatActivity implements OnMapReadyC
         mapboxMap.setStyle(new Style.Builder().fromUri("mapbox://styles/ridwanharts/cjytgnl6o073w1cnv460nfx46"), new Style.OnStyleLoaded() {
             @Override
             public void onStyleLoaded(@NonNull Style style) {
+                isSemuaLahan = true;
                 mStyle = style;
                 rvLoading.setVisibility(View.VISIBLE);
                 loadDataLokasiFromServer();
@@ -137,6 +156,7 @@ public class SemuaLahanActivity extends AppCompatActivity implements OnMapReadyC
     }
 
     private void loadDataLokasiFromServer(){
+        getUser();
         reset = true;
         rvLoading.setVisibility(View.VISIBLE);
         lokasiListFromServer.clear();
@@ -188,6 +208,7 @@ public class SemuaLahanActivity extends AppCompatActivity implements OnMapReadyC
                                 initRecyclerviewLatlong();
                                 initFillLayer(mStyle);
 
+
                             }
 
                             @Override
@@ -211,6 +232,48 @@ public class SemuaLahanActivity extends AppCompatActivity implements OnMapReadyC
 
             }
         });
+    }
+
+    private void getUser(){
+
+        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
+            @Override
+            public void log(String message) {
+                Log.e("", "message : "+message);
+            }
+        });
+        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        OkHttpClient client = new OkHttpClient.Builder()
+                .addInterceptor(interceptor)
+                .build();
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(client)
+                .build();
+
+        RegisterApi api = retrofit.create(RegisterApi.class);
+        Call<Respon> call = api.view_user();
+        call.enqueue(new Callback<Respon>() {
+            @Override
+            public void onResponse(Call<Respon> call, Response<Respon> response) {
+                String value = response.body().getValue();
+                if (value.equals("1")){
+                    userList = response.body().getUsersList();
+                    Log.e("status", "berhasil"+userList.size());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Respon> call, Throwable t) {
+                Log.e("error", "gagal");
+            }
+        });
+    }
+
+    public static List<Users> userList(){
+        return userList;
     }
 
     private void initDataLokasiCollection() {
@@ -264,7 +327,7 @@ public class SemuaLahanActivity extends AppCompatActivity implements OnMapReadyC
 
         lokasiCollection = FeatureCollection.fromFeatures(new Feature[] {});
         List<Feature> lokasiList = new ArrayList<>();
-        if (lokasiList.size() != 0) {
+        if (lokasi.length != 0) {
             for (LatLng latLngLoc : lokasi) {
                 lokasiList.add(Feature.fromGeometry(Point.fromLngLat(latLngLoc.getLongitude(), latLngLoc.getLatitude())));
             }
@@ -295,8 +358,11 @@ public class SemuaLahanActivity extends AppCompatActivity implements OnMapReadyC
     private void initMarkerIcons(@NonNull Style loadedMapStyle) {
 
         if (reset){
-            loadedMapStyle.removeLayer(LAYER_ID);
-            loadedMapStyle.removeSource(SOURCE_ID);
+            if (loadedMapStyle.isFullyLoaded()){
+                loadedMapStyle.removeLayer(LAYER_ID);
+                loadedMapStyle.removeSource(SOURCE_ID);
+            }
+
         }
 
         Drawable drawable = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_loc_blue, null);
@@ -413,6 +479,8 @@ public class SemuaLahanActivity extends AppCompatActivity implements OnMapReadyC
     public void onBackPressed() {
         setResult(RESULT_OK);
         super.onBackPressed();
+        isSemuaLahan = false;
+
         Intent a = new Intent(this, MainActivity.class);
         a.putExtra("LOGIN", getUsername());
         a.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -423,7 +491,12 @@ public class SemuaLahanActivity extends AppCompatActivity implements OnMapReadyC
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
+            isSemuaLahan = false;
             finish(); // close this activity and return to preview activity (if there is any)
+        }
+        if (item.getItemId()==R.id.refresh_menu){
+            rvLoading.setVisibility(View.VISIBLE);
+            loadDataLokasiFromServer();
         }
         return super.onOptionsItemSelected(item);
     }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
-  android:layout_width="match_parent"
+  android:layout_width="250dp"
   android:layout_height="wrap_content"
   android:layout_marginStart="8dp"
   android:layout_marginEnd="8dp"
@@ -126,21 +126,31 @@
 		</LinearLayout>
 	  </LinearLayout>
 
+		<TextView
+			android:id="@+id/tv_rank_jumlah"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_below="@+id/linear_ll"
+			android:layout_marginTop="8dp"
+			android:layout_marginStart="8dp"
+			android:layout_marginEnd="8dp"
+			android:text="Jumlah" />
+
 	  <LinearLayout
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
+		  android:padding="5dp"
 		android:layout_marginTop="8dp"
 		android:background="@color/colorPrimary"
-		android:layout_below="@id/linear_ll">
-		<TextView
-		  android:id="@+id/tv_rank_jumlah"
-		  android:gravity="center_horizontal"
-		  android:layout_width="match_parent"
-		  android:layout_height="wrap_content"
-		  android:layout_marginStart="8dp"
-		  android:textColor="@color/mapboxWhite"
-		  android:layout_marginBottom="8dp"
-		  android:text="aaaaaaaaa" />
+		android:layout_below="@id/tv_rank_jumlah">
+
+		  <TextView
+			  android:id="@+id/tv_status"
+			  android:layout_width="match_parent"
+			  android:layout_height="match_parent"
+			  android:gravity="center"
+			  android:text="Lihat Detail"
+			  android:textColor="@color/mapboxWhite" />
 	  </LinearLayout>
 
 	</RelativeLayout>

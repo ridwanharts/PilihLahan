@@ -16,13 +16,13 @@
         android:id="@+id/clear_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
+        android:layout_gravity="end|top"
         android:layout_marginBottom="88dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
         android:paddingStart="12dp"
         android:paddingEnd="12dp"
-        android:background="@drawable/rect_blue"
+        android:background="@color/mapboxRed"
         android:text="Hapus Semua"
         android:textAllCaps="false"
         android:textColor="@color/mapboxWhite" />
@@ -63,11 +63,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/custom_button_blueriple"
-        android:padding="30dp"
+        android:padding="15dp"
         android:layout_marginBottom="25dp"
         android:layout_gravity="bottom|center"
         android:textColor="@color/mapboxWhite"
-        android:text="SIMPAN AREA">
+        android:text="SIMPAN PLOT AREA">
 
     </Button>
 

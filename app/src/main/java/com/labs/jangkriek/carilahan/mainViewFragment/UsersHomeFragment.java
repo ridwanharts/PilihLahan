@@ -16,6 +16,7 @@ import com.labs.jangkriek.carilahan.Activity.SemuaLahanActivity;
 import com.labs.jangkriek.carilahan.Database.DbLokasi;
 import com.labs.jangkriek.carilahan.Database.DbSavePencarian;
 import com.labs.jangkriek.carilahan.Activity.Users.HistoriActivity;
+import com.labs.jangkriek.carilahan.MetodeActivity;
 import com.labs.jangkriek.carilahan.PrefConfig;
 import com.labs.jangkriek.carilahan.R;
 import com.labs.jangkriek.carilahan.Activity.Users.KelolaLahankuActivity;
@@ -81,7 +82,7 @@ public class UsersHomeFragment extends Fragment {
         cvCari.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(getActivity(), PilihKriteria.class);
+                Intent i = new Intent(getActivity(), MetodeActivity.class);
                 startActivity(i);
             }
         });

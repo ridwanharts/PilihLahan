@@ -15,6 +15,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -25,6 +26,8 @@ import androidx.recyclerview.widget.SnapHelper;
 
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -74,6 +77,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 import static com.labs.jangkriek.carilahan.Activity.MainActivity.getIdUser;
 import static com.labs.jangkriek.carilahan.Activity.MainActivity.getUsername;
+import static com.labs.jangkriek.carilahan.Activity.MainActivity.idUser;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.fillColor;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.fillOpacity;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.fillOutlineColor;
@@ -96,7 +100,7 @@ public class KelolaLahankuActivity extends AppCompatActivity implements OnMapRea
     private FeatureCollection lokasiCollection;
     private ImageView ivCekUpload;
     private Boolean reset;
-
+    private Style mStyle;
     private KelolaLahankuAdapter mAdapter;
 
     //private List<Lokasi> lokasiList = new ArrayList<>();
@@ -110,19 +114,10 @@ public class KelolaLahankuActivity extends AppCompatActivity implements OnMapRea
 
     private DbLokasi db;
 
-    private ValueAnimator valueAnimator;
-    private LatLng currentPos = new LatLng(-7.8855268466, 110.062440920);
-
-    private GeoJsonSource geoJsonSource;
-    private TextView tvLatitudeLokasi,tvLongitudeLokasi;
-    private Style mStyle;
-
     private String lat, longi;
     private Context context;
 
-    private ImageView ivUploadGambar, ivReloadServer;
-
-    private Bitmap imageBitmap;
+    private ImageView ivUploadGambar;
 
     private RelativeLayout rvLoading;
 
@@ -134,19 +129,25 @@ public class KelolaLahankuActivity extends AppCompatActivity implements OnMapRea
         Mapbox.getInstance(this, getString(R.string.access_token));
 
         setContentView(R.layout.activity_kelola_lahanku);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+
+        if (getSupportActionBar() == null){
+            setSupportActionBar(toolbar);
+        }
+        if (getSupportActionBar() != null){
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+            getSupportActionBar().setTitle("Kelola Lahanku");
+        }
+
         FloatingActionButton fabOpAddLocation = findViewById(R.id.op_add_location);
 
         mapView = findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(this);
 
-        tvLatitudeLokasi = findViewById(R.id.tv_latitude_lokasi);
-        tvLongitudeLokasi = findViewById(R.id.tv_longitude_lokasi);
-        tvLatitudeLokasi.setText("-7.8855268466");
-        tvLongitudeLokasi.setText("110.062440920");
-        ivCekUpload = findViewById(R.id.iv_cek_upload);
         ivUploadGambar = findViewById(R.id.iv_upload_lokasi);
-        ivReloadServer = findViewById(R.id.reload_data_server);
         rvLoading = findViewById(R.id.rv_loading);
         reset = false;
 
@@ -154,9 +155,10 @@ public class KelolaLahankuActivity extends AppCompatActivity implements OnMapRea
             @Override
             public void onClick(View v) {
                 //showNoteDialog(false, null, -1);
-                double latitude = Double.parseDouble(tvLatitudeLokasi.getText().toString());
-                double longitude = Double.parseDouble(tvLongitudeLokasi.getText().toString());
+                double latitude = -7.8855268466;
+                double longitude = 110.062440920;
                 Intent i = new Intent(getApplicationContext(), TambahLahanActivity.class);
+                i.putExtra("is_edit", false);
                 i.putExtra("latitude", latitude);
                 i.putExtra("longitude", longitude);
                 //i.putExtra("nama", nama);
@@ -165,34 +167,17 @@ public class KelolaLahankuActivity extends AppCompatActivity implements OnMapRea
             }
         });
 
-
-
-        //db = new DbLokasi(this);
-
-        //lokasiList.addAll(lokasiListFromServer);
-
     }
 
     @Override
     public void onMapReady(@NonNull MapboxMap mapboxMap) {
         KelolaLahankuActivity.this.mapboxMap = mapboxMap;
-        geoJsonSource = new GeoJsonSource("source-id",
-                Feature.fromGeometry(Point.fromLngLat(currentPos.getLongitude(),
-                        currentPos.getLatitude())));
-
         //new Style.Builder().fromUri("mapbox://styles/ridwanharts/cjytgnl6o073w1cnv460nfx46"
         mapboxMap.setStyle(new Style.Builder().fromUri("mapbox://styles/ridwanharts/cjytgnl6o073w1cnv460nfx46"), new Style.OnStyleLoaded() {
             @Override
             public void onStyleLoaded(@NonNull Style style) {
-                showRedMarker(style);
-                ivReloadServer.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        mStyle = style;
-                        loadDataLokasiFromServer();
-                    }
-                });
-
+                mStyle = style;
+                loadDataLokasiFromServer();
             }
         });
     }
@@ -202,6 +187,14 @@ public class KelolaLahankuActivity extends AppCompatActivity implements OnMapRea
         rvLoading.setVisibility(View.VISIBLE);
         lokasiListFromServer.clear();
         userLatLongListFromServer.clear();
+        lokasiListUser.clear();
+        listCreatedAt.clear();
+        POINTS.clear();
+        dataPointHash.clear();
+
+        if (mAdapter != null){
+            mAdapter.clear();
+        }
 
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
             @Override
@@ -221,53 +214,40 @@ public class KelolaLahankuActivity extends AppCompatActivity implements OnMapRea
                 .build();
 
         RegisterApi api = retrofit.create(RegisterApi.class);
-        Call<Respon> call = api.view();
+        Call<Respon> call = api.view_lokasi_user(getIdUser());
         call.enqueue(new Callback<Respon>() {
             @Override
             public void onResponse(Call<Respon> call, Response<Respon> response) {
                 String value = response.body().getValue();
+                String message = response.body().getMessage();
                 if (value.equals("1")){
                     lokasiListFromServer = response.body().getLokasiList();
-                    //Toast.makeText(getApplicationContext(),lokasiListFromServer.size()+" : "+lokasiList.size(), Toast.LENGTH_SHORT).show();
+                    userLatLongListFromServer = response.body().getPoint();
                     if (lokasiListFromServer.size() != 0){
-                        //ibDownload.setVisibility(View.VISIBLE);
+                        if (userLatLongListFromServer.size() != 0){
+                            rvLoading.setVisibility(View.INVISIBLE);
+                            initDataLokasiCollection();
+                            initMarkerIcons(mStyle);
+                            initRecyclerviewLatlong();
+                            initFillLayer(mStyle);
+                        }
                         Toast.makeText(getApplicationContext(),"Data lahan berhasil didownload "+lokasiListFromServer.size(), Toast.LENGTH_SHORT).show();
-                        Call<Respon> getUserLatLong = api.get_user_latlong();
-                        getUserLatLong.enqueue(new Callback<Respon>() {
-                            @Override
-                            public void onResponse(Call<Respon> call, Response<Respon> response) {
-                                String value = response.body().getValue();
-
-                                if (value.equals("1")) {
-                                    userLatLongListFromServer = response.body().getPoint();
-                                }
-                                Toast.makeText(getApplicationContext(),"Data plot berhasil didownload "+userLatLongListFromServer.size(), Toast.LENGTH_SHORT).show();
-                                rvLoading.setVisibility(View.INVISIBLE);
-
-                                initDataLokasiCollection();
-                                initMarkerIcons(mStyle);
-                                initRecyclerviewLatlong();
-                                initFillLayer(mStyle);
-
-                            }
-
-                            @Override
-                            public void onFailure(Call<Respon> call, Throwable t) {
-                                Toast.makeText(getApplicationContext(),"Internet Problem", Toast.LENGTH_SHORT).show();
-                                rvLoading.setVisibility(View.INVISIBLE);
-                            }
-                        });
+                        rvLoading.setVisibility(View.INVISIBLE);
                     }else{
-                        Toast.makeText(getApplicationContext(),"Anda belum menambahkan data lahan", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(),"Anda belum menambahkan data lahan "+message, Toast.LENGTH_SHORT).show();
+                        Log.e("message ", message);
                         rvLoading.setVisibility(View.INVISIBLE);
                     }
+
+                }else {
+                    //Toast.makeText(getApplicationContext(),"Anda belum memiliki lahan"+message, Toast.LENGTH_SHORT).show();
 
                 }
             }
 
             @Override
             public void onFailure(Call<Respon> call, Throwable t) {
-                Toast.makeText(getApplicationContext(),"Koneksi internet bermasalah", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(),"Koneksi internet bermasalah"+t, Toast.LENGTH_SHORT).show();
                 rvLoading.setVisibility(View.INVISIBLE);
 
             }
@@ -316,21 +296,16 @@ public class KelolaLahankuActivity extends AppCompatActivity implements OnMapRea
         Log.e("data hash", dataPointHash.size()+"");
         Log.e("data hash", dataPointHash.get(listCreatedAt.get(0))+"");*/
 
-
+        lokasiCollection = FeatureCollection.fromFeatures(new Feature[] {});
+        List<Feature> lokasiList = new ArrayList<>();
         for(int i=0;i<lokasiListFromServer.size();i++) {
             if (lokasiListFromServer.get(i).getId_user() == getIdUser()) {
                 lokasi[i] = new LatLng(lokasiListFromServer.get(i).getLatitude(), lokasiListFromServer.get(i).getLongitude());
+                lokasiList.add(Feature.fromGeometry(Point.fromLngLat(lokasi[i].getLongitude(), lokasi[i].getLatitude())));
             }
         }
+        lokasiCollection = FeatureCollection.fromFeatures(lokasiList);
 
-        lokasiCollection = FeatureCollection.fromFeatures(new Feature[] {});
-        List<Feature> lokasiList = new ArrayList<>();
-        if (lokasiList.size() != 0) {
-            for (LatLng latLngLoc : lokasi) {
-                lokasiList.add(Feature.fromGeometry(Point.fromLngLat(latLngLoc.getLongitude(), latLngLoc.getLatitude())));
-            }
-            lokasiCollection = FeatureCollection.fromFeatures(lokasiList);
-        }
     }
 
     private void initFillLayer(@NonNull Style loadedMapStyle) {
@@ -339,7 +314,7 @@ public class KelolaLahankuActivity extends AppCompatActivity implements OnMapRea
             loadedMapStyle.removeLayer("layer-id11");
             loadedMapStyle.removeSource("source-id11");
         }
-
+        Log.e("size", listCreatedAt.size()+"");
         for (int i=0;i<listCreatedAt.size();i++){
             POINTS.add(dataPointHash.get(listCreatedAt.get(i)));
         }
@@ -374,26 +349,7 @@ public class KelolaLahankuActivity extends AppCompatActivity implements OnMapRea
 
     @Override
     public boolean onMapClick(@NonNull LatLng point) {
-        if (!mStyle.isFullyLoaded()) {
-            return false;
-        }
-        if (valueAnimator != null && valueAnimator.isStarted()) {
-            currentPos = (LatLng) valueAnimator.getAnimatedValue();
-            valueAnimator.cancel();
-        }
 
-        valueAnimator = ObjectAnimator
-                .ofObject(latLngEvaluator, currentPos, point)
-                .setDuration(1000);
-        valueAnimator.addUpdateListener(animatorUpdateListener);
-        valueAnimator.start();
-
-        currentPos = point;
-
-        tvLatitudeLokasi.setText(String.valueOf(currentPos.getLatitude()));
-        tvLongitudeLokasi.setText(String.valueOf(currentPos.getLongitude()));
-        lat = tvLatitudeLokasi.getText().toString();
-        longi = tvLongitudeLokasi.getText().toString();
         return true;
     }
 
@@ -404,47 +360,6 @@ public class KelolaLahankuActivity extends AppCompatActivity implements OnMapRea
 
     public interface ItemClickListener {
         void onClick(View view, int position);
-    }
-
-    private static final TypeEvaluator<LatLng> latLngEvaluator = new TypeEvaluator<LatLng>() {
-
-        private final LatLng latLng = new LatLng();
-
-        @Override
-        public LatLng evaluate(float fraction, LatLng startValue, LatLng endValue) {
-            latLng.setLatitude(startValue.getLatitude()
-                    + ((endValue.getLatitude() - startValue.getLatitude()) * fraction));
-            latLng.setLongitude(startValue.getLongitude()
-                    + ((endValue.getLongitude() - startValue.getLongitude()) * fraction));
-            return latLng;
-        }
-    };
-
-    private final ValueAnimator.AnimatorUpdateListener animatorUpdateListener =
-            new ValueAnimator.AnimatorUpdateListener() {
-                @Override
-                public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                    LatLng animatedPosition = (LatLng) valueAnimator.getAnimatedValue();
-
-                    geoJsonSource.setGeoJson(Point.fromLngLat(animatedPosition.getLongitude(), animatedPosition.getLatitude()));
-                }
-            };
-
-    public void showRedMarker(Style styleRed){
-        Drawable drawable = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_place, null);
-        Bitmap bitmap = BitmapUtils.getBitmapFromDrawable(drawable);
-
-        styleRed.addImage(("marker_icon"), bitmap);
-        styleRed.addSource(geoJsonSource);
-        styleRed.addLayer(new SymbolLayer("layer-id", "source-id")
-                .withProperties(
-                        iconImage("marker_icon"),
-                        PropertyFactory.iconIgnorePlacement(true),
-                        iconAllowOverlap(true)
-                ));
-
-        mapboxMap.addOnMapClickListener(KelolaLahankuActivity.this);
-        KelolaLahankuActivity.this.mStyle = styleRed;
     }
 
     public void initRecyclerviewLatlong(){
@@ -469,6 +384,7 @@ public class KelolaLahankuActivity extends AppCompatActivity implements OnMapRea
                 //showActionsDialog(position);
             }
         }));
+        mAdapter.notifyDataSetChanged();
     }
 
     private boolean checkIfAlreadyhavePermission() {
@@ -490,43 +406,7 @@ public class KelolaLahankuActivity extends AppCompatActivity implements OnMapRea
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(resultCode != RESULT_CANCELED) {
-            switch (requestCode) {
-                case 0:
-                    if (resultCode == RESULT_OK && data != null) {
-                        Bitmap selectedImage = (Bitmap) data.getExtras().get("data");
-                        //imageView.setImageBitmap(selectedImage);
-                    }
-                    break;
-                case 1:
-                    Toast.makeText(KelolaLahankuActivity.this, "case 1", Toast.LENGTH_SHORT).show();
-                    if (resultCode == RESULT_OK && data != null) {
-                        Uri selectedImage =  data.getData();
-                        String[] filePathColumn = {MediaStore.Images.Media.DATA};
-                        if (selectedImage != null) {
-                            Cursor cursor = getContentResolver().query(selectedImage,
-                                    filePathColumn, null, null, null);
-                            if (cursor != null) {
-                                cursor.moveToFirst();
 
-                                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-                                String picturePath = cursor.getString(columnIndex);
-                                //imageView.setImageBitmap(BitmapFactory.decodeFile(picturePath));
-                                try {
-                                    imageBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
-                                cursor.close();
-                            }
-                        }
-
-                    }
-                    break;
-                default:
-                    throw new IllegalStateException("Unexpected value: " + requestCode);
-            }
-        }
     }
 
     // Add the mapView lifecycle to the activity's lifecycle methods
@@ -585,6 +465,28 @@ public class KelolaLahankuActivity extends AppCompatActivity implements OnMapRea
         finish();
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish(); // close this activity and return to preview activity (if there is any)
+        }
+        if (item.getItemId()==R.id.refresh_menu){
+            if (mStyle.isFullyLoaded()) {
+                rvLoading.setVisibility(View.VISIBLE);
+                loadDataLokasiFromServer();
+            }
+
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.refresh_menu, menu);
+        return true;
+    }
+
         /*private void showActionsDialog(final int position) {
         CharSequence[] colors = new CharSequence[]{"Edit", "Delete"};
 
@@ -630,7 +532,7 @@ public class KelolaLahankuActivity extends AppCompatActivity implements OnMapRea
         });
 
         if (shouldUpdate && lokasi != null) {
-            inputNote.setText(lokasi.getNama());
+            inputNote.setText(lokasi.getUsername());
 
         }
         etLatitude.setText(tvLatitudeLokasi.getText());
@@ -713,7 +615,7 @@ public class KelolaLahankuActivity extends AppCompatActivity implements OnMapRea
     /*private void updateLokasi(String note, int position) {
         Lokasi n = lokasiList.get(position);
         // updating note text
-        n.setNama(note);
+        n.setUsername(note);
 
         // updating note in db
         db.updateLokasi(n);
@@ -747,7 +649,7 @@ public class KelolaLahankuActivity extends AppCompatActivity implements OnMapRea
 
         RegisterApi api = retrofit.create(RegisterApi.class);
         Call<Respon> call = api.delete(
-                lokasiList.get(position).getNama(),
+                lokasiList.get(position).getUsername(),
                 lokasiList.get(position).getLatitude(),
                 lokasiList.get(position).getLongitude()
 

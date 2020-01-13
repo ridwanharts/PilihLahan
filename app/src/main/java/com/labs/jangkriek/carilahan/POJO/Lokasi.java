@@ -19,7 +19,6 @@ public class Lokasi {
     private Double latitude;
     private int status;
     private String created_at;
-    private String waktu;
     private LatLng lokasi;
 
     private String dayaDukungTanah;
@@ -32,6 +31,8 @@ public class Lokasi {
     private Double jumlah;
     private Bitmap bitmap;
     private String gambar;
+    private String waktu;
+    private String idgroup;
     private byte[] image;
 
     public Lokasi (){
@@ -211,5 +212,21 @@ public class Lokasi {
 
     public void setId_user(int id_user) {
         this.id_user = id_user;
+    }
+
+    public String getWaktu() {
+        return waktu;
+    }
+
+    public void setWaktu(String waktu) {
+        this.waktu = waktu;
+    }
+
+    public String getIdgroup() {
+        return idgroup;
+    }
+
+    public void setIdgroup(String idgroup) {
+        this.idgroup = idgroup;
     }
 }

@@ -42,15 +42,51 @@ public interface RegisterApi {
     @GET("/view_lokasi.php")
     Call<Respon> view();
 
+    @GET("/view_lokasi_all.php")
+    Call<Respon> view_all_lokasi();
+
     @GET("/get_user_latlong.php")
     Call<Respon> get_user_latlong();
 
+    @GET("/view_users.php")
+    Call<Respon> view_user();
 
     @FormUrlEncoded
     @POST("/delete_lokasi.php")
     Call<Respon> delete(
+            @Field("id") int id
+    );
+
+    @FormUrlEncoded
+    @POST("/delete_polygon.php")
+    Call<Respon> delete_polygon(
+            @Field("id_user") int id_user,
+            @Field("created_at") String created_at
+    );
+
+    @FormUrlEncoded
+    @POST("/update.php")
+    Call<Respon> update(
+            @Field("id_lahan") int id_lahan,
             @Field("nama") String nama,
+            @Field("hargaLahan") double hargaLahan,
+            @Field("luasLahan") double luasLahan,
             @Field("latitude") double latitude,
-            @Field("longitude") double longitude
+            @Field("longitude") double longitude,
+            @Field("dayaDukungTanah") String dayaDukungTanah,
+            @Field("ketersediaanAir") String ketersediaanAir,
+            @Field("kemiringanLereng") String kemiringanLereng,
+            @Field("aksebilitas") double aksebilitas,
+            @Field("kerawananBencana") String kerawananBencana,
+            @Field("jarakKeBandara") double jarakKeBandara,
+            @Field("created_at") String created_at,
+            @Field("id_user") int id_user,
+            @Field("gambar") String gambar
+    );
+
+    @FormUrlEncoded
+    @POST("/view_lokasi_by_user.php")
+    Call<Respon> view_lokasi_user(
+            @Field("id_user") int id_user
     );
 }

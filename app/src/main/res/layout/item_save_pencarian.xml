@@ -13,6 +13,7 @@
 	android:id="@+id/cardview_save_lokasi"
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
+	  android:background="@color/color_bg"
 	android:clickable="true"
 	android:focusable="true"
 	android:foreground="?android:attr/selectableItemBackground"
@@ -25,122 +26,91 @@
 	  android:gravity="center_horizontal"
 	  android:orientation="vertical">
 
-	  <TextView
-		android:id="@+id/tv_save_date"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_marginTop="8dp"
-		android:layout_marginStart="8dp"
-		android:layout_marginEnd="8dp"
-		android:gravity="bottom"
-		android:layout_alignParentStart="true"
-		android:text="24/02/1997"
-		android:textAppearance="@style/TextAppearance.AppCompat.Small" />
-
-	  <TextView
-		android:id="@+id/tv_nama_save_lokasi"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:layout_marginTop="8dp"
-		android:textStyle="bold"
-		android:gravity="center_horizontal"
-		android:text="aaaaaaaaa"
-		android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
-
-	  <TextView
-		android:id="@+id/tv_id_save"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_marginTop="8dp"
-		android:layout_marginStart="8dp"
-		android:layout_marginEnd="8dp"
-		android:gravity="bottom"
-		android:layout_alignParentEnd="true"
-		android:text="id 12345"
-		android:textAppearance="@style/TextAppearance.AppCompat.Small" />
-
-	  <LinearLayout
-		android:layout_width="match_parent"
-		android:layout_height="2dp"
-		android:layout_marginTop="1dp"
-		android:layout_marginBottom="8dp"
-		android:layout_below="@+id/tv_nama_save_lokasi"
-		android:background="@color/colorPrimary">
-
-	  </LinearLayout>
-
-	  <LinearLayout
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:layout_below="@+id/tv_nama_save_lokasi"
-		android:layout_marginStart="3dp"
-		android:layout_marginEnd="3dp"
-		android:layout_marginTop="18dp"
-		android:weightSum="1"
-		android:id="@+id/linear_ll"
-		android:orientation="horizontal">
-
-
 		<LinearLayout
-		  android:layout_width="match_parent"
-		  android:layout_height="wrap_content"
-		  android:layout_weight="0.5"
-		  android:orientation="vertical">
-
-		  <TextView
-			android:layout_width="wrap_content"
-			android:layout_gravity="center_horizontal"
-			android:layout_height="wrap_content"
-			android:text="Latitude" />
-
-		  <TextView
-			android:id="@+id/tv_save_latitude"
+			android:id="@+id/l_save_atas"
 			android:layout_width="match_parent"
-			android:gravity="center_horizontal"
 			android:layout_height="wrap_content"
-			android:layout_marginTop="3dp"
-			android:text="aaaaaaaaa" />
+			android:orientation="vertical">
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="8dp"
+				android:layout_marginStart="8dp"
+				android:layout_marginEnd="8dp"
+				android:gravity="bottom"
+				android:text="Tanggal Pencarian"
+				android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+			<TextView
+				android:id="@+id/tv_save_date"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="8dp"
+				android:layout_marginStart="10dp"
+				android:layout_marginEnd="8dp"
+				android:layout_marginBottom="8dp"
+				android:textStyle="bold"
+				android:gravity="bottom"
+				android:text="24/02/1997"
+				android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
 		</LinearLayout>
 
-		<LinearLayout
-		  android:layout_width="match_parent"
-		  android:layout_height="wrap_content"
-		  android:layout_weight="0.5"
-		  android:orientation="vertical">
-
-		  <TextView
-			android:layout_width="wrap_content"
-			android:layout_gravity="center_horizontal"
-			android:layout_height="wrap_content"
-			android:text="Longitude" />
-
-		  <TextView
-			android:id="@+id/tv_save_longitude"
-			android:layout_width="match_parent"
-			android:gravity="center_horizontal"
-			android:layout_height="wrap_content"
-			android:layout_marginTop="3dp"
-			android:text="aaaaaaaaa" />
-
-		</LinearLayout>
-	  </LinearLayout>
-
 	  <LinearLayout
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:layout_marginTop="15dp"
-		android:layout_below="@id/linear_ll">
+		android:layout_marginTop="8dp"
+		android:layout_below="@id/l_save_atas">
 		<Button
 		  android:layout_width="match_parent"
-		  android:layout_height="32dp"
-		  android:background="@color/mapboxGreen"
+		  android:layout_height="48dp"
+		  android:background="@color/mapbox_blue"
 		  android:textColor="@color/mapboxWhite"
 		  android:textAllCaps="false"
 		  android:id="@+id/btn_see_detail"
-		  android:text="see details"/>
+		  android:text="Lihat Detail"/>
 
 	  </LinearLayout>
+
+		<ImageButton
+			android:id="@+id/btn_delete"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_alignParentTop="true"
+			android:layout_alignParentEnd="true"
+			android:layout_margin="3dp"
+			android:background="@drawable/custom_button_blue"
+			android:padding="3dp"
+			android:tint="@color/mapboxWhite"
+			app:srcCompat="@drawable/ic_delete" />
+
+		<RelativeLayout
+			android:id="@+id/rv_loading"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:layout_centerInParent="true"
+			android:padding="10dp"
+			android:visibility="invisible">
+
+			<androidx.cardview.widget.CardView
+				android:id="@+id/cardview_loading"
+				android:layout_width="80dp"
+				android:layout_height="80dp"
+				android:layout_centerInParent="true"
+				app:cardCornerRadius="8dp"
+				app:cardElevation="4dp">
+
+				<ProgressBar
+					android:id="@+id/pb_loading"
+					android:layout_width="55dp"
+					android:layout_height="55dp"
+					android:layout_gravity="center">
+
+				</ProgressBar>
+			</androidx.cardview.widget.CardView>
+
+
+		</RelativeLayout>
 
 	</RelativeLayout>
 

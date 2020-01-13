@@ -91,9 +91,9 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         Fragment fragment = null;
         switch (menuItem.getItemId()){
             case R.id.home_menu:
-                if(loginType.equals("USER")){
+                if(loginType.equals("GUEST")){
                     fragment = new GuestHomeFragment();
-                }else if (loginType.equals("USERS")){
+                }else {
                     fragment = new UsersHomeFragment();
                 }
                 //getSupportActionBar().show();

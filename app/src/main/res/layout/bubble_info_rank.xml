@@ -124,21 +124,8 @@
 
             </LinearLayout>
 
-
-
         </LinearLayout>
 
-        <ImageButton
-            android:id="@+id/btn_edit"
-            android:layout_width="40dp"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/bl"
-            android:layout_marginTop="5dp"
-            android:layout_centerHorizontal="true"
-            android:background="@drawable/custom_button_blue"
-            android:padding="1dp"
-            android:tint="@color/mapboxWhite"
-            app:srcCompat="@drawable/ic_edit" />
 
     </RelativeLayout>
 

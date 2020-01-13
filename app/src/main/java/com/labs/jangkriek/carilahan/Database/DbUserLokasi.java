@@ -163,7 +163,7 @@ public class DbUserLokasi extends SQLiteOpenHelper {
             do {
                 Lokasi note = new Lokasi();
                 note.setId(cursor.getInt(cursor.getColumnIndex(KOLOM_ID)));
-                note.setNama(cursor.getString(cursor.getColumnIndex(KOLOM_NAMA)));
+                note.setUsername(cursor.getString(cursor.getColumnIndex(KOLOM_NAMA)));
                 note.setLatitude(cursor.getDouble(cursor.getColumnIndex(KOLOM_LATITUDE)));
                 note.setLongitude(cursor.getDouble(cursor.getColumnIndex(KOLOM_LONGITUDE)));
                 note.setDayaDukungTanah(cursor.getDouble(cursor.getColumnIndex(KOLOM_DAYA_DUKUNG_TANAH)));
@@ -268,7 +268,7 @@ public class DbUserLokasi extends SQLiteOpenHelper {
             do {
                 Lokasi temp = new Lokasi();
                 temp.setId(cursor.getInt(cursor.getColumnIndex(KOLOM_ID)));
-                temp.setNama(cursor.getString(cursor.getColumnIndex(KOLOM_NAMA)));
+                temp.setUsername(cursor.getString(cursor.getColumnIndex(KOLOM_NAMA)));
                 temp.setLatitude(cursor.getDouble(cursor.getColumnIndex(KOLOM_LATITUDE)));
                 temp.setLongitude(cursor.getDouble(cursor.getColumnIndex(KOLOM_LONGITUDE)));
                 temp.setDayaDukungTanah(cursor.getDouble(cursor.getColumnIndex(KOLOM_DAYA_DUKUNG_TANAH)));

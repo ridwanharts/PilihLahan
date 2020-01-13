@@ -8,27 +8,47 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
 import com.labs.jangkriek.carilahan.Adapter.DetailHistoryAdapter;
+import com.labs.jangkriek.carilahan.Adapter.KelolaLahankuAdapter;
+import com.labs.jangkriek.carilahan.Adapter.LokasiUserAdapter;
 import com.labs.jangkriek.carilahan.Database.DbRangkingLokasi;
+import com.labs.jangkriek.carilahan.Database.DbSavePencarian;
+import com.labs.jangkriek.carilahan.POJO.Lokasi;
 import com.labs.jangkriek.carilahan.POJO.RankingLokasi;
+import com.labs.jangkriek.carilahan.POJO.Respon;
+import com.labs.jangkriek.carilahan.POJO.Users;
 import com.labs.jangkriek.carilahan.R;
+import com.labs.jangkriek.carilahan.Utils.RegisterApi;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
+import static com.labs.jangkriek.carilahan.Activity.MainActivity.getIdUser;
+
 public class DetailHistoryActivity extends AppCompatActivity {
 
-    private DbRangkingLokasi dbRangkingLokasi;
-    private DetailHistoryAdapter detailHistoryAdapter;
-    private List<RankingLokasi> rankingLokasiList = new ArrayList<>();
+    private DbSavePencarian dbSavePencarian;
+    private KelolaLahankuAdapter detailHistoryAdapter;
+    private List<Lokasi> rankingLokasiList = new ArrayList<>();
     private RecyclerView recyclerView;
+    private static final String URL = "https://ridwanharts.000webhostapp.com/";
+    private static List<Users> userList;
 
     String waktu, nama;
-    int idgroup;
+    String idgroup;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,9 +56,11 @@ public class DetailHistoryActivity extends AppCompatActivity {
         setContentView(R.layout.activity_detail_history);
 
         Intent i = getIntent();
-        idgroup = i.getIntExtra("idgroup",idgroup);
-        nama = i.getStringExtra("nama");
+        idgroup = i.getStringExtra("id_group");
         waktu = i.getStringExtra("waktu");
+
+        Log.e("","id_group : "+idgroup);
+        Log.e("","waktu : "+waktu);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 
@@ -48,19 +70,19 @@ public class DetailHistoryActivity extends AppCompatActivity {
         if (getSupportActionBar() != null){
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
-            getSupportActionBar().setTitle(nama);
+            getSupportActionBar().setTitle(idgroup);
         }
 
-        dbRangkingLokasi = new DbRangkingLokasi(this);
-        Toast.makeText(getApplicationContext(), ""+idgroup+" - "+waktu+" - "+dbRangkingLokasi.getRankLokasiCount(), Toast.LENGTH_SHORT).show();
-        rankingLokasiList.addAll(dbRangkingLokasi.getAllRankLokasi(idgroup, waktu));
+        //Toast.makeText(getApplicationContext(), ""+idgroup+" - "+waktu+" - "+dbRangkingLokasi.getRankLokasiCount(), Toast.LENGTH_SHORT).show();
+        dbSavePencarian = new DbSavePencarian(this);
+        rankingLokasiList.addAll(dbSavePencarian.getDetailSaveLokasi(idgroup, waktu));
         initRecylerView();
 
     }
 
     private void initRecylerView() {
         recyclerView = findViewById(R.id.rv_list_saved_lokasi_detil);
-        detailHistoryAdapter = new DetailHistoryAdapter(this, rankingLokasiList);
+        detailHistoryAdapter = new KelolaLahankuAdapter(this, rankingLokasiList);
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext(), RecyclerView.VERTICAL, false));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(detailHistoryAdapter);

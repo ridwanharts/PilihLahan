@@ -8,6 +8,7 @@ public class Respon {
     String message;
 
     List<Lokasi> result;
+    List<Users> usersList;
     List<PointLatLong> point;
 
 
@@ -33,5 +34,13 @@ public class Respon {
 
     public String getMessage() {
         return message;
+    }
+
+    public List<Users> getUsersList() {
+        return usersList;
+    }
+
+    public void setUsersList(List<Users> usersList) {
+        this.usersList = usersList;
     }
 }

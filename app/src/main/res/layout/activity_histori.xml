@@ -36,6 +36,7 @@
 	  android:gravity="center"
 	  android:text="New Search" />
   </LinearLayout>
+
   <com.google.android.material.floatingactionbutton.FloatingActionButton
 	android:id="@+id/fab_location_search"
 	android:layout_width="64dp"
@@ -43,6 +44,7 @@
 	android:layout_alignParentEnd="true"
 	android:layout_margin="16dp"
 	android:clickable="true"
+	  android:visibility="invisible"
 	app:srcCompat="@drawable/ic_search"
 	app:maxImageSize="32dp"
 	android:focusable="true" />

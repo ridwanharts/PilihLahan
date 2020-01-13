@@ -1,15 +1,21 @@
 package com.labs.jangkriek.carilahan.Adapter;
 
 import android.content.Context;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.daasuu.bl.ArrowDirection;
+import com.daasuu.bl.BubbleLayout;
+import com.daasuu.bl.BubblePopupHelper;
 import com.labs.jangkriek.carilahan.Activity.RankingActivity;
 import com.labs.jangkriek.carilahan.POJO.Lokasi;
 import com.labs.jangkriek.carilahan.R;
@@ -89,12 +95,36 @@ public class RankingLokasiAdapter extends RecyclerView.Adapter<RankingLokasiAdap
             @Override
             public void onClick(View view, int position) {
                 LatLng selectedLocationLatLng = rangkingLokasiList.get(position).getLokasi();
-                Toast.makeText(context,"cek : "+rangkingLokasiList.get(position).getLokasi(), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(context,"cek : "+rangkingLokasiList.get(position).getLokasi(), Toast.LENGTH_SHORT).show();
+
+                BubbleLayout bubbleLayout = (BubbleLayout) LayoutInflater.from(context).inflate(R.layout.bubble_info_rank, null);
+                PopupWindow popupWindow = BubblePopupHelper.create(context, bubbleLayout);
 
                 CameraPosition newCameraPosition = new CameraPosition.Builder()
                         .target(selectedLocationLatLng)
                         .build();
                 map.easeCamera(CameraUpdateFactory.newCameraPosition(newCameraPosition));
+
+                TextView jarakBandara, aksebilitas, jenisTanah, kAir, kLereng, kBencana;
+                ImageButton ibEdit;
+                bubbleLayout.setArrowDirection(ArrowDirection.BOTTOM_CENTER);
+                popupWindow.showAtLocation(view, Gravity.CENTER, 0, -90);
+
+                jarakBandara = popupWindow.getContentView().findViewById(R.id.jarak_bandara_bubble);
+                aksebilitas = popupWindow.getContentView().findViewById(R.id.aksebilitas_bubble);
+
+                jenisTanah = popupWindow.getContentView().findViewById(R.id.jenistanah_bubble);
+                kAir = popupWindow.getContentView().findViewById(R.id.air_bubble);
+                kLereng = popupWindow.getContentView().findViewById(R.id.lereng_bubble);
+                kBencana = popupWindow.getContentView().findViewById(R.id.bencana_bubble);
+
+                jarakBandara.setText(rangkingLokasiList.get(position).getJarakKeBandara()+"");
+                aksebilitas.setText(rangkingLokasiList.get(position).getAksebilitas()+"");
+
+                jenisTanah.setText(rangkingLokasiList.get(position).getDayaDukungTanah()+"");
+                kAir.setText(rangkingLokasiList.get(position).getKetersediaanAir()+"");
+                kLereng.setText(rangkingLokasiList.get(position).getKemiringanLereng()+"");
+                kBencana.setText(rangkingLokasiList.get(position).getKerawananBencana()+"");
             }
         });
         /*holder.setClickListener(new KelolaLahankuActivity.ItemClickListener() {

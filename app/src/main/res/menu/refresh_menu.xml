@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/refresh_menu"
+        android:title="Download Data"
+        app:showAsAction="ifRoom"
+        android:iconTint="@color/mapboxWhite"
+        android:icon="@drawable/ic_refresh"/>
+
+    <item
+        android:id="@+id/cari_lahan"
+        android:title="Cari Baru"
+        app:showAsAction="ifRoom"
+        android:iconTint="@color/mapboxWhite"
+        android:icon="@drawable/ic_search"/>
+
+</menu>

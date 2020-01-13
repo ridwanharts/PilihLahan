@@ -45,7 +45,7 @@
                         android:layout_height="wrap_content"
                         android:background="#00000000"
                         android:gravity="center"
-                        android:hint="nama lahan"
+                        android:hint="username lahan"
                         android:inputType="text"
                         android:padding="16dp"
                         android:textColor="@color/mapboxBlack"
@@ -200,10 +200,12 @@
                     </LinearLayout>
 
                     <ImageView
+                        android:id="@+id/pilih_lokasi"
                         android:layout_width="45dp"
                         android:layout_height="match_parent"
                         android:layout_alignParentEnd="true"
                         android:layout_marginStart="45dp"
+                        android:padding="3dp"
                         android:src="@drawable/ic_place" />
 
                 </RelativeLayout>

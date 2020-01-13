@@ -1,151 +1,174 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:app="http://schemas.android.com/apk/res-auto"
-  xmlns:tools="http://schemas.android.com/tools"
-  android:layout_width="match_parent"
-  android:layout_height="match_parent"
-  android:background="@color/bgColor"
-  tools:context=".Activity.PilihKriteria">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bgColor"
+    tools:context=".Activity.PilihKriteria">
 
-  <RelativeLayout
-	android:id="@+id/relative_layout_select_kriteria"
-	android:layout_width="match_parent"
-	android:layout_height="wrap_content"
-	android:layout_marginBottom="10dp"
-	android:orientation="horizontal">
+    <RelativeLayout
+        android:id="@+id/relative_layout_select_kriteria"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:orientation="horizontal">
 
-	<androidx.cardview.widget.CardView
-	  android:id="@+id/card_main"
-	  android:layout_width="match_parent"
-	  android:layout_height="60dp"
-	  android:layout_marginBottom="20dp"
-	  app:cardUseCompatPadding="true">
-	  <LinearLayout
-		android:layout_width="match_parent"
-		android:layout_height="match_parent"
-		android:layout_gravity="center"
-		android:paddingStart="20dp"
-		android:paddingEnd="20dp"
-		android:orientation="vertical">
+        <LinearLayout
+            android:id="@+id/card_main"
+            android:layout_width="match_parent"
+            android:background="@color/mapboxWhite"
+            android:layout_marginBottom="3dp"
+            android:layout_height="60dp">
 
-		<LinearLayout
-		  android:layout_width="match_parent"
-		  android:layout_height="match_parent"
-		  android:layout_gravity="center"
-		  android:weightSum="1"
-		  android:orientation="horizontal">
-		  <TextView
-			android:layout_width="match_parent"
-			android:layout_height="match_parent"
-			android:layout_weight="0.2"
-			android:gravity="start|center_vertical"
-			android:text="PILIH KRITERIA"
-			android:textStyle="bold"
-			android:textSize="16sp"
-			android:layout_marginEnd="20dp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:orientation="vertical"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp">
 
-		  </TextView>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:orientation="horizontal"
+                    android:weightSum="1">
 
-		  <Button
-			android:id="@+id/btn_pilih"
-			android:layout_width="match_parent"
-			android:layout_height="40dp"
-			android:layout_weight="0.8"
-			android:padding="10dp"
-			android:text="Pilih"
-			android:background="@drawable/custom_button_blueriple"
-			android:textColor="@color/mapboxWhite"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginEnd="20dp"
+                        android:layout_weight="0.2"
+                        android:gravity="start|center_vertical"
+                        android:text="PILIH KRITERIA"
+                        android:textSize="16sp"
+                        android:textStyle="bold">
 
-		</LinearLayout>
-	  </LinearLayout>
-	</androidx.cardview.widget.CardView>
+                    </TextView>
 
-	<LinearLayout
-	  android:layout_width="match_parent"
-	  android:layout_height="2dp"
-	  android:id="@+id/batas1"
-	  android:layout_marginLeft="5dp"
-	  android:layout_marginRight="5dp"
-	  android:background="@color/colorPrimary"
-	  android:layout_below="@+id/card_main"
-	  android:layout_marginBottom="10dp"
-	  android:orientation="horizontal">
+                    <Button
+                        android:id="@+id/btn_pilih"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_weight="0.8"
+                        android:background="@drawable/custom_button_blueriple"
+                        android:padding="10dp"
+                        android:text="Pilih"
+                        android:textColor="@color/mapboxWhite" />
 
-	</LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
 
-	<com.alespero.expandablecardview.ExpandableCardView
-	  android:visibility="visible"
-	  android:id="@+id/input_otomatis"
-	  android:layout_width="match_parent"
-	  android:layout_height="wrap_content"
-	  android:layout_below="@+id/batas1"
-	  android:layout_marginTop="10dp"
-	  android:layout_marginBottom="10dp"
-	  android:layout_marginStart="20dp"
-	  android:layout_marginEnd="20dp"
-	  app:title="Input Otomatis"
-	  app:icon="@drawable/ic_delete"
-	  app:inner_view="@layout/inner_otomatis"
-	  app:expandOnClick="true"
-	  app:animationDuration="300"
-	  app:startExpanded="false" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/card_main"
+            android:layout_marginStart="10dp"
+            android:orientation="horizontal">
 
-	<com.alespero.expandablecardview.ExpandableCardView
-	  android:visibility="visible"
-	  android:id="@+id/input_manual"
-	  android:layout_width="match_parent"
-	  android:layout_height="wrap_content"
-	  android:layout_below="@+id/batas1"
-	  android:layout_marginTop="10dp"
-	  android:layout_marginBottom="10dp"
-	  android:layout_marginStart="20dp"
-	  android:layout_marginEnd="20dp"
-	  app:title="Input Manual"
-	  app:icon="@drawable/ic_delete"
-	  app:inner_view="@layout/inner_manual"
-	  app:expandOnClick="true"
-	  app:animationDuration="300"
-	  app:startExpanded="false" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Jumlah Data Lokasi : " />
+            <TextView
+                android:id="@+id/jumlah_data_lokasi"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="10" />
 
-	<LinearLayout
-	  android:layout_width="match_parent"
-	  android:layout_height="wrap_content"
-	  android:id="@+id/linear_cek_input"
-	  android:orientation="horizontal"
-	  android:layout_marginBottom="5dp"
-	  android:layout_above="@+id/btn_input_activity"
-	  android:layout_marginStart="15dp"
-	  android:layout_marginEnd="15dp"
-	  android:gravity="center_horizontal">
+        </LinearLayout>
 
-	  <TextView
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:text="jumlah input : "
-		android:textStyle="bold"
-		android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
+        <LinearLayout
+            android:id="@+id/batas1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/card_main"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginBottom="30dp"
+            android:orientation="vertical">
 
-	  <TextView
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:text="0"
-		android:textStyle="bold"
-		android:id="@+id/tv_jumlahInput"
-		android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="25dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginBottom="10dp"
+            android:background="@color/colorPrimary"
+            android:orientation="horizontal">
 
-	</LinearLayout>
+        </LinearLayout>
 
-	<Button
-	  android:layout_width="match_parent"
-	  android:layout_height="wrap_content"
-	  android:text="Proses"
-	  android:background="@drawable/custom_button_blueriple"
-	  android:id="@+id/btn_input_activity"
-	  android:layout_alignParentBottom="true"
-	  android:textColor="@color/mapboxWhite"
-	  android:layout_marginStart="20dp"
-	  android:layout_marginEnd="20dp"/>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_prioritas"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-  </RelativeLayout>
+            </androidx.recyclerview.widget.RecyclerView>
+
+        </LinearLayout>
+
+        <com.alespero.expandablecardview.ExpandableCardView
+            android:id="@+id/input_manual"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/batas1"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="10dp"
+            android:visibility="visible"
+            app:animationDuration="300"
+            app:expandOnClick="true"
+            app:icon="@drawable/ic_delete"
+            app:inner_view="@layout/inner_manual"
+            app:startExpanded="false"
+            app:title="Input Manual" />
+
+        <LinearLayout
+            android:id="@+id/linear_cek_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/btn_input_activity"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginBottom="5dp"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="jumlah input : "
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_jumlahInput"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btn_input_activity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:background="@drawable/custom_button_blueriple"
+            android:text="Proses"
+            android:textColor="@color/mapboxWhite" />
+
+    </RelativeLayout>
 
 </RelativeLayout>

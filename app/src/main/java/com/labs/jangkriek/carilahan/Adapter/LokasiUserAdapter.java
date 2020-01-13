@@ -31,11 +31,18 @@ public class LokasiUserAdapter extends RecyclerView.Adapter<LokasiUserAdapter.My
     private MapboxMap map;
     private static final String URL = "https://ridwanharts.000webhostapp.com/";
     private DbUserLokasi dbUserLokasi;
+    private boolean history = false;
 
     public LokasiUserAdapter(Context context, List<Lokasi> lokasiList, MapboxMap mapboxMap) {
         this.context = context;
         this.lokasiList = lokasiList;
         this.map = mapboxMap;
+    }
+
+    public LokasiUserAdapter(Context context, List<Lokasi> lokasiList) {
+        this.context = context;
+        this.lokasiList = lokasiList;
+        history = true;
     }
 
     @Override
@@ -60,28 +67,32 @@ public class LokasiUserAdapter extends RecyclerView.Adapter<LokasiUserAdapter.My
         holder.longitude.setText(String.valueOf(namaLokasi.getLongitude()));
         holder.ivGambar.setImageBitmap(namaLokasi.getBitmap());
         //Log.e("b", lokasiList.get(position).getLokasi()+"");
-        holder.setClickListener(new KelolaLahankuActivity.ItemClickListener() {
-            @Override
-            public void onClick(View view, int position) {
-                LatLng selectedLocationLatLng = lokasiList.get(position).getLokasi();
-                Toast.makeText(context,"Lokasi : "+lokasiList.get(position).getNama(), Toast.LENGTH_SHORT).show();
 
-                CameraPosition newCameraPosition = new CameraPosition.Builder()
-                        .target(selectedLocationLatLng)
-                        .build();
-                map.easeCamera(CameraUpdateFactory.newCameraPosition(newCameraPosition));
-            }
-        });
+        if (!history){
+            holder.setClickListener(new KelolaLahankuActivity.ItemClickListener() {
+                @Override
+                public void onClick(View view, int position) {
+                    LatLng selectedLocationLatLng = lokasiList.get(position).getLokasi();
+                    Toast.makeText(context,"Lokasi : "+lokasiList.get(position).getNama(), Toast.LENGTH_SHORT).show();
 
-        holder.linearLayoutDetailLokasi.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(context, DetailLokasiActivity.class);
+                    CameraPosition newCameraPosition = new CameraPosition.Builder()
+                            .target(selectedLocationLatLng)
+                            .build();
+                    map.easeCamera(CameraUpdateFactory.newCameraPosition(newCameraPosition));
+                }
+            });
+
+            holder.linearLayoutDetailLokasi.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent i = new Intent(context, DetailLokasiActivity.class);
 
 
-                context.startActivity(i);
-            }
-        });
+                    context.startActivity(i);
+                }
+            });
+        }
+
 
     }
 

@@ -8,6 +8,7 @@
 
   <!-- FAB menu colors -->
   <color name="black_semi_transparent">#4B000000</color>
+  <color name="black_transparent">#0D000000</color>
   <color name="mapboxBlack">#000000</color>
   <color name="half_black">#808080</color>
 
