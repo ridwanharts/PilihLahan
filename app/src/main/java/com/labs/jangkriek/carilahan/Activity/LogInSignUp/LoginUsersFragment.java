@@ -41,7 +41,6 @@ public class LoginUsersFragment extends Fragment {
     private TextView tvSignUp, tvLogin;
     private EditText etUsernameLogin, etPasswordLogin;
     public static ApiInterface apiInterface;
-    public static PrefConfig prefConfig;
     private Context context;
     private RelativeLayout rlLoading;
 
@@ -56,7 +55,6 @@ public class LoginUsersFragment extends Fragment {
         // Inflate the bubble_info for this fragment
         View v = inflater.inflate(R.layout.fragment_login_users, container, false);
 
-        prefConfig = new PrefConfig(getContext());
         apiInterface = ApiClient.getApiClientWithLog().create(ApiInterface.class);
 
         tvSignUp = v.findViewById(R.id.tv_signup_admin);
@@ -101,12 +99,13 @@ public class LoginUsersFragment extends Fragment {
                                 Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
                                 rlLoading.setVisibility(View.INVISIBLE);
                             }else {
+                                PrefConfig.setLoggedInUser(getActivity(), idUser);
+                                PrefConfig.setLoggedInStatus(getActivity(),true);
+                                PrefConfig.setUsernameLogin(getActivity(), message);
+                                PrefConfig.setTypeLogin(getActivity(), "USER");
                                 Toast.makeText(getActivity(), idUser+"", Toast.LENGTH_SHORT).show();
                                 rlLoading.setVisibility(View.INVISIBLE);
-                                prefConfig.writeName(message);
                                 Intent i = new Intent(getActivity(), MainActivity.class);
-                                i.putExtra("LOGIN", message);
-                                i.putExtra("ID_USER", idUser);
                                 startActivity(i);
                                 getActivity().finish();
                             }

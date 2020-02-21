@@ -29,6 +29,9 @@
     <string name="query_feature_marker_title">Properties</string>
     <string name="spinner_title">Title</string>
     <string name="select">- pilih -</string>
+    <string name="metode">Metode</string>
+    <string name="URL_SERVER">"https://ridwanharts.000webhostapp.com/"</string>
+
 
 
 </resources>

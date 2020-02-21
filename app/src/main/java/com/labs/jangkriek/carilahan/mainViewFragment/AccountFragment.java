@@ -12,19 +12,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.labs.jangkriek.carilahan.Activity.LogInSignUp.LoginActivity;
+import com.labs.jangkriek.carilahan.PrefConfig;
 import com.labs.jangkriek.carilahan.R;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
-
-import static com.labs.jangkriek.carilahan.Activity.MainActivity.getUsername;
-import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.lineCap;
-import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.lineColor;
-import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.lineJoin;
-import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.lineWidth;
-
 
 /**
  * A simple {@link Fragment} subclass.
@@ -40,6 +35,7 @@ public class AccountFragment extends Fragment implements OnMapReadyCallback, Map
     private LatLng currentPos = new LatLng(-7.905, 110.06);
     private String currentMap;*/
     private Button btnLogout;
+    private TextView tvUser;
 
     public AccountFragment() {
         // Required empty public constructor
@@ -59,6 +55,13 @@ public class AccountFragment extends Fragment implements OnMapReadyCallback, Map
         showArea = view.findViewById(R.id.show_area);
         fabLogOut = view.findViewById(R.id.logout);*/
         btnLogout = view.findViewById(R.id.logout);
+        tvUser = view.findViewById(R.id.username_logout);
+
+        tvUser.setText(PrefConfig.getUsernameLogin(getActivity()));
+        if (PrefConfig.getTypeLogin(getContext()).equals("GUEST")){
+            tvUser.setText("GUEST");
+            btnLogout.setText("Login");
+        }
 
         return view;
     }
@@ -71,10 +74,9 @@ public class AccountFragment extends Fragment implements OnMapReadyCallback, Map
         btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                PrefConfig.clearLoggedInUser(getActivity());
                 Intent i = new Intent(getActivity(), LoginActivity.class);
-                i.putExtra("LOGIN", getUsername());
                 startActivity(i);
-                getActivity().finish();
             }
         });
 

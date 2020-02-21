@@ -33,6 +33,8 @@ public class Lokasi {
     private String gambar;
     private String waktu;
     private String idgroup;
+    private String metode;
+    private String kriteria;
     private byte[] image;
 
     public Lokasi (){
@@ -228,5 +230,21 @@ public class Lokasi {
 
     public void setIdgroup(String idgroup) {
         this.idgroup = idgroup;
+    }
+
+    public String getMetode() {
+        return metode;
+    }
+
+    public void setMetode(String metode) {
+        this.metode = metode;
+    }
+
+    public String getKriteria() {
+        return kriteria;
+    }
+
+    public void setKriteria(String kriteria) {
+        this.kriteria = kriteria;
     }
 }

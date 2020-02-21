@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:mapbox="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <com.mapbox.mapboxsdk.maps.MapView
         android:id="@+id/mapView"
@@ -12,7 +12,8 @@
         android:layout_height="match_parent"
         mapbox:mapbox_cameraTargetLat="-7.8855268466"
         mapbox:mapbox_cameraTargetLng="110.062440920"
-        mapbox:mapbox_cameraZoom="12"/>
+        mapbox:mapbox_cameraZoom="10"/>
+
     <RelativeLayout
         android:id="@+id/linear_latlong"
         android:layout_width="match_parent"
@@ -69,6 +70,96 @@
 
     </RelativeLayout>
 
+    <LinearLayout
+        android:visibility="invisible"
+        android:id="@+id/banjir"
+        android:layout_marginTop="5dp"
+        android:background="@color/mapboxWhite"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:background="@color/mapboxBlue"/>
+        <TextView
+            android:layout_gravity="center"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Rawan Banjir"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:visibility="invisible"
+        android:layout_below="@+id/banjir"
+        android:id="@+id/tsunami"
+        android:layout_marginTop="5dp"
+        android:background="@color/mapboxWhite"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:background="@color/mapboxGreen"/>
+        <TextView
+            android:layout_gravity="center"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Rawan Tsunami"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:visibility="invisible"
+        android:layout_below="@+id/tsunami"
+        android:id="@+id/longsor"
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
+        android:background="@color/mapboxWhite"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:background="@color/mapboxOrange"/>
+        <TextView
+            android:layout_gravity="center"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Rawan Longsor"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:visibility="invisible"
+        android:layout_alignParentEnd="true"
+        android:id="@+id/kekeringan"
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
+        android:background="@color/mapboxWhite"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:background="@color/mapboxRed"/>
+        <TextView
+            android:layout_gravity="center"
+            android:layout_marginStart="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Rawan Kekeringan"/>
+    </LinearLayout>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -88,5 +179,13 @@
         </Button>
     </RelativeLayout>
 
+    <ImageView
+        android:id="@+id/iv_focus"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_margin="24dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:src="@drawable/ic_target"/>
 
-</FrameLayout>
+</RelativeLayout>

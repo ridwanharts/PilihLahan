@@ -16,6 +16,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.labs.jangkriek.carilahan.Activity.MainActivity;
+import com.labs.jangkriek.carilahan.PrefConfig;
 import com.labs.jangkriek.carilahan.R;
 
 /**
@@ -50,8 +51,8 @@ public class LoginGuestFragment extends Fragment {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
+                        PrefConfig.setTypeLogin(getContext(), "GUEST");
                         Intent i = new Intent(getActivity(), MainActivity.class);
-                        i.putExtra("LOGIN","GUEST");
                         startActivity(i);
                         getActivity().finish();
                     }

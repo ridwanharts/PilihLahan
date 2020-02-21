@@ -14,7 +14,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.PointF;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -28,10 +27,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.getbase.floatingactionbutton.FloatingActionButton;
-import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.google.gson.JsonElement;
-import com.labs.jangkriek.carilahan.Activity.MainActivity;
 import com.labs.jangkriek.carilahan.R;
 import com.mapbox.geojson.Feature;
 import com.mapbox.geojson.FeatureCollection;
@@ -56,13 +52,12 @@ import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
 import com.mapbox.mapboxsdk.style.sources.VectorSource;
 import com.mapbox.mapboxsdk.utils.BitmapUtils;
 
-import java.io.Serializable;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import static com.mapbox.mapboxsdk.style.layers.Property.ICON_ANCHOR_BOTTOM;
 import static com.mapbox.mapboxsdk.style.layers.Property.LINE_CAP_ROUND;
 import static com.mapbox.mapboxsdk.style.layers.Property.LINE_JOIN_BEVEL;
@@ -79,38 +74,14 @@ import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.lineColor;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.lineJoin;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.lineWidth;
 
-public class LihatKriteriaOnMap extends AppCompatActivity implements OnMapReadyCallback,
+public class LihatKekeringan extends AppCompatActivity implements OnMapReadyCallback,
         MapboxMap.OnMapClickListener, MapboxMap.OnCameraIdleListener {
 
     private static final String GEOJSON_SOURCE_ID = "GEOJSON_SOURCE_ID";
     private static final String CALLOUT_IMAGE_ID = "CALLOUT_IMAGE_ID";
     private static final String CALLOUT_LAYER_ID = "CALLOUT_LAYER_ID";
 
-    private static final String JENIS_TANAH = "jenis_tanah";
-    private static final String URI_JENIS_TANAH = "mapbox://ridwanharts.7kulsbt0";
-    private static final String SCL_JENIS_TANAH = "pgon_jenis_tanah-4t1g4e";
-
-    private static final String KEMIRINGAN_LERENG = "kemiringan_lereng";
-    private static final String URI_KEMIRINGAN_LERENG = "mapbox://ridwanharts.3b23f5j3";
-    private static final String SCL_KEMIRINGAN_LERENG = "pgon_lereng-bnu7xi";
-
-    private static final String KETERSEDIAAN_AIR = "ketersediaan_air";
-    private static final String URI_KETERSEDIAAN_AIR = "mapbox://ridwanharts.9hge7fet";
-    private static final String SCL_KETERSEDIAAN_AIR = "pgon_hidrologi-cfh8n7";
-
     private static final String KERAWANAN_BENCANA = "kerawanan_bencana";
-
-    private static final String KERAWANAN_BENCANA_BANJIR = "kerawanan_bencana_banjir";
-    private static final String URI_KERAWANAN_BENCANA_BANJIR = "mapbox://ridwanharts.2if1cuio";
-    private static final String SCL_KERAWANAN_BENCANA_BANJIR = "pgon_rawan_benc_banjir-52ry6c";
-
-    private static final String KERAWANAN_BENCANA_LONGSOR = "kerawanan_bencana_longsor";
-    private static final String URI_KERAWANAN_BENCANA_LONGSOR = "mapbox://ridwanharts.94291cuy";
-    private static final String SCL_KERAWANAN_BENCANA_LONGSOR = "pgon_rawan_benc_longsor-7ty2zh";
-
-    private static final String KERAWANAN_BENCANA_TSUNAMI = "kerawanan_bencana_tsunami";
-    private static final String URI_KERAWANAN_BENCANA_TSUNAMI = "mapbox://ridwanharts.5xtrhxkx";
-    private static final String SCL_KERAWANAN_BENCANA_TSUNAMI = "pgon_rawan_benc_tsunami-cjktyx";
 
     private static final String KERAWANAN_BENCANA_KEKERINGAN = "kerawanan_bencana_kekeringan";
     private static final String URI_KERAWANAN_BENCANA_KEKERINGAN = "mapbox://ridwanharts.de8cdzgv";
@@ -141,7 +112,7 @@ public class LihatKriteriaOnMap extends AppCompatActivity implements OnMapReadyC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Mapbox.getInstance(this, getString(R.string.access_token));
-        setContentView(R.layout.activity_lihat_kriteria);
+        setContentView(R.layout.activity_lihat_kekeringan);
 
         mapView = findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
@@ -167,26 +138,10 @@ public class LihatKriteriaOnMap extends AppCompatActivity implements OnMapReadyC
                 case "pilih_lokasi":
                     getSupportActionBar().setTitle("Pilih Lokasi Lahan");
                     break;
-                case JENIS_TANAH:
-                    getSupportActionBar().setTitle("Jenis Tanah (Daya Dukung Tanah)");
-                    break;
-                case KETERSEDIAAN_AIR:
-                    getSupportActionBar().setTitle("Peta Ketersediaan Air");
-                    break;
-                case KEMIRINGAN_LERENG:
-                    getSupportActionBar().setTitle("Peta Kemiringan Lereng");
-                    break;
                 case KERAWANAN_BENCANA:
-                    getSupportActionBar().setTitle("Peta Bencana Alam");
-                    a = findViewById(R.id.banjir);
-                    b = findViewById(R.id.longsor);
+                    getSupportActionBar().setTitle("Peta Rawan Kekeringan");
                     c = findViewById(R.id.kekeringan);
-                    d = findViewById(R.id.tsunami);
-
-                    a.setVisibility(View.VISIBLE);
-                    b.setVisibility(View.VISIBLE);
                     c.setVisibility(View.VISIBLE);
-                    d.setVisibility(View.VISIBLE);
                     break;
             }
 
@@ -196,7 +151,7 @@ public class LihatKriteriaOnMap extends AppCompatActivity implements OnMapReadyC
 
     @Override
     public void onMapReady(@NonNull final MapboxMap mapboxMap) {
-        LihatKriteriaOnMap.this.mapboxMap = mapboxMap;
+        LihatKekeringan.this.mapboxMap = mapboxMap;
         geoJsonSource = new GeoJsonSource("source-red-marker",
                 Feature.fromGeometry(Point.fromLngLat(currentPos.getLongitude(),
                         currentPos.getLatitude())));
@@ -206,16 +161,6 @@ public class LihatKriteriaOnMap extends AppCompatActivity implements OnMapReadyC
 
                 if (style.isFullyLoaded()) {
 
-                    ivFocus.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            LatLng selectedLocationLatLng = new LatLng(latitude, longitude);
-                            CameraPosition newCameraPosition = new CameraPosition.Builder()
-                                    .target(selectedLocationLatLng)
-                                    .build();
-                            mapboxMap.easeCamera(CameraUpdateFactory.newCameraPosition(newCameraPosition));
-                        }
-                    });
                     if (tipeKriteria.equals("pilih_lokasi")) {
                         tvLatitudeLokasi = findViewById(R.id.tv_latitude_lokasi);
                         tvLongitudeLokasi = findViewById(R.id.tv_longitude_lokasi);
@@ -237,56 +182,27 @@ public class LihatKriteriaOnMap extends AppCompatActivity implements OnMapReadyC
                     } else {
                         rlLatLong = findViewById(R.id.linear_latlong);
                         rlLatLong.setVisibility(View.INVISIBLE);
-                        btnPilih = findViewById(R.id.btn_red_marker_pilih);
-                        btnPilih.setVisibility(View.INVISIBLE);
+
+                        LatLng selectedLocationLatLng = new LatLng(latitude, longitude);
+                        CameraPosition newCameraPosition = new CameraPosition.Builder()
+                                .target(selectedLocationLatLng)
+                                .zoom(11)
+                                .build();
+                        mapboxMap.easeCamera(CameraUpdateFactory.newCameraPosition(newCameraPosition));
                         MarkerOptions options = new MarkerOptions();
                         options.title("Lahan Anda");
                         options.position(new LatLng(latitude, longitude));
                         mapboxMap.addMarker(options);
-                        mapboxMap.addOnMapClickListener(LihatKriteriaOnMap.this);
-                        Toast.makeText(LihatKriteriaOnMap.this,
+                        mapboxMap.addOnMapClickListener(LihatKekeringan.this);
+                        Toast.makeText(LihatKekeringan.this,
                                 "Arahkan titik merah mendekati lokasi lahan anda", Toast.LENGTH_LONG).show();
 
 
-                        if (tipeKriteria.equals(JENIS_TANAH)) {
-                            idSource = JENIS_TANAH;
-                            uri = URI_JENIS_TANAH;
-                            sourceLayer = SCL_JENIS_TANAH;
-                        }
-                        if (tipeKriteria.equals(KEMIRINGAN_LERENG)) {
-                            idSource = KEMIRINGAN_LERENG;
-                            uri = URI_KEMIRINGAN_LERENG;
-                            sourceLayer = SCL_KEMIRINGAN_LERENG;
-                        }
-                        if (tipeKriteria.equals(KETERSEDIAAN_AIR)) {
-                            idSource = KETERSEDIAAN_AIR;
-                            uri = URI_KETERSEDIAAN_AIR;
-                            sourceLayer = SCL_KETERSEDIAAN_AIR;
-                        }
-
                         if (tipeKriteria.equals(KERAWANAN_BENCANA)){
-                            LatLng selectedLocationLatLng = new LatLng(latitude, longitude);
-                            CameraPosition newCameraPosition = new CameraPosition.Builder()
-                                    .target(selectedLocationLatLng)
-                                    .zoom(15)
-                                    .build();
-                            mapboxMap.easeCamera(CameraUpdateFactory.newCameraPosition(newCameraPosition));
-                            if (style.getSource(KERAWANAN_BENCANA_TSUNAMI) == null) {
-                                style.addSource(new VectorSource(KERAWANAN_BENCANA_TSUNAMI, URI_KERAWANAN_BENCANA_TSUNAMI)
-                                );
-                            }
-                            FillLayer terrainTsunami = new FillLayer(SCL_KERAWANAN_BENCANA_TSUNAMI, KERAWANAN_BENCANA_TSUNAMI);
-                            terrainTsunami.setSourceLayer(SCL_KERAWANAN_BENCANA_TSUNAMI);
-                            terrainTsunami.setProperties(
-                                    fillColor("#33c377"),
-                                    fillOpacity(0.5f),
-                                    fillAntialias(true)
-                            );
-                            style.addLayerAt(terrainTsunami, 3);
 
-                            idSource = KERAWANAN_BENCANA_BANJIR;
-                            uri = URI_KERAWANAN_BENCANA_BANJIR;
-                            sourceLayer = SCL_KERAWANAN_BENCANA_BANJIR;
+                            idSource = KERAWANAN_BENCANA_KEKERINGAN;
+                            uri = URI_KERAWANAN_BENCANA_KEKERINGAN;
+                            sourceLayer = SCL_KERAWANAN_BENCANA_KEKERINGAN;
                             if (style.getSource(idSource) == null) {
                                 style.addSource(new VectorSource(idSource, uri)
                                 );
@@ -295,36 +211,13 @@ public class LihatKriteriaOnMap extends AppCompatActivity implements OnMapReadyC
                             FillLayer terrainData = new FillLayer(sourceLayer, idSource);
                             terrainData.setSourceLayer(sourceLayer);
                             terrainData.setProperties(
-                                    fillColor("#4264fb"),
+                                    fillColor("#f74e4e"),
                                     fillOpacity(0.5f),
                                     fillAntialias(true)
                             );
-                            style.addLayerAt(terrainData, 4);
+                            style.addLayerAt(terrainData, 3);
+                            /*
 
-                            if (style.getSource(KERAWANAN_BENCANA_LONGSOR) == null) {
-                                style.addSource(new VectorSource(KERAWANAN_BENCANA_LONGSOR, URI_KERAWANAN_BENCANA_LONGSOR)
-                                );
-                            }
-                            FillLayer terrainLongsor = new FillLayer(SCL_KERAWANAN_BENCANA_LONGSOR, KERAWANAN_BENCANA_LONGSOR);
-                            terrainLongsor.setSourceLayer(SCL_KERAWANAN_BENCANA_LONGSOR);
-                            terrainLongsor.setProperties(
-                                    fillColor("#f79640"),
-                                    fillOpacity(0.5f),
-                                    fillAntialias(true)
-                            );
-                            style.addLayerAt(terrainLongsor, 5);
-
-                            c.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    Intent i = new Intent(LihatKriteriaOnMap.this, LihatKekeringan.class);
-                                    i.putExtra("latitude", latitude);
-                                    i.putExtra("longitude", longitude);
-                                    i.putExtra("tipe_kriteria", "kerawanan_bencana");
-                                    startActivity(i);
-                                }
-                            });
-/*
                             fabKekeringan.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
@@ -361,27 +254,10 @@ public class LihatKriteriaOnMap extends AppCompatActivity implements OnMapReadyC
 
                         }
 
-
-                        if (tipeKriteria.equals("kerawanan_bencana")) {
-
-                        } else {
-                            style.addSource(new VectorSource(idSource, uri)
-                            );
-
-                            FillLayer terrainData = new FillLayer(idSource, idSource);
-                            terrainData.setSourceLayer(sourceLayer);
-                            terrainData.setProperties(
-                                    fillColor("#197901"),
-                                    fillOpacity(0.5f),
-                                    fillAntialias(true)
-                            );
-                            style.addLayerAt(terrainData, 6);
-                        }
-
                         //style.addLayerBelow(terrainData, CALLOUT_LAYER_ID);
 
                         setUpLineLayer(style);
-                        mapboxMap.addOnCameraIdleListener(LihatKriteriaOnMap.this);
+                        mapboxMap.addOnCameraIdleListener(LihatKekeringan.this);
                         showCrosshair();
                         setupSource(style);
                         setUpInfoWindowLayer(style);
@@ -406,8 +282,8 @@ public class LihatKriteriaOnMap extends AppCompatActivity implements OnMapReadyC
                         iconAllowOverlap(true)
                 ));
 
-        mapboxMap.addOnMapClickListener(LihatKriteriaOnMap.this);
-        LihatKriteriaOnMap.this.mStyle = styleRed;
+        mapboxMap.addOnMapClickListener(LihatKekeringan.this);
+        LihatKekeringan.this.mStyle = styleRed;
     }
 
     private final ValueAnimator.AnimatorUpdateListener animatorUpdateListener =
@@ -455,22 +331,13 @@ public class LihatKriteriaOnMap extends AppCompatActivity implements OnMapReadyC
 
 // Check whether the map style has a building layer
         String idLayer = "";
-        if (tipeKriteria.equals(JENIS_TANAH)){
-            idLayer = JENIS_TANAH;
-        }
-        if (tipeKriteria.equals(KEMIRINGAN_LERENG)){
-            idLayer = KEMIRINGAN_LERENG;
-        }
-        if (tipeKriteria.equals(KETERSEDIAAN_AIR)){
-            idLayer = KETERSEDIAAN_AIR;
-        }
 /*        if (tipeKriteria.equals(KERAWANAN_BENCANA_BANJIR)){
             idLayer = KERAWANAN_BENCANA_BANJIR;
-        }
+        }*/
         if (tipeKriteria.equals(KERAWANAN_BENCANA_KEKERINGAN)){
             idLayer = KERAWANAN_BENCANA_KEKERINGAN;
         }
-        if (tipeKriteria.equals(KERAWANAN_BENCANA_LONGSOR)){
+/*        if (tipeKriteria.equals(KERAWANAN_BENCANA_LONGSOR)){
             idLayer = KERAWANAN_BENCANA_LONGSOR;
         }
         if (tipeKriteria.equals(KERAWANAN_BENCANA_TSUNAMI)){
@@ -567,7 +434,7 @@ public class LihatKriteriaOnMap extends AppCompatActivity implements OnMapReadyC
                     stringBuilder.append(String.format("%s - %s", entry.getKey(), entry.getValue()));
                     stringBuilder.append(System.getProperty("line.separator"));
                 }
-                new GenerateViewIconTask(LihatKriteriaOnMap.this).execute(FeatureCollection.fromFeature(feature));
+                new GenerateViewIconTask(LihatKekeringan.this).execute(FeatureCollection.fromFeature(feature));
             }
         } else {
             //Toast.makeText(this, "Tidak ditemukan data", Toast.LENGTH_SHORT).show();
@@ -647,17 +514,17 @@ public class LihatKriteriaOnMap extends AppCompatActivity implements OnMapReadyC
 
     private static class GenerateViewIconTask extends AsyncTask<FeatureCollection, Void, HashMap<String, Bitmap>> {
 
-        private final WeakReference<LihatKriteriaOnMap> activityRef;
+        private final WeakReference<LihatKekeringan> activityRef;
         private Feature featureAtMapClickPoint;
 
-        GenerateViewIconTask(LihatKriteriaOnMap activity) {
+        GenerateViewIconTask(LihatKekeringan activity) {
             this.activityRef = new WeakReference<>(activity);
         }
 
         @SuppressWarnings("WrongThread")
         @Override
         protected HashMap<String, Bitmap> doInBackground(FeatureCollection... params) {
-            LihatKriteriaOnMap activity = activityRef.get();
+            LihatKekeringan activity = activityRef.get();
             HashMap<String, Bitmap> imagesMap = new HashMap<>();
             if (activity != null) {
                 LayoutInflater inflater = LayoutInflater.from(activity);
@@ -685,17 +552,11 @@ public class LihatKriteriaOnMap extends AppCompatActivity implements OnMapReadyC
                                 }
 
                             }else {
-                                if (tipeKriteria.equals(KERAWANAN_BENCANA)){
-                                    if (entry.getKey().equals("Ket")){
-                                        titleTextView.setText(""+entry.getValue()+"");
-                                    }
-                                }else{
-                                    if (entry.getKey().equals("JNS_TANAH")){
-                                        titleTextView.setText("Jenis Tanah = "+entry.getValue()+"");
-                                    }
-                                    stringBuilder.append(String.format("%s : %s", entry.getKey(), entry.getValue()));
-                                    stringBuilder.append(System.getProperty("line.separator"));
+                                if (entry.getKey().equals("LAYER")){
+                                    titleTextView.setText("Rawan Longsor");
                                 }
+                                stringBuilder.append(String.format("%s",  entry.getValue()));
+                                stringBuilder.append(System.getProperty("line.separator"));
                             }
 
                         }
@@ -710,7 +571,7 @@ public class LihatKriteriaOnMap extends AppCompatActivity implements OnMapReadyC
 
                         bubbleLayout.setArrowPosition(measuredWidth / 2 - 5);
 
-                        Bitmap bitmap = LihatKriteriaOnMap.SymbolGenerator.generate(bubbleLayout);
+                        Bitmap bitmap = LihatKekeringan.SymbolGenerator.generate(bubbleLayout);
                         imagesMap.put(CALLOUT_IMAGE_ID, bitmap);
                     }
                 }
@@ -722,7 +583,7 @@ public class LihatKriteriaOnMap extends AppCompatActivity implements OnMapReadyC
         @Override
         protected void onPostExecute(HashMap<String, Bitmap> bitmapHashMap) {
             super.onPostExecute(bitmapHashMap);
-            LihatKriteriaOnMap activity = activityRef.get();
+            LihatKekeringan activity = activityRef.get();
             if (activity != null && bitmapHashMap != null) {
                 activity.setImageGenResults(bitmapHashMap);
                 activity.refreshSource(featureAtMapClickPoint);

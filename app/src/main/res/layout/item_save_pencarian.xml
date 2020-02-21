@@ -45,7 +45,7 @@
 				android:id="@+id/tv_save_date"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:layout_marginTop="8dp"
+				android:layout_marginTop="5dp"
 				android:layout_marginStart="10dp"
 				android:layout_marginEnd="8dp"
 				android:layout_marginBottom="8dp"
@@ -56,11 +56,29 @@
 
 		</LinearLayout>
 
+		<LinearLayout
+			android:id="@+id/lin_kriteria"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="8dp"
+			android:layout_marginBottom="8dp"
+			android:paddingStart="15dp"
+			android:paddingEnd="15dp"
+			android:layout_below="@id/l_save_atas">
+			<TextView
+				android:id="@+id/tv_kriteria_use"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:textAlignment="textStart"
+				android:text="qwertyuiop, bkjaskfjbaf, kjhsflhalfs, nlkaflkajbfljsaf, kjasfkasfkaf, kjahfsk"/>
+
+		</LinearLayout>
+
 	  <LinearLayout
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:layout_marginTop="8dp"
-		android:layout_below="@id/l_save_atas">
+		android:layout_below="@id/lin_kriteria">
 		<Button
 		  android:layout_width="match_parent"
 		  android:layout_height="48dp"
@@ -83,6 +101,48 @@
 			android:padding="3dp"
 			android:tint="@color/mapboxWhite"
 			app:srcCompat="@drawable/ic_delete" />
+
+		<LinearLayout
+			android:visibility="invisible"
+			android:id="@+id/lin_ahp"
+			android:layout_width="wrap_content"
+			android:layout_height="30dp"
+			android:layout_toStartOf="@+id/btn_delete"
+			android:layout_margin="3dp"
+			android:paddingStart="8dp"
+			android:paddingEnd="8dp"
+			android:paddingTop="4dp"
+			android:paddingBottom="4dp"
+			android:background="@color/mapboxRed"
+			android:layout_alignParentTop="true">
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="AHP"/>
+
+		</LinearLayout>
+
+		<LinearLayout
+			android:visibility="invisible"
+			android:id="@+id/lin_fahp"
+			android:layout_width="wrap_content"
+			android:layout_height="30dp"
+			android:layout_toStartOf="@+id/btn_delete"
+			android:layout_margin="3dp"
+			android:paddingStart="8dp"
+			android:paddingEnd="8dp"
+			android:paddingTop="4dp"
+			android:paddingBottom="4dp"
+			android:background="@color/mapboxGreen"
+			android:layout_alignParentTop="true">
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="FAHP"/>
+
+		</LinearLayout>
 
 		<RelativeLayout
 			android:id="@+id/rv_loading"

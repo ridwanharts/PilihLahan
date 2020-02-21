@@ -21,10 +21,7 @@ import com.mapbox.mapboxsdk.Mapbox;
 
 public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
 
-    public static String loginType;
     public static int idUser;
-    private ProgressDialog progressDialog;
-    public static PrefConfig prefConfig;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,25 +29,22 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         Mapbox.getInstance(this, getString(R.string.access_token));
         setContentView(R.layout.activity_main);
 
-        prefConfig = new PrefConfig(this);
-
         if(findViewById(R.id.fragment_container) != null){
-            if (prefConfig.readLoginStatus()){
+            if (PrefConfig.getLoggedInStatus(getApplicationContext())){
                 getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, new LoginUsersFragment());
             }
         }
 
         Intent i = getIntent();
-        loginType = i.getStringExtra("LOGIN");
-        idUser = i.getIntExtra("ID_USER", idUser);
+        idUser = PrefConfig.getLoggedInUser(getApplicationContext());
 
         // kita set default nya Home Fragment
-        if(loginType.equals("GUEST")){
+        if(!PrefConfig.getTypeLogin(getApplicationContext()).equals("GUEST")){
             //Toast.makeText(getApplicationContext(),"Masuk USER = "+loginType, Toast.LENGTH_SHORT).show();
-            loadFragment(new GuestHomeFragment());
+            loadFragment(new UsersHomeFragment());
         }else {
             //Toast.makeText(getApplicationContext(),"Masuk ADMIN = "+loginType, Toast.LENGTH_SHORT).show();
-            loadFragment(new UsersHomeFragment());
+            loadFragment(new GuestHomeFragment());
         }
         // inisialisasi BottomNavigaionView
         BottomNavigationView bottomNavigationView = findViewById(R.id.bn_main);
@@ -58,14 +52,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
         //getSupportActionBar().setElevation(0);
 
-    }
-
-    public static String getUsername(){
-        return loginType;
-    }
-
-    public static int getIdUser(){
-        return idUser;
     }
 
     private boolean loadFragment(Fragment fragment) {
@@ -91,17 +77,17 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         Fragment fragment = null;
         switch (menuItem.getItemId()){
             case R.id.home_menu:
-                if(loginType.equals("GUEST")){
+                if(PrefConfig.getTypeLogin(getApplicationContext()).equals("GUEST")){
                     fragment = new GuestHomeFragment();
                 }else {
                     fragment = new UsersHomeFragment();
                 }
                 //getSupportActionBar().show();
                 break;
-            case R.id.map_menu:
+            /*case R.id.map_menu:
                 fragment = new MapFragment();
                 //getSupportActionBar().hide();
-                break;
+                break;*/
             case R.id.account_menu:
                 fragment = new AccountFragment();
                 break;

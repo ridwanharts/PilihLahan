@@ -81,7 +81,7 @@
                     android:gravity="center"
                     android:hint="Password"
                     android:inputType="textPassword"
-                    android:maxLength="6"
+                    android:maxLength="10"
                     android:padding="20dp"
                     android:textColor="@color/mapboxWhite"
                     android:textColorHint="@color/mapboxWhite"

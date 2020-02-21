@@ -25,8 +25,6 @@ public class SignUpActivity extends AppCompatActivity {
     TextView tvRegister, tvBackLogin;
     EditText etUsername, etEmail, etPassword;
     RelativeLayout rlLoading;
-
-    public static PrefConfig prefConfig;
     public static ApiInterface apiInterface;
 
     @Override
@@ -34,7 +32,6 @@ public class SignUpActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
 
-        prefConfig = new PrefConfig(this);
         apiInterface = ApiClient.getApiClient().create(ApiInterface.class);
 
         tvRegister = findViewById(R.id.tv_register);

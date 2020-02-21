@@ -32,18 +32,18 @@
                 android:orientation="horizontal"
                 android:weightSum="1">
 
-                <LinearLayout
+                <RelativeLayout
                     android:id="@+id/lihat_detail_lokasi"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_below="@+id/linear_ll"
-                    android:gravity="center"
-                    android:background="@color/mapboxBlue">
+                    android:background="@color/mapbox_blue">
 
                     <Button
                         android:id="@+id/btn_no_prioritas"
                         android:layout_width="40dp"
                         android:layout_height="40dp"
+                        android:gravity="center"
                         android:textSize="14sp"
                         android:text="1">
 
@@ -54,9 +54,27 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:gravity="center"
-                        android:text="Lihat Detail"
+                        android:text="Kriteria"
                         android:textColor="@color/mapboxWhite" />
-                </LinearLayout>
+
+                    <TextView
+                        android:visibility="invisible"
+                        android:id="@+id/tv_vektor_prioritas"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginEnd="25dp"
+                        android:gravity="center_vertical|end"
+                        android:text="100"
+                        android:textColor="@color/mapboxWhite" />
+                    <TextView
+                        android:visibility="invisible"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginEnd="10dp"
+                        android:gravity="center_vertical|end"
+                        android:text="%"
+                        android:textColor="@color/mapboxWhite" />
+                </RelativeLayout>
 
             </LinearLayout>
 

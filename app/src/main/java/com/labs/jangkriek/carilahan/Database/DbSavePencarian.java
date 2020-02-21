@@ -39,6 +39,8 @@ public class DbSavePencarian extends SQLiteOpenHelper {
     private static final String SAVE_ID_USER = "id_user";
     private static final String SAVE_GAMBAR = "gambar";
     private static final String SAVE_WAKTU= "waktu";
+    private static final String SAVE_METODE= "metode";
+    private static final String SAVE_KRITERIA= "kriteria";
 
     public DbSavePencarian(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -64,7 +66,9 @@ public class DbSavePencarian extends SQLiteOpenHelper {
 
                 + SAVE_ID_USER +" INTEGER,"
                 + SAVE_GAMBAR +" TEXT,"
-                + SAVE_WAKTU +" DATETIME"
+                + SAVE_WAKTU +" DATETIME,"
+                + SAVE_METODE +" TEXT,"
+                + SAVE_KRITERIA +" TEXT"
                 + ")";
 
         db.execSQL(sql);
@@ -78,7 +82,7 @@ public class DbSavePencarian extends SQLiteOpenHelper {
 
     public long insertSaveLokasi(String id_group, String namaLokasi, double harga, double luas, double lat, double longi,
                                  String ddTanah, String kAir, String kLereng, double aksebilitas, String kBencana, double jBandara,
-                                  int idUser, String gambar, String waktu) {
+                                  int idUser, String gambar, String waktu, String metode, String kriteria) {
 
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -101,6 +105,8 @@ public class DbSavePencarian extends SQLiteOpenHelper {
         values.put(SAVE_ID_USER, idUser);
         values.put(SAVE_GAMBAR, gambar);
         values.put(SAVE_WAKTU, waktu);
+        values.put(SAVE_METODE, metode);
+        values.put(SAVE_KRITERIA, kriteria);
 
         long id = db.insert(TABLE_NAME, null, values);
 
@@ -145,6 +151,8 @@ public class DbSavePencarian extends SQLiteOpenHelper {
                 save.setId_user(cursor.getInt(cursor.getColumnIndex(SAVE_ID_USER)));
                 save.setGambar(cursor.getString((cursor.getColumnIndex(SAVE_GAMBAR))));
                 save.setWaktu(cursor.getString((cursor.getColumnIndex(SAVE_WAKTU))));
+                save.setMetode(cursor.getString((cursor.getColumnIndex(SAVE_METODE))));
+                save.setKriteria(cursor.getString((cursor.getColumnIndex(SAVE_KRITERIA))));
 
                 saved.add(save);
             } while (cursor.moveToNext());
@@ -171,6 +179,8 @@ public class DbSavePencarian extends SQLiteOpenHelper {
                 save.setId(cursor.getInt(cursor.getColumnIndex(SAVE_ID)));
                 save.setWaktu(cursor.getString(cursor.getColumnIndex(SAVE_WAKTU)));
                 save.setIdgroup(cursor.getString(cursor.getColumnIndex(SAVE_ID_GROUP)));
+                save.setMetode(cursor.getString((cursor.getColumnIndex(SAVE_METODE))));
+                save.setKriteria(cursor.getString((cursor.getColumnIndex(SAVE_KRITERIA))));
 
                 saved.add(save);
             } while (cursor.moveToNext());

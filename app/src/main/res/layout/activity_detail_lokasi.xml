@@ -1,222 +1,351 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:app="http://schemas.android.com/apk/res-auto"
-  xmlns:tools="http://schemas.android.com/tools"
-  android:layout_width="match_parent"
-  android:layout_height="match_parent"
-  android:background="@color/color_bg"
-  tools:context=".Activity.DetailLokasiActivity">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:mapbox="http://schemas.android.com/apk/res-auto"
+    android:background="@color/color_bg"
+    tools:context=".Activity.DetailLokasiActivity">
 
-  <com.mapbox.mapboxsdk.maps.MapView
-	android:id="@+id/map_detail"
-	android:layout_width="match_parent"
-	android:layout_height="150dp">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-  </com.mapbox.mapboxsdk.maps.MapView>
+        <RelativeLayout
+            android:id="@+id/rel_a"
+            android:layout_width="match_parent"
+            android:layout_height="210dp">
 
-	<RelativeLayout
-	  android:layout_width="match_parent"
-	  android:layout_height="match_parent"
-	  android:layout_below="@+id/map_detail">
+            <com.synnapps.carouselview.CarouselView
+                android:id="@+id/carouselView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:fillColor="#FFFFFFFF"
+                app:pageColor="#00000000"
+                app:radius="6dp"
+                app:slideInterval="3000"
+                app:strokeColor="#FF777777"
+                app:strokeWidth="1dp" />
 
-		  <ImageView
-			android:id="@+id/image_detail"
-			android:layout_width="match_parent"
-			android:layout_height="200dp"
-			android:scaleType="centerCrop"
-			android:layout_marginTop="2dp"
-			android:layout_marginBottom="2dp"
-			android:src="@drawable/local"
-			android:contentDescription="image" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentBottom="true"
+                android:background="@color/black_semi_transparent"
+                android:orientation="vertical"
+                android:padding="3dp">
 
-		  	<androidx.cardview.widget.CardView
-			android:id="@+id/cv_detail"
-			android:layout_width="match_parent"
-			android:layout_height="120dp"
-			android:layout_below="@+id/image_detail"
-			android:layout_marginStart="8dp"
-			android:layout_marginEnd="8dp"
-			android:layout_marginTop="8dp"
-			android:layout_marginBottom="8dp"
-			android:clickable="true"
-			android:focusable="true"
-			android:foreground="?android:attr/selectableItemBackground"
-			app:cardCornerRadius="4dp"
-			app:cardElevation="2dp"
-			app:contentPadding="0dp">
+                <TextView
+                    android:id="@+id/tv_nama_lokasi_detail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:text="Nama Lokasi"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:textColor="@color/mapboxWhite"
+                    android:textStyle="bold" />
 
-			<LinearLayout
-			  android:id="@+id/linear_layout_user_homefr"
-			  android:layout_width="match_parent"
-			  android:layout_height="match_parent"
-			  android:layout_marginTop="8dp"
-			  android:layout_marginBottom="8dp"
-			  android:layout_marginStart="16dp"
-			  android:layout_marginEnd="16dp"
-			  android:gravity="top"
-			  android:orientation="horizontal"
-			  android:weightSum="1"
-			  android:paddingTop="3dp">
+                <TextView
+                    android:id="@+id/tv_harga_tanah_detail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:text="Rp. 2500 /h"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                    android:textColor="@color/mapboxWhite"
+                    android:textStyle="bold" />
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:id="@+id/tv_luas_tanah_detail"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:text="m2"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                        android:textColor="@color/mapboxWhite"
+                        android:textStyle="bold" />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:text="m2"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                        android:textColor="@color/mapboxWhite"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </LinearLayout>
+        </RelativeLayout>
 
-			  <LinearLayout
-				android:layout_width="match_parent"
-				android:layout_height="match_parent"
-				android:layout_weight="0.5"
-				android:orientation="vertical">
-				<TextView
-				  android:layout_width="match_parent"
-				  android:layout_height="wrap_content"
-				  android:textStyle="bold"
-				  android:textSize="14sp"
-				  android:text="Nama Lokasi"/>
-				<TextView
-				  android:id="@+id/tv_nama_lokasi_detail"
-				  android:layout_width="match_parent"
-				  android:layout_height="wrap_content"
-				  android:layout_marginStart="5dp"
-				  android:textSize="12sp"
-				  android:text="Nama Lokasi"/>
+        <LinearLayout
+            android:id="@+id/lin_a"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/rel_a"
+            android:background="@color/mapboxWhite"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_no_kriteria"
+                android:orientation="horizontal"
+                android:padding="8dp">
 
-				<TextView
-				  android:layout_width="match_parent"
-				  android:layout_height="wrap_content"
-				  android:layout_marginTop="5dp"
-				  android:textStyle="bold"
-				  android:textSize="14sp"
-				  android:text="Harga"/>
+                <LinearLayout
+                    android:id="@+id/linear_cekbox_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:weightSum="3"
+                    android:orientation="horizontal">
 
-				<TextView
-				  android:id="@+id/tv_harga_tanah_detail"
-				  android:layout_width="match_parent"
-				  android:layout_height="wrap_content"
-				  android:layout_marginStart="5dp"
-				  android:textSize="12sp"
-				  android:text="Rp. 2500 /h"/>
-			  </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:padding="3dp"
+                        android:orientation="vertical"
+                        android:gravity="center">
+                        <ImageView
+                            android:id="@+id/iv1"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:src="@drawable/ic_land"/>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:textStyle="bold"
+                            android:text="Jenis Tanah" />
+
+                        <TextView
+                            android:id="@+id/k1_1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="Kambisol" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:padding="3dp"
+                        android:orientation="vertical"
+                        android:gravity="center">
+                        <ImageView
+                            android:id="@+id/iv2"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:src="@drawable/ic_water"/>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:textStyle="bold"
+                            android:text="Ketersediaan Air" />
+
+                        <TextView
+                            android:id="@+id/k2_2"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="Ada" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:padding="3dp"
+                        android:orientation="vertical"
+                        android:gravity="center">
+                        <ImageView
+                            android:id="@+id/iv3"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:src="@drawable/ic_slope"/>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:textStyle="bold"
+                            android:text="Kemiringan Lereng" />
+
+                        <TextView
+                            android:id="@+id/k3_3"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="Kemiringan Lereng" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_no_kriteria"
+                android:orientation="horizontal"
+                android:layout_marginTop="16dp"
+                android:padding="8dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:weightSum="3"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:padding="3dp"
+                        android:orientation="vertical"
+                        android:gravity="center">
+                        <ImageView
+                            android:id="@+id/iv4"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:src="@drawable/ic_route"/>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:textStyle="bold"
+                            android:text="Aksesibilitas" />
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+                            <TextView
+                                android:id="@+id/k4_4"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:text="200" />
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:layout_marginStart="3dp"
+                                android:text="m" />
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:padding="3dp"
+                        android:orientation="vertical"
+                        android:gravity="center">
+                        <ImageView
+                            android:id="@+id/iv5"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:src="@drawable/ic_flood"/>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:textStyle="bold"
+                            android:text="Kerawanan Bencana" />
+
+                        <TextView
+                            android:id="@+id/k5_5"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="Banjir" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:padding="3dp"
+                        android:orientation="vertical"
+                        android:gravity="center">
+                        <ImageView
+                            android:id="@+id/iv6"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:src="@drawable/ic_departure"/>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:textStyle="bold"
+                            android:text="Jarak ke Bandara" />
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+                            <TextView
+                                android:id="@+id/k6_6"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:text="2" />
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:layout_marginStart="3dp"
+                                android:text="km" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cv_detaily"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/lin_a"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?android:attr/selectableItemBackground"
+            app:cardCornerRadius="4dp"
+            app:cardElevation="2dp"
+            app:contentPadding="0dp">
+
+            <com.mapbox.mapboxsdk.maps.MapView
+                android:id="@+id/mapView"
+                android:padding="3dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                mapbox:mapbox_cameraTargetLat="-7.8855268466"
+                mapbox:mapbox_cameraTargetLng="110.062440920"
+                mapbox:mapbox_cameraZoom="10" />
 
 
-			  <LinearLayout
-				android:layout_width="1dp"
-				android:layout_height="match_parent"
-				android:layout_marginStart="16dp"
-				android:layout_marginEnd="16dp"
-				android:background="@color/half_black">
+        </androidx.cardview.widget.CardView>
 
-			  </LinearLayout>
-
-			  <LinearLayout
-				android:layout_width="match_parent"
-				android:layout_height="match_parent"
-				android:orientation="vertical"
-				android:layout_weight="0.5">
-
-				<TextView
-				  android:id="@+id/tv_detail_lat"
-				  android:layout_width="match_parent"
-				  android:layout_height="wrap_content"
-				  android:text="Latitude"/>
-
-				<TextView
-				  android:id="@+id/tv_detail_longi"
-				  android:layout_width="match_parent"
-				  android:layout_height="wrap_content"
-				  android:text="Longitude"/>
-
-			  </LinearLayout>
-
-			</LinearLayout>
-
-		  </androidx.cardview.widget.CardView>
-
-	  		<androidx.cardview.widget.CardView
-		  android:id="@+id/cv_detaily"
-		  android:layout_width="match_parent"
-		  android:layout_height="match_parent"
-		  android:layout_below="@+id/cv_detail"
-		  android:layout_marginStart="8dp"
-		  android:layout_marginEnd="8dp"
-		  android:layout_marginBottom="16dp"
-		  android:clickable="true"
-		  android:focusable="true"
-		  android:foreground="?android:attr/selectableItemBackground"
-		  app:cardCornerRadius="4dp"
-		  app:cardElevation="2dp"
-		  app:contentPadding="0dp">
-
-		  <LinearLayout
-			android:id="@+id/linear_tengah"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:layout_below="@+id/tv_no_kriteria"
-			android:padding="8dp"
-			android:orientation="horizontal"
-			android:weightSum="1">
-
-			<LinearLayout
-			  android:id="@+id/linear_cekbox_input"
-			  android:layout_width="match_parent"
-			  android:layout_height="wrap_content"
-			  android:layout_marginStart="5dp"
-			  android:layout_marginTop="5dp"
-			  android:layout_marginEnd="5dp"
-			  android:layout_weight="0.6"
-			  android:orientation="vertical">
-
-			  <TextView
-				android:id="@+id/k1_otomatis"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_marginTop="8dp"
-				android:layout_marginBottom="5dp"
-				android:text="Daya Dukung Tanah" />
-
-			  <TextView
-				android:id="@+id/k2_otomatis"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_marginTop="8dp"
-				android:layout_marginBottom="5dp"
-				android:text="Ketersediaan Air" />
-
-			  <TextView
-				android:id="@+id/k3_otomatis"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_marginTop="8dp"
-				android:layout_marginBottom="5dp"
-				android:text="Kemiringan Lereng" />
-
-			  <TextView
-				android:id="@+id/k4_otomatis"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_marginTop="8dp"
-				android:layout_marginBottom="5dp"
-				android:text="Aksebilitas" />
-
-			  <TextView
-				android:id="@+id/k6_otomatis"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_marginTop="8dp"
-				android:layout_marginBottom="5dp"
-				android:text="Kerawanan Bencana" />
-
-			  <TextView
-				android:id="@+id/k7_otomatis"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_marginTop="8dp"
-				android:layout_marginBottom="5dp"
-				android:text="Jarak ke Bandara" />
-
-			</LinearLayout>
-
-
-		  </LinearLayout>
-
-		</androidx.cardview.widget.CardView>
-
-	</RelativeLayout>
+    </RelativeLayout>
 
 </RelativeLayout>

@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -47,6 +48,8 @@ public class SaveAdapter extends RecyclerView.Adapter<SaveAdapter.MyViewHolder> 
     private Context context;
     private List<String> waktu;
     private List<String> idGroup;
+    private List<String> metode;
+    private List<String> kriteria;
     private MapboxMap map;
     private SimpleDateFormat newFormatHour = new SimpleDateFormat("HH:mm");
     private SimpleDateFormat formatHour = new SimpleDateFormat("HHmmss");
@@ -57,17 +60,22 @@ public class SaveAdapter extends RecyclerView.Adapter<SaveAdapter.MyViewHolder> 
     private static List<Users> userList;
 
     public static class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        public TextView waktu;
+        public TextView waktu, tvKriteria;
         public Button btnSeeDetail;
+        LinearLayout linAHP, linFAHP;
         CardView singleCard;
         private RelativeLayout rvLoading;
         KelolaLahankuActivity.ItemClickListener itemClickListener;
         ImageButton ibDelete;
 
+
         public MyViewHolder(View view) {
             super(view);
+            linAHP = view.findViewById(R.id.lin_ahp);
+            linFAHP = view.findViewById(R.id.lin_fahp);
             waktu = view.findViewById(R.id.tv_save_date);
             btnSeeDetail = view.findViewById(R.id.btn_see_detail);
+            tvKriteria = view.findViewById(R.id.tv_kriteria_use);
             singleCard = view.findViewById(R.id.cardview_save_lokasi);
             singleCard.setOnClickListener(this);
             rvLoading = view.findViewById(R.id.rv_loading);
@@ -85,10 +93,12 @@ public class SaveAdapter extends RecyclerView.Adapter<SaveAdapter.MyViewHolder> 
     }
 
 
-    public SaveAdapter(Context context, List<String> waktu, List<String> idGroup) {
+    public SaveAdapter(Context context, List<String> waktu, List<String> idGroup, List<String> metode, List<String> kriteria) {
         this.context = context;
         this.waktu = waktu;
         this.idGroup = idGroup;
+        this.metode = metode;
+        this.kriteria = kriteria;
     }
 
     @Override
@@ -112,6 +122,14 @@ public class SaveAdapter extends RecyclerView.Adapter<SaveAdapter.MyViewHolder> 
         if (date != null){
             holder.waktu.setText(waktu.get(position)+" - "+""+newFormatHour.format(date)+ " WIB");
         }
+        if (metode.get(position).equals("AHP")){
+            holder.linAHP.setVisibility(View.VISIBLE);
+        }else {
+            holder.linFAHP.setVisibility(View.VISIBLE);
+        }
+
+        holder.tvKriteria.setText(kriteria.get(position));
+
         holder.setClickListener(new KelolaLahankuActivity.ItemClickListener() {
             @Override
             public void onClick(View view, int position) {

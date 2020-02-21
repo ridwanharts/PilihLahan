@@ -26,18 +26,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import okhttp3.OkHttpClient;
-import okhttp3.logging.HttpLoggingInterceptor;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-
-import static com.labs.jangkriek.carilahan.Activity.MainActivity.getIdUser;
-import static com.labs.jangkriek.carilahan.Activity.MainActivity.getUsername;
-import static com.labs.jangkriek.carilahan.Activity.MainActivity.idUser;
-
 public class HistoriActivity extends AppCompatActivity {
 
     private Button btnSymbol;
@@ -47,9 +35,13 @@ public class HistoriActivity extends AppCompatActivity {
     private List<Lokasi> savePencarianList = new ArrayList<>();
     private List<String> waktu = new ArrayList<>();
     private List<String> idGroup = new ArrayList<>();
+    private List<String> metode = new ArrayList<>();
+    private List<String> kriteria = new ArrayList<>();
     private List<String> viewIdGroup = new ArrayList<>();
     private HashMap<Integer, String> dataHash = new HashMap<>();
     private HashMap<Integer, String> dataIdGroup = new HashMap<>();
+    private HashMap<Integer, String> dataMetode = new HashMap<>();
+    private HashMap<Integer, String> dataKriteria = new HashMap<>();
     private SaveAdapter saveAdapter;
 
 
@@ -89,16 +81,22 @@ public class HistoriActivity extends AppCompatActivity {
             if (savePencarianList.size()==3){
                 dataHash.put(count,savePencarianList.get(i).getWaktu());
                 dataIdGroup.put(count,savePencarianList.get(i).getIdgroup());
+                dataMetode.put(count,savePencarianList.get(i).getMetode());
+                dataKriteria.put(count,savePencarianList.get(i).getKriteria());
                 break;
             }else {
                 if (i==0){
                     dataHash.put(count,savePencarianList.get(0).getWaktu());
                     dataIdGroup.put(count,savePencarianList.get(0).getIdgroup());
+                    dataMetode.put(count,savePencarianList.get(0).getMetode());
+                    dataKriteria.put(count,savePencarianList.get(0).getKriteria());
                     count++;
                 }
                 if (!savePencarianList.get(i).getIdgroup().equals(savePencarianList.get(i+1).getIdgroup())){
                     dataHash.put(count,savePencarianList.get(i+1).getWaktu());
                     dataIdGroup.put(count,savePencarianList.get(i+1).getIdgroup());
+                    dataMetode.put(count,savePencarianList.get(i+1).getMetode());
+                    dataKriteria.put(count,savePencarianList.get(i+1).getKriteria());
                     count++;
                 }
 
@@ -109,19 +107,21 @@ public class HistoriActivity extends AppCompatActivity {
 
         int j = 1;
         for (int i=0;i<dataHash.size();i++){
-            Log.e("-",""+dataHash.get(j));
+            Log.e("-",""+dataMetode.get(j));
             waktu.add(dataHash.get(j));
             idGroup.add(dataIdGroup.get(j));
+            metode.add(dataMetode.get(j));
+            kriteria.add(dataKriteria.get(j));
             j++;
         }
-        Log.e("Jumlah",""+dataHash.size());
+        //Log.e("Jumlah",""+dataHash.size());
 
 
     }
 
     public void initRecyclerView(){
         recyclerView = findViewById(R.id.rv_list_saved_lokasi);
-        saveAdapter = new SaveAdapter(this, waktu, idGroup);
+        saveAdapter = new SaveAdapter(this, waktu, idGroup, metode, kriteria);
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext(), RecyclerView.VERTICAL, false));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(saveAdapter);
@@ -180,7 +180,6 @@ public class HistoriActivity extends AppCompatActivity {
         setResult(RESULT_OK);
         super.onBackPressed();
         Intent a = new Intent(this, MainActivity.class);
-        a.putExtra("LOGIN", getUsername());
         a.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(a);
         finish();

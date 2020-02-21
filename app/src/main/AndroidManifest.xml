@@ -18,7 +18,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".MetodeActivity"></activity>
+        <activity android:name=".Activity.Users.LihatKekeringan"></activity>
+        <activity android:name=".MetodeActivity" />
         <activity android:name=".Activity.Users.LihatKriteriaOnMap" />
         <activity android:name=".Activity.Users.PlottingAreaActivity" />
         <activity android:name=".Activity.Users.TambahLahanActivity" />

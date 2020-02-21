@@ -66,9 +66,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-
-import static com.labs.jangkriek.carilahan.Activity.MainActivity.getIdUser;
-import static com.labs.jangkriek.carilahan.Activity.MainActivity.getUsername;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.fillColor;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.fillOpacity;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconAllowOverlap;
@@ -338,20 +335,25 @@ public class SemuaLahanActivity extends AppCompatActivity implements OnMapReadyC
     private void initFillLayer(@NonNull Style loadedMapStyle) {
 
         if (reset){
-            loadedMapStyle.removeLayer("layer-id11");
-            loadedMapStyle.removeSource("source-id11");
+            if (loadedMapStyle.isFullyLoaded()){
+                loadedMapStyle.removeLayer("layer-id11");
+                loadedMapStyle.removeSource("source-id11");
+            }
+
         }
 
         for (int i=0;i<listCreatedAt.size();i++){
             POINTS.add(dataPointHash.get(listCreatedAt.get(i)));
         }
 
-        loadedMapStyle.addSource(new GeoJsonSource("source-id11", Polygon.fromLngLats(POINTS)));
-        loadedMapStyle.addLayerBelow(new FillLayer("layer-id11", "source-id11").withProperties(
-                fillOpacity(0.4f),
-                fillColor(Color.parseColor("#f74e4e"))
-                ), LAYER_ID
-        );
+        if (loadedMapStyle.isFullyLoaded()) {
+            loadedMapStyle.addSource(new GeoJsonSource("source-id11", Polygon.fromLngLats(POINTS)));
+            loadedMapStyle.addLayerBelow(new FillLayer("layer-id11", "source-id11").withProperties(
+                    fillOpacity(0.4f),
+                    fillColor(Color.parseColor("#f74e4e"))
+                    ), LAYER_ID
+            );
+        }
 
     }
 
@@ -365,16 +367,19 @@ public class SemuaLahanActivity extends AppCompatActivity implements OnMapReadyC
 
         }
 
-        Drawable drawable = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_loc_blue, null);
-        Bitmap bitmap = BitmapUtils.getBitmapFromDrawable(drawable);
+        if (loadedMapStyle.isFullyLoaded()) {
 
-        loadedMapStyle.addImage(SYMBOL_ICON_ID, bitmap);
-        loadedMapStyle.addSource(new GeoJsonSource(SOURCE_ID, lokasiCollection));
-        loadedMapStyle.addLayer(new SymbolLayer(LAYER_ID, SOURCE_ID).withProperties(
-                iconImage(SYMBOL_ICON_ID),
-                iconAllowOverlap(true),
-                iconOffset(new Float[] {0f, -4f})
-        ));
+            Drawable drawable = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_loc_blue, null);
+            Bitmap bitmap = BitmapUtils.getBitmapFromDrawable(drawable);
+
+            loadedMapStyle.addImage(SYMBOL_ICON_ID, bitmap);
+            loadedMapStyle.addSource(new GeoJsonSource(SOURCE_ID, lokasiCollection));
+            loadedMapStyle.addLayer(new SymbolLayer(LAYER_ID, SOURCE_ID).withProperties(
+                    iconImage(SYMBOL_ICON_ID),
+                    iconAllowOverlap(true),
+                    iconOffset(new Float[]{0f, -4f})
+            ));
+        }
     }
     @Override
     public void onPointerCaptureChanged(boolean hasCapture) {
@@ -480,9 +485,7 @@ public class SemuaLahanActivity extends AppCompatActivity implements OnMapReadyC
         setResult(RESULT_OK);
         super.onBackPressed();
         isSemuaLahan = false;
-
         Intent a = new Intent(this, MainActivity.class);
-        a.putExtra("LOGIN", getUsername());
         a.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(a);
         finish();

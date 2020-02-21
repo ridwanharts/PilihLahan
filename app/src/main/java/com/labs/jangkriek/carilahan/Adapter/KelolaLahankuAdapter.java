@@ -23,15 +23,18 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.daasuu.bl.ArrowDirection;
 import com.daasuu.bl.BubbleLayout;
 import com.daasuu.bl.BubblePopupHelper;
+import com.labs.jangkriek.carilahan.Activity.DetailLokasiActivity;
 import com.labs.jangkriek.carilahan.Activity.Users.KelolaLahankuActivity;
 import com.labs.jangkriek.carilahan.Activity.Users.TambahLahanActivity;
 import com.labs.jangkriek.carilahan.Database.DbLokasi;
 import com.labs.jangkriek.carilahan.POJO.Lokasi;
 import com.labs.jangkriek.carilahan.POJO.Respon;
 import com.labs.jangkriek.carilahan.POJO.Users;
+import com.labs.jangkriek.carilahan.PrefConfig;
 import com.labs.jangkriek.carilahan.R;
 import com.labs.jangkriek.carilahan.Utils.RegisterApi;
 import com.mapbox.mapboxsdk.camera.CameraPosition;
@@ -48,9 +51,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-
-import static com.labs.jangkriek.carilahan.Activity.MainActivity.getIdUser;
-import static com.labs.jangkriek.carilahan.Activity.MainActivity.loginType;
 import static com.labs.jangkriek.carilahan.Activity.SemuaLahanActivity.getIsSemuaLahan;
 import static com.labs.jangkriek.carilahan.Activity.SemuaLahanActivity.userList;
 import static com.labs.jangkriek.carilahan.Adapter.SaveAdapter.userListDetailHistory;
@@ -73,6 +73,7 @@ public class KelolaLahankuAdapter extends RecyclerView.Adapter<KelolaLahankuAdap
         TextView hargaLahan;
         TextView luasLahan;
         ImageButton ibDelete;
+        ImageButton ibEdit;
         ImageView ivLahan;
         CardView singleCard;
         LinearLayout linearLayoutDetailLokasi;
@@ -85,6 +86,7 @@ public class KelolaLahankuAdapter extends RecyclerView.Adapter<KelolaLahankuAdap
             luasLahan = view.findViewById(R.id.tv_luas_lahan);
             hargaLahan = view.findViewById(R.id.tv_harga_lahan);
             ibDelete = view.findViewById(R.id.btn_delete);
+            ibEdit = view.findViewById(R.id.btn_edit);
             ivLahan = view.findViewById(R.id.image_lahan);
             rvLoading = view.findViewById(R.id.rv_loading);
             singleCard = view.findViewById(R.id.cardview_lokasi);
@@ -127,7 +129,7 @@ public class KelolaLahankuAdapter extends RecyclerView.Adapter<KelolaLahankuAdap
     @Override
     public void onBindViewHolder(KelolaLahankuAdapter.MyViewHolder holder, int position) {
         dbLokasi = new DbLokasi(context);
-        Lokasi namaLokasi = lokasiList.get(position);
+        Lokasi mLokasi = lokasiList.get(position);
 
         if (history){
             userList = userListDetailHistory();
@@ -137,18 +139,18 @@ public class KelolaLahankuAdapter extends RecyclerView.Adapter<KelolaLahankuAdap
 
         String username = "null";
 
-        byte[] decodedString = Base64.decode(namaLokasi.getGambar(), Base64.DEFAULT);
-        Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+        //byte[] decodedString = Base64.decode(mLokasi.getGambar(), Base64.DEFAULT);
+        //Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
 
-        holder.namaLokasi.setText(namaLokasi.getNama());
+        holder.namaLokasi.setText(mLokasi.getNama());
+        String loginType = PrefConfig.getTypeLogin(context);
 
-
-        if (namaLokasi.getId_user() == getIdUser() && !loginType.equals("GUEST")){
+        if (mLokasi.getId_user() == PrefConfig.getLoggedInUser(context) && !loginType.equals("GUEST")){
             holder.pemilikLahan.setText("Lahanku");
             holder.pemilikLahan.setTextColor(context.getResources().getColor(R.color.mapboxGreen));
         }else{
             for (int i=0;i<userList.size();i++){
-                if (userList.get(i).getId() == namaLokasi.getId_user()){
+                if (userList.get(i).getId() == mLokasi.getId_user()){
                     username = userList.get(i).getUsername();
                     holder.pemilikLahan.setText(username);
                 }
@@ -157,12 +159,19 @@ public class KelolaLahankuAdapter extends RecyclerView.Adapter<KelolaLahankuAdap
             holder.pemilikLahan.setTextColor(context.getResources().getColor(R.color.colorPrimary));
         }
 
-        holder.luasLahan.setText(String.valueOf(namaLokasi.getLuasLahan()));
-        holder.hargaLahan.setText(String.valueOf(namaLokasi.getHargaLahan()));
-        holder.ivLahan.setImageBitmap(decodedByte);
-        //Log.e("b", lokasiList.get(position).getLokasi()+"");
+        holder.luasLahan.setText(String.valueOf(mLokasi.getLuasLahan()));
+        holder.hargaLahan.setText(String.valueOf(mLokasi.getHargaLahan()));
+
+        Glide.with(context)
+                .load(mLokasi.getGambar()+"0.jpg")
+                .placeholder(R.drawable.ic_refresh)
+                .error(R.drawable.ic_error)
+                .into(holder.ivLahan);
 
         //histroy cek
+        BubbleLayout bubbleLayout = (BubbleLayout) LayoutInflater.from(context).inflate(R.layout.bubble_info, null);
+        PopupWindow popupWindow = BubblePopupHelper.create(context, bubbleLayout);
+
         if (!history) {
             holder.setClickListener(new KelolaLahankuActivity.ItemClickListener() {
                 @Override
@@ -174,13 +183,79 @@ public class KelolaLahankuAdapter extends RecyclerView.Adapter<KelolaLahankuAdap
                             .target(selectedLocationLatLng)
                             .build();
                     map.easeCamera(CameraUpdateFactory.newCameraPosition(newCameraPosition));
+
+                    //buble layout
+                    TextView jarakBandara, aksebilitas, jenisTanah, kAir, kLereng, kBencana;
+
+                    bubbleLayout.setArrowDirection(ArrowDirection.BOTTOM_CENTER);
+                    popupWindow.showAtLocation(view, Gravity.CENTER, 0, -90);
+
+                    jarakBandara = popupWindow.getContentView().findViewById(R.id.jarak_bandara_bubble);
+                    aksebilitas = popupWindow.getContentView().findViewById(R.id.aksebilitas_bubble);
+
+                    jenisTanah = popupWindow.getContentView().findViewById(R.id.jenistanah_bubble);
+                    kAir = popupWindow.getContentView().findViewById(R.id.air_bubble);
+                    kLereng = popupWindow.getContentView().findViewById(R.id.lereng_bubble);
+                    kBencana = popupWindow.getContentView().findViewById(R.id.bencana_bubble);
+
+                    Boolean cek;
+                    cek = true;
+
+                    jarakBandara.setText(lokasiList.get(position).getJarakKeBandara()+"");
+                    aksebilitas.setText(lokasiList.get(position).getAksebilitas()+"");
+
+                    jenisTanah.setText(lokasiList.get(position).getDayaDukungTanah()+"");
+                    kAir.setText(lokasiList.get(position).getKetersediaanAir()+"");
+                    kLereng.setText(lokasiList.get(position).getKemiringanLereng()+"");
+                    kBencana.setText(lokasiList.get(position).getKerawananBencana()+"");
                 }
             });
             if (getIsSemuaLahan() != null){
                 if (getIsSemuaLahan()){
                     holder.ibDelete.setVisibility(View.INVISIBLE);
+                    holder.ibEdit.setVisibility(View.INVISIBLE);
                 }
             }
+
+            holder.ibEdit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                    builder.setCancelable(true);
+                    builder.setTitle("Edit Lahan");
+                    builder.setMessage("\"" + mLokasi.getNama() + "\"");
+                    builder.setPositiveButton("Ya",
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Intent i = new Intent(context, TambahLahanActivity.class);
+                                    i.putExtra("is_edit", true);
+                                    i.putExtra("id_lahan", mLokasi.getId());
+                                    i.putExtra("nama_lahan", mLokasi.getNama());
+                                    i.putExtra("harga_lahan", mLokasi.getHargaLahan());
+                                    i.putExtra("luas_lahan", mLokasi.getLuasLahan());
+                                    i.putExtra("latitude", mLokasi.getLatitude());
+                                    i.putExtra("longitude", mLokasi.getLongitude());
+                                    i.putExtra("created_at", mLokasi.getCreated_at());
+                                    i.putExtra("gambar", mLokasi.getGambar());
+                                    context.startActivity(i);
+
+                                    Toast.makeText(context, "Edited Lahan " + mLokasi.getNama(), Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                    builder.setNegativeButton("Tidak",
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                }
+                            });
+
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+                }
+            });
 
             holder.ibDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -189,13 +264,13 @@ public class KelolaLahankuAdapter extends RecyclerView.Adapter<KelolaLahankuAdap
                     AlertDialog.Builder builder = new AlertDialog.Builder(context);
                     builder.setCancelable(true);
                     builder.setTitle("Hapus Lahan ");
-                    builder.setMessage("Apakah anda yakin menghapus lahan "+namaLokasi.getNama());
+                    builder.setMessage("Apakah anda yakin menghapus lahan "+mLokasi.getNama());
                     builder.setPositiveButton("Ya",
                             new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     rvLoading.setVisibility(View.VISIBLE);
-                                    deleteLahan(namaLokasi.getId());
+                                    deleteLahan(mLokasi.getId());
                                     notifyDataSetChanged();
                                     //notifyItemRemoved(namaLokasi.getId());
                                 }
@@ -214,90 +289,27 @@ public class KelolaLahankuAdapter extends RecyclerView.Adapter<KelolaLahankuAdap
                 }
             });
 
-            BubbleLayout bubbleLayout = (BubbleLayout) LayoutInflater.from(context).inflate(R.layout.bubble_info, null);
-            PopupWindow popupWindow = BubblePopupHelper.create(context, bubbleLayout);
-
             holder.linearLayoutDetailLokasi.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    TextView jarakBandara, aksebilitas, jenisTanah, kAir, kLereng, kBencana;
-                    ImageButton ibEdit;
+                    Toast.makeText(context, "Detail Lokasi ", Toast.LENGTH_SHORT).show();
+                    Intent i = new Intent(context, DetailLokasiActivity.class);
+                    i.putExtra("is_edit", false);
+                    i.putExtra("nama", mLokasi.getNama());
+                    i.putExtra("harga", mLokasi.getHargaLahan());
+                    i.putExtra("latitude", mLokasi.getLatitude());
+                    i.putExtra("longitude", mLokasi.getLongitude());
+                    i.putExtra("url", mLokasi.getGambar());
 
-                    LatLng selectedLocationLatLng = lokasiList.get(position).getLokasi();
-
-                    CameraPosition newCameraPosition = new CameraPosition.Builder()
-                            .target(selectedLocationLatLng)
-                            .build();
-                    map.easeCamera(CameraUpdateFactory.newCameraPosition(newCameraPosition));
-
-                    bubbleLayout.setArrowDirection(ArrowDirection.BOTTOM_CENTER);
-                    popupWindow.showAtLocation(v, Gravity.CENTER, 0, -70);
-
-                    jarakBandara = popupWindow.getContentView().findViewById(R.id.jarak_bandara_bubble);
-                    aksebilitas = popupWindow.getContentView().findViewById(R.id.aksebilitas_bubble);
-
-                    jenisTanah = popupWindow.getContentView().findViewById(R.id.jenistanah_bubble);
-                    kAir = popupWindow.getContentView().findViewById(R.id.air_bubble);
-                    kLereng = popupWindow.getContentView().findViewById(R.id.lereng_bubble);
-                    kBencana = popupWindow.getContentView().findViewById(R.id.bencana_bubble);
-
-                    ibEdit = popupWindow.getContentView().findViewById(R.id.btn_edit);
-                    Boolean cek;
-                    cek = true;
-                    if (cek == getIsSemuaLahan()){
-                        ibEdit.setVisibility(View.GONE);
-                    }else {
-                        if (ibEdit.getVisibility() == View.VISIBLE) {
-                            ibEdit.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-
-                                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                                    builder.setCancelable(true);
-                                    builder.setTitle("Edit Lahan");
-                                    builder.setMessage("\"" + namaLokasi.getNama() + "\"");
-                                    builder.setPositiveButton("Ya",
-                                            new DialogInterface.OnClickListener() {
-                                                @Override
-                                                public void onClick(DialogInterface dialog, int which) {
-                                                    Intent i = new Intent(context, TambahLahanActivity.class);
-                                                    i.putExtra("is_edit", true);
-                                                    i.putExtra("id_lahan", namaLokasi.getId());
-                                                    i.putExtra("nama_lahan", namaLokasi.getNama());
-                                                    i.putExtra("harga_lahan", namaLokasi.getHargaLahan());
-                                                    i.putExtra("luas_lahan", namaLokasi.getLuasLahan());
-                                                    i.putExtra("latitude", namaLokasi.getLatitude());
-                                                    i.putExtra("longitude", namaLokasi.getLongitude());
-                                                    i.putExtra("created_at", namaLokasi.getCreated_at());
-                                                    i.putExtra("gambar", namaLokasi.getGambar());
-                                                    context.startActivity(i);
-
-                                                    Toast.makeText(context, "Edited Lahan " + namaLokasi.getNama(), Toast.LENGTH_SHORT).show();
-                                                }
-                                            });
-                                    builder.setNegativeButton("Tidak",
-                                            new DialogInterface.OnClickListener() {
-                                                @Override
-                                                public void onClick(DialogInterface dialog, int which) {
-
-                                                }
-                                            });
-
-                                    AlertDialog dialog = builder.create();
-                                    dialog.show();
-                                }
-                            });
-                        }
-                    }
-
-                    jarakBandara.setText(lokasiList.get(position).getJarakKeBandara()+"");
-                    aksebilitas.setText(lokasiList.get(position).getAksebilitas()+"");
-
-                    jenisTanah.setText(lokasiList.get(position).getDayaDukungTanah()+"");
-                    kAir.setText(lokasiList.get(position).getKetersediaanAir()+"");
-                    kLereng.setText(lokasiList.get(position).getKemiringanLereng()+"");
-                    kBencana.setText(lokasiList.get(position).getKerawananBencana()+"");
-
+                    i.putExtra("k1", mLokasi.getDayaDukungTanah());
+                    i.putExtra("k2", mLokasi.getKetersediaanAir());
+                    i.putExtra("k3", mLokasi.getKemiringanLereng());
+                    i.putExtra("k4", mLokasi.getAksebilitas());
+                    i.putExtra("k5", mLokasi.getKerawananBencana());
+                    i.putExtra("k6", mLokasi.getJarakKeBandara());
+                    i.putExtra("luas", mLokasi.getLuasLahan());
+                    //i.putExtra("nama", nama);
+                    context.startActivity(i);
                 }
             });
 
@@ -307,6 +319,7 @@ public class KelolaLahankuAdapter extends RecyclerView.Adapter<KelolaLahankuAdap
             holder.singleCard.setLayoutParams(a);
 
             holder.ibDelete.setVisibility(View.INVISIBLE);
+            holder.ibEdit.setVisibility(View.INVISIBLE);
             holder.setClickListener(new KelolaLahankuActivity.ItemClickListener() {
                 @Override
                 public void onClick(View view, int position) {
@@ -319,6 +332,24 @@ public class KelolaLahankuAdapter extends RecyclerView.Adapter<KelolaLahankuAdap
                 @Override
                 public void onClick(View v) {
                     Toast.makeText(context, "Linear ", Toast.LENGTH_SHORT).show();
+
+                    Intent i = new Intent(context, DetailLokasiActivity.class);
+                    i.putExtra("is_edit", false);
+                    i.putExtra("nama", mLokasi.getNama());
+                    i.putExtra("harga", mLokasi.getHargaLahan());
+                    i.putExtra("latitude", mLokasi.getLatitude());
+                    i.putExtra("longitude", mLokasi.getLongitude());
+                    i.putExtra("url", mLokasi.getGambar());
+
+                    i.putExtra("k1", mLokasi.getDayaDukungTanah());
+                    i.putExtra("k2", mLokasi.getKetersediaanAir());
+                    i.putExtra("k3", mLokasi.getKemiringanLereng());
+                    i.putExtra("k4", mLokasi.getAksebilitas());
+                    i.putExtra("k5", mLokasi.getKerawananBencana());
+                    i.putExtra("k6", mLokasi.getJarakKeBandara());
+                    i.putExtra("luas", mLokasi.getLuasLahan());
+                    //i.putExtra("nama", nama);
+                    context.startActivity(i);
                 }
             });
         }

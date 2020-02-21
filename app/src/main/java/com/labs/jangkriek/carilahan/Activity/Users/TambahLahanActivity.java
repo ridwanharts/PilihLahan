@@ -1,24 +1,21 @@
 package com.labs.jangkriek.carilahan.Activity.Users;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.MediaStore;
-import android.util.Base64;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -32,17 +29,18 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.labs.jangkriek.carilahan.Activity.MainActivity;
 import com.labs.jangkriek.carilahan.POJO.Respon;
+import com.labs.jangkriek.carilahan.PrefConfig;
 import com.labs.jangkriek.carilahan.R;
 import com.labs.jangkriek.carilahan.Utils.RegisterApi;
-import com.labs.jangkriek.carilahan.Utils.ImageUtils;
 import com.labs.jangkriek.carilahan.Utils.Utils;
 import com.mapbox.geojson.Point;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 
+import net.gotev.uploadservice.MultipartUploadRequest;
+import net.gotev.uploadservice.UploadNotificationConfig;
+
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -50,6 +48,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.UUID;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -59,21 +58,15 @@ import retrofit2.Callback;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-import static com.labs.jangkriek.carilahan.Activity.MainActivity.getIdUser;
-import static com.labs.jangkriek.carilahan.Activity.MainActivity.getUsername;
-import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconAllowOverlap;
-import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconImage;
-import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconOffset;
-
 public class TambahLahanActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     private TextView tvLatitude, tvLongitude, tvPlotArea, tvJarakBandara, tvAksebilitas;
     private double lat, longi;
-    private ImageView ivPlotArea;
+    private ImageView ivPlotArea, imageView1, imageView2, imageView3;
     private List<Point> fillLayerPointList = new ArrayList<>();
-    private Bitmap imageBitmap;
-    private ImageView ivUploadGambar, pilihLokasi;
-    private Button btnSelectFoto, btnKirimDataKeServer, btnLihatJenisTanah, btnLihatKair, btnLihatKlereng, btnLihatKbencana, btnLihat;
+    //private Bitmap imageBitmap;
+    private ImageView pilihLokasi;
+    private Button btnKirimDataKeServer, btnLihatJenisTanah, btnLihatKair, btnLihatKlereng, btnLihatKbencana, btnLihat;
     private static final int LATLONG = 10001;
     private static final int ADD_IMAGE_GALERI = 10002;
     private static final int ADD_IMAGE_CAMERA = 10003;
@@ -97,6 +90,15 @@ public class TambahLahanActivity extends AppCompatActivity implements AdapterVie
     private double hargaLahan, luasLahan;
     private int id;
 
+    //upload image
+    public static final String UPLOAD_URL = "http://ridwanharts.000webhostapp.com/upload_images.php";
+    private static final int STORAGE_PERMISSION_CODE = 4655;
+    private static final int PICK_IMAGE_REQUEST1 = 1;
+    private static final int PICK_IMAGE_REQUEST2 = 2;
+    private static final int PICK_IMAGE_REQUEST3 = 3;
+    private Uri filepath1, filepath2, filepath3;
+    private Bitmap bitmap1, bitmap2, bitmap3;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,6 +106,8 @@ public class TambahLahanActivity extends AppCompatActivity implements AdapterVie
         setContentView(R.layout.activity_tambah_lahan);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
+
+        requestStoragePermission();
 
         isEdit = false;
         isPilihLokasi = false;
@@ -142,10 +146,8 @@ public class TambahLahanActivity extends AppCompatActivity implements AdapterVie
 
         }
 
-
-
         jarakLokasiKePointJalanWates();
-        jarakAksebilitas();
+        jarakKeBandara();
 
         Spinner();
 
@@ -158,7 +160,7 @@ public class TambahLahanActivity extends AppCompatActivity implements AdapterVie
         }else {
             Utils point = new Utils();
             pointJalanWates = point.listPointJalanRayaWates();
-
+            jarakPointkeJalanWates.clear();
             LatLng lokasi = new LatLng(lat, longi);
             double jarak = 0;
             for (int i = 0; i < pointJalanWates.size(); i++) {
@@ -172,7 +174,7 @@ public class TambahLahanActivity extends AppCompatActivity implements AdapterVie
 
     }
 
-    private void jarakAksebilitas(){
+    private void jarakKeBandara(){
         if (!isPilihLokasi) {
             tvJarakBandara.setText("0");
         }else {
@@ -186,6 +188,10 @@ public class TambahLahanActivity extends AppCompatActivity implements AdapterVie
 
     public void InitViewAndAction (){
 
+        imageView1 = (ImageView) findViewById(R.id.imageView1);
+        imageView2 = (ImageView) findViewById(R.id.imageView2);
+        imageView3 = (ImageView) findViewById(R.id.imageView3);
+
         spJenisTanah = findViewById(R.id.add_jenis_lahan);
         spKemiringan = findViewById(R.id.add_kemiringan);
         spKair = findViewById(R.id.add_ketersediaan_air);
@@ -194,7 +200,6 @@ public class TambahLahanActivity extends AppCompatActivity implements AdapterVie
         tvLatitude = findViewById(R.id.latitude_add);
         tvLongitude = findViewById(R.id.longitude_add);
         ivPlotArea = findViewById(R.id.iv_plotarea);
-        ivUploadGambar = findViewById(R.id.image_upload);
         pilihLokasi = findViewById(R.id.pilih_lokasi);
         rvLoading = findViewById(R.id.rv_loading);
         //example 20191206-112440222
@@ -281,7 +286,7 @@ public class TambahLahanActivity extends AppCompatActivity implements AdapterVie
                     if (!etLuasLahan.getText().toString().isEmpty()) {
                         if (!etHargaLahan.getText().toString().isEmpty()) {
                             if (isPilihLokasi) {
-                                if (imageBitmap != null) {
+                                if (bitmap1 != null || bitmap2 != null || bitmap3 != null) {
                                     if (fillLayerPointList.size() >= 1) {
                                         rvLoading.setVisibility(View.VISIBLE);
                                         String namaLahan = etNamaLahan.getText().toString();
@@ -293,25 +298,25 @@ public class TambahLahanActivity extends AppCompatActivity implements AdapterVie
                                         String kemiringanLereng = spKemiringan.getSelectedItem().toString();
                                         String kerawananBencana = spKerawanan.getSelectedItem().toString();
                                         double jarakKeBandara = Double.parseDouble(tvJarakBandara.getText().toString());
-                                        int idUser = getIdUser();
+                                        int idUser = PrefConfig.getLoggedInUser(getApplicationContext());
                                         ByteArrayOutputStream out = new ByteArrayOutputStream();
 
                                         if (!isEdit) {
                                             insertDatakeServer(namaLahan, hargaLahan, luasLahan, lat, longi,
                                                     dayaDukungT, ketersediaanAir, kemiringanLereng, aksebilitas, kerawananBencana, jarakKeBandara,
-                                                    createdAt, idUser, imageBitmap);
+                                                    createdAt, idUser);
                                         } else {
 
                                             updateData(namaLahan, hargaLahan, luasLahan, lat, longi,
                                                     dayaDukungT, ketersediaanAir, kemiringanLereng, aksebilitas, kerawananBencana, jarakKeBandara,
-                                                    createdAt, idUser, imageBitmap);
+                                                    createdAt, idUser);
                                         }
                                     } else {
                                         Toast.makeText(getApplicationContext(), "Plot lahan tidak boleh kosong", Toast.LENGTH_SHORT).show();
                                     }
 
                                 } else {
-                                    Toast.makeText(getApplicationContext(), "Foto lahan tidak boleh kosong", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getApplicationContext(), "Harus ada satu foto lahan", Toast.LENGTH_SHORT).show();
                                 }
                             } else {
                                 Toast.makeText(getApplicationContext(), "Pilih lokasi lahan dulu", Toast.LENGTH_SHORT).show();
@@ -326,14 +331,6 @@ public class TambahLahanActivity extends AppCompatActivity implements AdapterVie
                     Toast.makeText(getApplicationContext(), "Anda belum memasukkan Nama Lahan", Toast.LENGTH_SHORT).show();
                 }
 
-            }
-        });
-
-        btnSelectFoto = findViewById(R.id.btn_select_foto);
-        btnSelectFoto.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                pickFromGallery();
             }
         });
 
@@ -354,10 +351,6 @@ public class TambahLahanActivity extends AppCompatActivity implements AdapterVie
             etNamaLahan.setText(namaLahan+"");
             etLuasLahan.setText(luasLahan+"");
 
-            byte[] decodedString = Base64.decode(gambarString, Base64.DEFAULT);
-            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-            imageBitmap = decodedByte;
-            ivUploadGambar.setImageBitmap(decodedByte);
         }
     }
 
@@ -393,6 +386,7 @@ public class TambahLahanActivity extends AppCompatActivity implements AdapterVie
         catKerawanan.add("Tanah Longsor");
         catKerawanan.add("Tsunami");
         catKerawanan.add("Kekeringan");
+        catKerawanan.add("Tidak Ada");
 
         // Creating adapter for spJenisTanah
         ArrayAdapter<String> dataAdapterJenisTanah = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, catJenisTanah);
@@ -426,7 +420,7 @@ public class TambahLahanActivity extends AppCompatActivity implements AdapterVie
                         //imageView.setImageBitmap(selectedImage);
                     }
                     break;
-                case ADD_IMAGE_GALERI:
+                /*case ADD_IMAGE_GALERI:
                     Toast.makeText(TambahLahanActivity.this, "add image galeri", Toast.LENGTH_SHORT).show();
                     if (data != null) {
                         Uri selectedImage =  data.getData();
@@ -439,7 +433,6 @@ public class TambahLahanActivity extends AppCompatActivity implements AdapterVie
 
                                 int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
                                 String picturePath = cursor.getString(columnIndex);
-                                ivUploadGambar.setImageBitmap(BitmapFactory.decodeFile(picturePath));
                                 try {
                                     imageBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);
                                 } catch (IOException e) {
@@ -450,7 +443,7 @@ public class TambahLahanActivity extends AppCompatActivity implements AdapterVie
                         }
 
                     }
-                    break;
+                    break;*/
                 case LATLONG:
                     if (requestCode == LATLONG) {
 
@@ -466,10 +459,14 @@ public class TambahLahanActivity extends AppCompatActivity implements AdapterVie
                     break;
                 case LOKASI:
 
-                    String sLat, sLongi;
+                    String sLat="", sLongi="";
                     if (data != null){
                         sLat = data.getStringExtra("latitude");
                         sLongi = data.getStringExtra("longitude");
+                        if (sLat==null || sLongi==null){
+                            sLat=lat+"";
+                            sLongi=longi+"";
+                        }
                         tvLatitude.setText(sLat);
                         tvLongitude.setText(sLongi);
                         lat = Double.parseDouble(sLat);
@@ -479,52 +476,45 @@ public class TambahLahanActivity extends AppCompatActivity implements AdapterVie
                     }
 
                     jarakLokasiKePointJalanWates();
-                    jarakAksebilitas();
+                    jarakKeBandara();
+                    break;
+
+                case PICK_IMAGE_REQUEST1:
+                    filepath1 = data.getData();
+                    try {
+
+                        bitmap1 = MediaStore.Images.Media.getBitmap(getContentResolver(), filepath1);
+                        imageView1.setImageBitmap(bitmap1);
+                    } catch (Exception ex) {
+
+                    }
+                    break;
+
+                case PICK_IMAGE_REQUEST2:
+                    filepath2 = data.getData();
+                    try {
+
+                        bitmap2 = MediaStore.Images.Media.getBitmap(getContentResolver(), filepath2);
+                        imageView2.setImageBitmap(bitmap2);
+                    } catch (Exception ex) {
+
+                    }
+                    break;
+
+                case PICK_IMAGE_REQUEST3:
+                    filepath3 = data.getData();
+                    try {
+
+                        bitmap3 = MediaStore.Images.Media.getBitmap(getContentResolver(), filepath3);
+                        imageView3.setImageBitmap(bitmap3);
+                    } catch (Exception ex) {
+
+                    }
                     break;
                 default:
                     throw new IllegalStateException("Unexpected value: " + requestCode);
             }
         }
-
-
-    }
-
-    private void pickFromGallery(){
-
-        final CharSequence[] options = { "Buka Kamera", "Pilih dari Galeri","Batal" };
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(TambahLahanActivity.this);
-        builder.setTitle("Pilih Gambar Lahan");
-
-        builder.setItems(options, new DialogInterface.OnClickListener() {
-
-            @Override
-            public void onClick(DialogInterface dialog, int item) {
-
-                final int MyVersion = Build.VERSION.SDK_INT;
-
-                if (MyVersion > Build.VERSION_CODES.LOLLIPOP_MR1) {
-                    if (!checkIfAlreadyhavePermission()) {
-                        ActivityCompat.requestPermissions(TambahLahanActivity.this, new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
-                    } else {
-                        if (options[item].equals("Buka Kamera")) {
-                            Intent takePicture = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                            startActivityForResult(takePicture, ADD_IMAGE_CAMERA );
-
-                        } else if (options[item].equals("Pilih dari Galeri")) {
-                            Intent pickPhoto = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                            startActivityForResult(pickPhoto , ADD_IMAGE_GALERI);
-
-                        } else if (options[item].equals("Batal")) {
-                            dialog.dismiss();
-                        }
-                    }
-                }
-
-
-            }
-        });
-        builder.show();
     }
 
     private boolean checkIfAlreadyhavePermission() {
@@ -532,257 +522,336 @@ public class TambahLahanActivity extends AppCompatActivity implements AdapterVie
         return result == PackageManager.PERMISSION_GRANTED;
     }
 
-    /*public void uploadBitmap(final Bitmap bitmap) {
-
-        //getting the tag from the edittext
-        final String tags = createdAt;
-
-        //our custom volley request
-        VolleyMultipartRequest volleyMultipartRequest = new VolleyMultipartRequest(Request.Method.POST, "https://ridwanharts.000webhostapp.com/upload_images.php",
-                new Response.Listener<NetworkResponse>() {
-                    @Override
-                    public void onResponse(NetworkResponse response) {
-                        try {
-                            JSONObject obj = new JSONObject(new String(response.data));
-                            Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
-                            filePath = "https://ridwanharts.000webhostapp.com/"+obj.getString("file_path");
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                }) {
-
-            *//*
-             * If you want to add more parameters with the image
-             * you can do it here
-             * here we have only one parameter with the image
-             * which is tags
-             * *//*
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> params = new HashMap<>();
-                params.put("tags", tags);
-                return params;
-            }
-
-            *//*
-             * Here we are passing image by renaming it with a unique name
-             * *//*
-            @Override
-            protected Map<String, DataPart> getByteData() {
-                Map<String, DataPart> params = new HashMap<>();
-                long imagename = System.currentTimeMillis();
-                params.put("pic", new DataPart(imagename + ".png", getFileDataFromDrawable(bitmap)));
-                return params;
-            }
-        };
-
-        //adding the request to volley
-        Volley.newRequestQueue(this).add(volleyMultipartRequest);
-    }*/
-
-    public byte[] getFileDataFromDrawable(Bitmap bitmap) {
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 70, byteArrayOutputStream);
-        return byteArrayOutputStream.toByteArray();
-    }
-
     private void insertDatakeServer(String namaLokasi, double hargaLahan, double luasLahan, double lat, double longi,
                                     String ddTanah, String kAir, String kLereng, double aksebilitas, String kBencana, double jBandara,
-                                    String createdAt, int id_user, Bitmap bitmap){
+                                    String createdAt, int id_user){
 
-        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
+        uploadImages(id_user, createdAt);
+
+        new Handler().postDelayed(new Runnable() {
             @Override
-            public void log(String message) {
-                Log.d("", "message : "+message);
-            }
-        });
-        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-        OkHttpClient client = new OkHttpClient.Builder()
-                .addInterceptor(interceptor)
-                .build();
+            public void run() {
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .client(client)
-                .build();
+                //beginretrofit upload
+                HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
+                    @Override
+                    public void log(String message) {
+                        Log.d("", "message : "+message);
+                    }
+                });
+                interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+                OkHttpClient client = new OkHttpClient.Builder()
+                        .addInterceptor(interceptor)
+                        .build();
 
-        String encodedBitmap = ImageUtils.bitmapToBase64String(bitmap, 30);
+                Retrofit retrofit = new Retrofit.Builder()
+                        .baseUrl(URL)
+                        .addConverterFactory(GsonConverterFactory.create())
+                        .client(client)
+                        .build();
 
-        RegisterApi api = retrofit.create(RegisterApi.class);
+                //String encodedBitmap = ImageUtils.bitmapToBase64String(bitmap, 30);
+                String urlPathImage = URL+"image/"+id_user+"/"+createdAt+"/";
 
-        //insert lokasi
-        Call<Respon> call = api.insert_lokasi(
-                namaLokasi, hargaLahan, luasLahan, lat,longi,
-                ddTanah,kAir,kLereng,
-                aksebilitas,kBencana,jBandara,
-                createdAt, id_user, encodedBitmap
-        );
-        call.enqueue(new Callback<Respon>() {
-            @Override
-            public void onResponse(Call<Respon> call, retrofit2.Response<Respon> response) {
+                RegisterApi api = retrofit.create(RegisterApi.class);
 
-                String value = response.body().getValue();
-                String message = response.body().getMessage();
-                if(value.equals("1")){
+                //insert lokasi
+                Call<Respon> call = api.insert_lokasi(
+                        namaLokasi, hargaLahan, luasLahan, lat,longi,
+                        ddTanah,kAir,kLereng,
+                        aksebilitas,kBencana,jBandara,
+                        createdAt, id_user, urlPathImage
+                );
+                call.enqueue(new Callback<Respon>() {
+                    @Override
+                    public void onResponse(Call<Respon> call, retrofit2.Response<Respon> response) {
 
-                    //insert data plot area
-                    for (int i=0;i<fillLayerPointList.size();i++){
-                        Call<Respon> callInsertPlot = api.insert_latlong(i,
-                                fillLayerPointList.get(i).latitude(),fillLayerPointList.get(i).longitude(), getIdUser(),createdAt);
-                        callInsertPlot.enqueue(new Callback<Respon>() {
-                            @Override
-                            public void onResponse(Call<Respon> call, retrofit2.Response<Respon> response) {
-                                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
-                                rvLoading.setVisibility(View.INVISIBLE);
-                                finish();
+                        String value = response.body().getValue();
+                        String message = response.body().getMessage();
+                        if(value.equals("1")){
+
+                            //insert data plot area
+                            for (int i=0;i<fillLayerPointList.size();i++){
+                                Call<Respon> callInsertPlot = api.insert_latlong(i,
+                                        fillLayerPointList.get(i).latitude(),fillLayerPointList.get(i).longitude(), PrefConfig.getLoggedInUser(getApplicationContext()),createdAt);
+                                callInsertPlot.enqueue(new Callback<Respon>() {
+                                    @Override
+                                    public void onResponse(Call<Respon> call, retrofit2.Response<Respon> response) {
+                                        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+                                        rvLoading.setVisibility(View.INVISIBLE);
+                                        finish();
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<Respon> call, Throwable t) {
+                                        rvLoading.setVisibility(View.INVISIBLE);
+                                    }
+                                });
                             }
 
-                            @Override
-                            public void onFailure(Call<Respon> call, Throwable t) {
-                                rvLoading.setVisibility(View.INVISIBLE);
-                            }
-                        });
+                        }else {
+                            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+                            rvLoading.setVisibility(View.INVISIBLE);
+                        }
                     }
 
-                }else {
-                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
-                    rvLoading.setVisibility(View.INVISIBLE);
-                }
+                    @Override
+                    public void onFailure(Call<Respon> call, Throwable t) {
+                        Toast.makeText(getApplicationContext(), "Jaringan Error", Toast.LENGTH_SHORT).show();
+                        rvLoading.setVisibility(View.INVISIBLE);
+                    }
+                });
+                // end retrofit upload
             }
+        }, 7000L);
 
-            @Override
-            public void onFailure(Call<Respon> call, Throwable t) {
-                Toast.makeText(getApplicationContext(), "Jaringan Error", Toast.LENGTH_SHORT).show();
-                rvLoading.setVisibility(View.INVISIBLE);
-            }
-        });
+
     }
 
     private void updateData(String namaLokasi, double hargaLahan, double luasLahan, double lat, double longi,
                             String ddTanah, String kAir, String kLereng, double aksebilitas, String kBencana, double jBandara,
-                            String createdAt, int id_user, Bitmap bitmap){
+                            String createdAt, int id_user) {
 
-        //update data
-        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
+        uploadImages(id_user, createdAt);
+
+        new Handler().postDelayed(new Runnable() {
             @Override
-            public void log(String message) {
-                Log.d("", "message : "+message);
-            }
-        });
-        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-        OkHttpClient client = new OkHttpClient.Builder()
-                .addInterceptor(interceptor)
-                .build();
+            public void run() {
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(URL)
-                .client(client)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
 
-        String encodedBitmap = ImageUtils.bitmapToBase64String(bitmap, 30);
+                //update data
+                HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
+                    @Override
+                    public void log(String message) {
+                        Log.d("", "message : " + message);
+                    }
+                });
+                interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+                OkHttpClient client = new OkHttpClient.Builder()
+                        .addInterceptor(interceptor)
+                        .build();
 
-        RegisterApi api = retrofit.create(RegisterApi.class);
+                Retrofit retrofit = new Retrofit.Builder()
+                        .baseUrl(URL)
+                        .client(client)
+                        .addConverterFactory(GsonConverterFactory.create())
+                        .build();
 
-        //insert lokasi
-        Call<Respon> callUpdate = api.update(
-                id, namaLokasi, hargaLahan, luasLahan, lat,longi,
-                ddTanah,kAir,kLereng,
-                aksebilitas,kBencana,jBandara,
-                createdAt, id_user, encodedBitmap
-        );
-        callUpdate.enqueue(new Callback<Respon>() {
-            @Override
-            public void onResponse(Call<Respon> call, retrofit2.Response<Respon> response) {
-                String value = response.body().getValue();
-                String message = response.body().getMessage();
-                if(value.equals("1")){
+                String urlPathImage = URL + "image/" + id_user + "/" + createdAt + "/";
 
-                    //insert data plot area
-                    for (int i=0;i<fillLayerPointList.size();i++){
-                        Call<Respon> callInsertPlot = api.insert_latlong(i,
-                                fillLayerPointList.get(i).latitude(),fillLayerPointList.get(i).longitude(), getIdUser(),createdAt);
-                        callInsertPlot.enqueue(new Callback<Respon>() {
-                            @Override
-                            public void onResponse(Call<Respon> call, retrofit2.Response<Respon> response) {
-                                String messageFill = response.body().getMessage();
-                                Toast.makeText(getApplicationContext(), messageFill, Toast.LENGTH_SHORT).show();
-                                Log.e("message", messageFill);
-                                Log.e("message", fillLayerPointList.size()+"");
-                                Log.e("create", createdAt);
-                                Log.e("create intent", createdAtIntent);
+                RegisterApi api = retrofit.create(RegisterApi.class);
 
-                                //delete point
-                                deletePolygon(id_user, createdAtIntent);
+                //insert lokasi
+                Call<Respon> callUpdate = api.update(
+                        id, namaLokasi, hargaLahan, luasLahan, lat, longi,
+                        ddTanah, kAir, kLereng,
+                        aksebilitas, kBencana, jBandara,
+                        createdAt, id_user, urlPathImage
+                );
+                callUpdate.enqueue(new Callback<Respon>() {
+                    @Override
+                    public void onResponse(Call<Respon> call, retrofit2.Response<Respon> response) {
+                        String value = response.body().getValue();
+                        String message = response.body().getMessage();
+                        if (value.equals("1")) {
 
-                                rvLoading.setVisibility(View.INVISIBLE);
-                                finish();
+                            //insert data plot area
+                            for (int i = 0; i < fillLayerPointList.size(); i++) {
+                                Call<Respon> callInsertPlot = api.insert_latlong(i,
+                                        fillLayerPointList.get(i).latitude(), fillLayerPointList.get(i).longitude(), PrefConfig.getLoggedInUser(getApplicationContext()), createdAt);
+                                callInsertPlot.enqueue(new Callback<Respon>() {
+                                    @Override
+                                    public void onResponse(Call<Respon> call, retrofit2.Response<Respon> response) {
+                                        String messageFill = response.body().getMessage();
+                                        Toast.makeText(getApplicationContext(), messageFill, Toast.LENGTH_SHORT).show();
+                                        Log.e("message", messageFill);
+                                        Log.e("message", fillLayerPointList.size() + "");
+                                        Log.e("create", createdAt);
+                                        Log.e("create intent", createdAtIntent);
+
+                                        //delete point
+                                        deletePolygon(id_user, createdAtIntent);
+
+                                        rvLoading.setVisibility(View.INVISIBLE);
+                                        finish();
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<Respon> call, Throwable t) {
+                                        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+                                    }
+                                });
                             }
 
-                            @Override
-                            public void onFailure(Call<Respon> call, Throwable t) {
-                                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
-                            }
-                        });
+                        } else {
+                            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+                            rvLoading.setVisibility(View.INVISIBLE);
+                        }
                     }
 
-                }else {
-                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
-                    rvLoading.setVisibility(View.INVISIBLE);
-                }
+                    @Override
+                    public void onFailure(Call<Respon> call, Throwable t) {
+                        Toast.makeText(getApplicationContext(), "Jaringan Error" + t, Toast.LENGTH_SHORT).show();
+                        rvLoading.setVisibility(View.INVISIBLE);
+                    }
+                });
+
             }
 
-            @Override
-            public void onFailure(Call<Respon> call, Throwable t) {
-                Toast.makeText(getApplicationContext(), "Jaringan Error"+ t, Toast.LENGTH_SHORT).show();
-                rvLoading.setVisibility(View.INVISIBLE);
-            }
-        });
+            private void deletePolygon(int idUser, String createdAt) {
 
+                HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
+                    @Override
+                    public void log(String message) {
+                        Log.d("", "message : " + message);
+                    }
+                });
+                interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+                OkHttpClient client = new OkHttpClient.Builder()
+                        .addInterceptor(interceptor)
+                        .build();
+
+                Retrofit retrofit = new Retrofit.Builder()
+                        .baseUrl(URL)
+                        .addConverterFactory(GsonConverterFactory.create())
+                        .client(client)
+                        .build();
+
+                RegisterApi api = retrofit.create(RegisterApi.class);
+                Call<Respon> callInsertPlot = api.delete_polygon(idUser, createdAt);
+                callInsertPlot.enqueue(new Callback<Respon>() {
+                    @Override
+                    public void onResponse(Call<Respon> call, retrofit2.Response<Respon> response) {
+                        String value = response.body().getValue();
+                        String message = response.body().getMessage();
+                        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onFailure(Call<Respon> call, Throwable t) {
+                        Toast.makeText(getApplicationContext(), "Koneksi bermasalah", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                // end retrofit upload
+            }
+        }, 7000L);
     }
 
-    private void deletePolygon(int idUser, String createdAt) {
 
-        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
-            @Override
-            public void log(String message) {
-                Log.d("", "message : "+message);
+    //
+    //
+    //Upload images multiple
+    //
+    //
+    public void iv1(View view) {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST1);
+    }
+
+    public void iv2(View view) {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST2);
+    }
+
+    public void iv3(View view) {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST3);
+    }
+
+
+    private String getPath(Uri uri) {
+
+        Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+        if (cursor != null) {
+            cursor.moveToFirst();
+        }
+        String document_id = cursor.getString(0);
+        document_id = document_id.substring(document_id.lastIndexOf(":") + 1);
+        cursor = getContentResolver().query(
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI, null, MediaStore.Images.Media._ID + "=?", new String[]{document_id}, null
+        );
+        if (cursor != null) {
+            cursor.moveToFirst();
+        }
+        String path = null;
+        if (cursor != null) {
+            path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
+        }
+        if (cursor != null) {
+            cursor.close();
+        }
+        return path;
+    }
+
+    public void uploadImages(int idUser, String created) {
+        String idToUpload = Integer.toString(idUser);
+        String path[] = new String[3];
+        int count = 0;
+        if (filepath1 != null){
+            path[0] = getPath(filepath1);
+            count++;
+        }
+        if (filepath2 != null){
+            path[1] = getPath(filepath2);
+            count++;
+        }
+        if (filepath3 != null){
+            path[2] = getPath(filepath3);
+            count++;
+        }
+
+        try {
+            String uploadId = UUID.randomUUID().toString();
+            MultipartUploadRequest upload = new MultipartUploadRequest(this, uploadId, UPLOAD_URL);
+
+            for(int i=0;i<count;i++){
+                upload.addFileToUpload(path[i], "image")
+                        .addParameter("no",i+"")
+                        .addParameter("name", idToUpload)
+                        .addParameter("created", created);
+                upload.setNotificationConfig(new UploadNotificationConfig());
+                upload.setMaxRetries(3);
+                upload.startUpload();
             }
-        });
-        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-        OkHttpClient client = new OkHttpClient.Builder()
-                .addInterceptor(interceptor)
-                .build();
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .client(client)
-                .build();
 
-        RegisterApi api = retrofit.create(RegisterApi.class);
-        Call<Respon> callInsertPlot = api.delete_polygon(idUser, createdAt);
-        callInsertPlot.enqueue(new Callback<Respon>() {
-            @Override
-            public void onResponse(Call<Respon> call, retrofit2.Response<Respon> response) {
-                String value = response.body().getValue();
-                String message = response.body().getMessage();
-                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+
+        } catch (Exception ex) {
+
+
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == STORAGE_PERMISSION_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this, "Permission granted now you can read the storage", Toast.LENGTH_LONG).show();
+
+            } else {
+                Toast.makeText(this, "Oops you just denied the permission", Toast.LENGTH_LONG).show();
             }
+        }
+    }
 
-            @Override
-            public void onFailure(Call<Respon> call, Throwable t) {
-                Toast.makeText(getApplicationContext(), "Koneksi bermasalah", Toast.LENGTH_SHORT).show();
-            }
-        });
+    private void requestStoragePermission() {
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)
+            return;
+
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
+            //If the user has denied the permission previously your code will come to this block
+            //Here you can explain why you need this permission
+            //Explain here why you need this permission
+        }
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, STORAGE_PERMISSION_CODE);
     }
 
     @Override
@@ -809,4 +878,6 @@ public class TambahLahanActivity extends AppCompatActivity implements AdapterVie
         }
         return super.onOptionsItemSelected(item);
     }
+
+
 }

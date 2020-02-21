@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+<!--    <item
+        android:id="@+id/lihat_tabel"
+        android:title="Lihat Tabel"
+        android:iconTint="@color/mapboxWhite"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_table"/>-->
+
+    <item
+        android:id="@+id/metode_ahp"
+        android:title="Metode AHP"
+        android:iconTint="@color/mapboxWhite"
+        android:icon="@drawable/ic_refresh"/>
+
+    <item
+        android:id="@+id/fahp_perhitungan"
+        android:title="Lihat Perhitungan FAHP"
+        android:iconTint="@color/mapboxWhite"
+        android:icon="@drawable/ic_refresh"/>
+
+<!--    <item
+        android:id="@+id/cek_konsistensi"
+        android:title="Cek Konsistensi"
+        android:iconTint="@color/mapboxWhite"
+        android:icon="@drawable/ic_refresh"/>-->
+
+</menu>

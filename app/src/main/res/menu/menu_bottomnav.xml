@@ -6,10 +6,10 @@
 	android:title="@string/home"
 	android:icon="@drawable/ic_home"/>
 
-  <item
+<!--  <item
 	android:id="@+id/map_menu"
 	android:title="@string/map"
-	android:icon="@drawable/ic_search"/>
+	android:icon="@drawable/ic_search"/>-->
 
   <item
 	android:id="@+id/account_menu"

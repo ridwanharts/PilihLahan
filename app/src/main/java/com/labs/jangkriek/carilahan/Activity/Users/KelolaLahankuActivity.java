@@ -1,9 +1,6 @@
 package com.labs.jangkriek.carilahan.Activity.Users;
 
 import android.Manifest;
-import android.animation.ObjectAnimator;
-import android.animation.TypeEvaluator;
-import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -41,6 +38,7 @@ import com.labs.jangkriek.carilahan.Adapter.KelolaLahankuAdapter;
 import com.labs.jangkriek.carilahan.Database.DbLokasi;
 import com.labs.jangkriek.carilahan.POJO.PointLatLong;
 import com.labs.jangkriek.carilahan.POJO.Respon;
+import com.labs.jangkriek.carilahan.PrefConfig;
 import com.labs.jangkriek.carilahan.R;
 import com.labs.jangkriek.carilahan.Utils.RegisterApi;
 import com.labs.jangkriek.carilahan.Utils.RecyclerTouchListener;
@@ -74,10 +72,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-
-import static com.labs.jangkriek.carilahan.Activity.MainActivity.getIdUser;
-import static com.labs.jangkriek.carilahan.Activity.MainActivity.getUsername;
-import static com.labs.jangkriek.carilahan.Activity.MainActivity.idUser;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.fillColor;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.fillOpacity;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.fillOutlineColor;
@@ -125,16 +119,18 @@ public class KelolaLahankuActivity extends AppCompatActivity implements OnMapRea
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         Mapbox.getInstance(this, getString(R.string.access_token));
-
         setContentView(R.layout.activity_kelola_lahanku);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
 
         if (getSupportActionBar() == null){
             setSupportActionBar(toolbar);
         }
+
+        String a = PrefConfig.getTypeLogin(getApplicationContext());
+        String b = PrefConfig.getUsernameLogin(getApplicationContext());
+        int c = PrefConfig.getLoggedInUser(getApplicationContext());
         if (getSupportActionBar() != null){
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -213,8 +209,9 @@ public class KelolaLahankuActivity extends AppCompatActivity implements OnMapRea
                 .client(client)
                 .build();
 
+        int id = PrefConfig.getLoggedInUser(getApplicationContext());
         RegisterApi api = retrofit.create(RegisterApi.class);
-        Call<Respon> call = api.view_lokasi_user(getIdUser());
+        Call<Respon> call = api.view_lokasi_user(id);
         call.enqueue(new Callback<Respon>() {
             @Override
             public void onResponse(Call<Respon> call, Response<Respon> response) {
@@ -234,7 +231,7 @@ public class KelolaLahankuActivity extends AppCompatActivity implements OnMapRea
                         Toast.makeText(getApplicationContext(),"Data lahan berhasil didownload "+lokasiListFromServer.size(), Toast.LENGTH_SHORT).show();
                         rvLoading.setVisibility(View.INVISIBLE);
                     }else{
-                        Toast.makeText(getApplicationContext(),"Anda belum menambahkan data lahan "+message, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(),"Anda belum memiliki data lahan ", Toast.LENGTH_SHORT).show();
                         Log.e("message ", message);
                         rvLoading.setVisibility(View.INVISIBLE);
                     }
@@ -261,7 +258,7 @@ public class KelolaLahankuActivity extends AppCompatActivity implements OnMapRea
         for (int i=0;i<lokasiListFromServer.size();i++){
 
             //if data lahan sama dgn id user
-            if (lokasiListFromServer.get(i).getId_user() == getIdUser()){
+            if (lokasiListFromServer.get(i).getId_user() == PrefConfig.getLoggedInUser(getApplicationContext())){
                 //get data created at disimpan ke list
                 lokasiListUser.add(lokasiListFromServer.get(i));
                 listCreatedAt.add(lokasiListFromServer.get(i).getCreated_at());
@@ -299,7 +296,7 @@ public class KelolaLahankuActivity extends AppCompatActivity implements OnMapRea
         lokasiCollection = FeatureCollection.fromFeatures(new Feature[] {});
         List<Feature> lokasiList = new ArrayList<>();
         for(int i=0;i<lokasiListFromServer.size();i++) {
-            if (lokasiListFromServer.get(i).getId_user() == getIdUser()) {
+            if (lokasiListFromServer.get(i).getId_user() == PrefConfig.getLoggedInUser(getApplicationContext())) {
                 lokasi[i] = new LatLng(lokasiListFromServer.get(i).getLatitude(), lokasiListFromServer.get(i).getLongitude());
                 lokasiList.add(Feature.fromGeometry(Point.fromLngLat(lokasi[i].getLongitude(), lokasi[i].getLatitude())));
             }
@@ -311,40 +308,48 @@ public class KelolaLahankuActivity extends AppCompatActivity implements OnMapRea
     private void initFillLayer(@NonNull Style loadedMapStyle) {
 
         if (reset){
-            loadedMapStyle.removeLayer("layer-id11");
-            loadedMapStyle.removeSource("source-id11");
+            if (loadedMapStyle.isFullyLoaded()) {
+                loadedMapStyle.removeLayer("layer-id11");
+                loadedMapStyle.removeSource("source-id11");
+            }
         }
         Log.e("size", listCreatedAt.size()+"");
         for (int i=0;i<listCreatedAt.size();i++){
             POINTS.add(dataPointHash.get(listCreatedAt.get(i)));
         }
 
-        loadedMapStyle.addSource(new GeoJsonSource("source-id11", Polygon.fromLngLats(POINTS)));
-        loadedMapStyle.addLayerBelow(new FillLayer("layer-id11", "source-id11").withProperties(
-                fillOpacity(0.4f),
-                fillColor(Color.parseColor("#f74e4e"))
-                ), LAYER_ID
-        );
+        if (loadedMapStyle.isFullyLoaded()) {
+            loadedMapStyle.addSource(new GeoJsonSource("source-id11", Polygon.fromLngLats(POINTS)));
+            loadedMapStyle.addLayerBelow(new FillLayer("layer-id11", "source-id11").withProperties(
+                    fillOpacity(0.4f),
+                    fillColor(Color.parseColor("#f74e4e"))
+                    ), LAYER_ID
+            );
+        }
 
     }
 
     private void initMarkerIcons(@NonNull Style loadedMapStyle) {
 
         if (reset){
-            loadedMapStyle.removeLayer(LAYER_ID);
-            loadedMapStyle.removeSource(SOURCE_ID);
+            if (loadedMapStyle.isFullyLoaded()) {
+                loadedMapStyle.removeLayer(LAYER_ID);
+                loadedMapStyle.removeSource(SOURCE_ID);
+            }
         }
 
         Drawable drawable = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_loc_blue, null);
         Bitmap bitmap = BitmapUtils.getBitmapFromDrawable(drawable);
 
-        loadedMapStyle.addImage(SYMBOL_ICON_ID, bitmap);
-        loadedMapStyle.addSource(new GeoJsonSource(SOURCE_ID, lokasiCollection));
-        loadedMapStyle.addLayer(new SymbolLayer(LAYER_ID, SOURCE_ID).withProperties(
-                iconImage(SYMBOL_ICON_ID),
-                iconAllowOverlap(true),
-                iconOffset(new Float[] {0f, -4f})
-        ));
+        if (loadedMapStyle.isFullyLoaded()) {
+            loadedMapStyle.addImage(SYMBOL_ICON_ID, bitmap);
+            loadedMapStyle.addSource(new GeoJsonSource(SOURCE_ID, lokasiCollection));
+            loadedMapStyle.addLayer(new SymbolLayer(LAYER_ID, SOURCE_ID).withProperties(
+                    iconImage(SYMBOL_ICON_ID),
+                    iconAllowOverlap(true),
+                    iconOffset(new Float[]{0f, -4f})
+            ));
+        }
     }
 
     @Override
@@ -459,7 +464,6 @@ public class KelolaLahankuActivity extends AppCompatActivity implements OnMapRea
         setResult(RESULT_OK);
         super.onBackPressed();
         Intent a = new Intent(this, MainActivity.class);
-        a.putExtra("LOGIN", getUsername());
         a.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(a);
         finish();
@@ -486,204 +490,5 @@ public class KelolaLahankuActivity extends AppCompatActivity implements OnMapRea
         getMenuInflater().inflate(R.menu.refresh_menu, menu);
         return true;
     }
-
-        /*private void showActionsDialog(final int position) {
-        CharSequence[] colors = new CharSequence[]{"Edit", "Delete"};
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Choose option");
-        builder.setItems(colors, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if (which == 0) {
-                    showNoteDialog(true, lokasiList.get(position), position);
-                } else {
-                    deleteLokasi(position);
-                }
-            }
-        });
-        builder.show();
-    }*/
-
-    /*private void showNoteDialog(final boolean shouldUpdate, final Lokasi lokasi, final int position) {
-        LayoutInflater layoutInflaterAndroid = LayoutInflater.from(getApplicationContext());
-        View view = layoutInflaterAndroid.inflate(R.bubble_info.dialog_lokasi, null);
-
-        AlertDialog.Builder alertDialogBuilderUserInput = new AlertDialog.Builder(KelolaLahankuActivity.this);
-        alertDialogBuilderUserInput.setView(view);
-
-        final EditText inputNote = view.findViewById(R.id.et_nama_lokasi);
-        TextView etLatitude = view.findViewById(R.id.et_latitude);
-        TextView etLongitude = view.findViewById(R.id.et_longitude);
-        EditText etDayaDukungTanah = view.findViewById(R.id.et_dd_tanah);
-        EditText etKetersediaanAir = view.findViewById(R.id.et_k_air);
-        EditText etKemiringanLereng = view.findViewById(R.id.et_k_lereng);
-        EditText etAksebilitas = view.findViewById(R.id.et_aksebilitas);
-        EditText etPerubahanLahan = view.findViewById(R.id.et_p_lahan);
-        EditText etKerawananBencana = view.findViewById(R.id.et_k_bencana);
-        EditText etJarakBandara = view.findViewById(R.id.et_j_bandara);
-
-        ImageView ivUploadGambar = view.findViewById(R.id.iv_upload_lokasi);
-        ivUploadGambar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-
-        if (shouldUpdate && lokasi != null) {
-            inputNote.setText(lokasi.getUsername());
-
-        }
-        etLatitude.setText(tvLatitudeLokasi.getText());
-        etLongitude.setText(tvLongitudeLokasi.getText());
-
-        alertDialogBuilderUserInput
-                .setCancelable(false)
-                .setPositiveButton(shouldUpdate ? "update" : "save", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialogBox, int id) {
-
-                    }
-                })
-                .setNegativeButton("cancel",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialogBox, int id) {
-                                dialogBox.cancel();
-                            }
-                        });
-
-        final AlertDialog alertDialog = alertDialogBuilderUserInput.create();
-        alertDialog.show();
-
-        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Show toast message when no text is entered
-                double tempDDTanah = Double.parseDouble(etDayaDukungTanah.getText().toString());
-                double tempKAir = Double.parseDouble(etKetersediaanAir.getText().toString());
-                double tempKLereng = Double.parseDouble(etKemiringanLereng.getText().toString());
-                double tempAksebilitas = Double.parseDouble(etAksebilitas.getText().toString());
-                double tempPLahan = Double.parseDouble(etPerubahanLahan.getText().toString());
-                double tempKBencana = Double.parseDouble(etKerawananBencana.getText().toString());
-                double tempJBandara = Double.parseDouble(etJarakBandara.getText().toString());
-
-                if (TextUtils.isEmpty(inputNote.getText().toString())) {
-                    Toast.makeText(KelolaLahankuActivity.this, "!", Toast.LENGTH_SHORT).show();
-                    return;
-                } else {
-                    alertDialog.dismiss();
-                }
-
-                // check if user updating note
-                if (shouldUpdate && lokasi != null) {
-                    // update note by it's idg
-                    updateLokasi(inputNote.getText().toString(), position);
-                } else {
-                    // create new note
-
-                    createLokasi(inputNote.getText().toString(), Double.parseDouble(lat), Double.parseDouble(longi),
-                            tempDDTanah,tempKAir,tempKLereng,
-                            tempAksebilitas,tempPLahan,tempKBencana,tempJBandara,
-                            0, imageBitmap);
-
-                }
-            }
-        });
-    }*/
-
-    /*private void createLokasi(String namaLokasi, double lat, double longi,
-                              double ddTanah, double kAir, double kLereng, double aksebilitas,
-                              double pLahan, double kBencana, double jBandara, int a, Bitmap bitmap) {
-        // inserting note in db and getting
-        // newly inserted note id
-        long id = db.insertLokasi(namaLokasi, lat, longi, ddTanah, kAir, kLereng, aksebilitas, pLahan, kBencana, jBandara, a, bitmap);
-
-        // get the newly inserted note from db
-        //Lokasi n = db.getLokasi(id);
-
-        *//*if (n != null) {
-            // adding new note to array list at 0 position
-            lokasiList.add(0, n);
-
-            // refreshing the list
-            mAdapter.notifyDataSetChanged();
-
-            toggleEmptyNotes();
-        }*//*
-    }*/
-
-    /*private void updateLokasi(String note, int position) {
-        Lokasi n = lokasiList.get(position);
-        // updating note text
-        n.setUsername(note);
-
-        // updating note in db
-        db.updateLokasi(n);
-
-        // refreshing the list
-        lokasiList.set(position, n);
-        mAdapter.notifyItemChanged(position);
-
-        toggleEmptyNotes();
-    }*/
-
-    /*private void deleteLokasi(int position) {
-
-        // delete pada database server
-        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
-            @Override
-            public void log(@NotNull String message) {
-                //Log.d("", "message : "+message);
-            }
-        });
-        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-        OkHttpClient client = new OkHttpClient.Builder()
-                .addInterceptor(interceptor)
-                .build();
-
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .client(client)
-                .build();
-
-        RegisterApi api = retrofit.create(RegisterApi.class);
-        Call<Respon> call = api.delete(
-                lokasiList.get(position).getUsername(),
-                lokasiList.get(position).getLatitude(),
-                lokasiList.get(position).getLongitude()
-
-        );
-        call.enqueue(new Callback<Respon>() {
-            @Override
-            public void onResponse(Call<Respon> call, retrofit2.Response<Respon> response) {
-                String value = response.body().getValue();
-                String message = response.body().getMessage();
-                if(value.equals("1")){
-                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
-                }else {
-                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(@NotNull Call<Respon> call, Throwable t) {
-                Toast.makeText(context, "Jaringan Error", Toast.LENGTH_SHORT).show();
-                //Log.d("cek lagi", ""+call);
-            }
-        });
-
-        // deleting the note from db lokal
-        db.deleteLokasi(lokasiList.get(position));
-
-        // removing the note from the list
-        lokasiList.remove(position);
-        mAdapter.notifyItemRemoved(position);
-
-
-
-        toggleEmptyNotes();
-    }*/
-
 
 }

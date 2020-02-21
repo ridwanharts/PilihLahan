@@ -32,17 +32,14 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-import static com.labs.jangkriek.carilahan.Activity.MainActivity.getIdUser;
-import static com.labs.jangkriek.carilahan.Activity.MainActivity.getUsername;
-
 public class MetodeActivity extends AppCompatActivity {
 
     private CardView cvFahp;
 
     private static final String URL = "https://ridwanharts.000webhostapp.com/";
 
-    private static List<Lokasi> lokasiListFromServer = new ArrayList<>();
     private static List<Lokasi> lokasiListUser = new ArrayList<>();
+    private static List<Lokasi> lokasiListFromServer = new ArrayList<>();
     private static List<PointLatLong> userLatLongListFromServer = new ArrayList<>();
     private static HashMap<String, List<Point>> dataPointHash = new HashMap<String, List<Point>>();
     ArrayList<String> listCreatedAt = new ArrayList<String>();
@@ -79,7 +76,7 @@ public class MetodeActivity extends AppCompatActivity {
             }
         });
 
-        getListLokasitoProcess();
+        //getListLokasitoProcess();
     }
 
     public static List<Lokasi> getListLokasitoProcess() {
@@ -158,7 +155,6 @@ public class MetodeActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         Intent a = new Intent(this, MainActivity.class);
-        a.putExtra("LOGIN", getUsername());
         a.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(a);
         finish();

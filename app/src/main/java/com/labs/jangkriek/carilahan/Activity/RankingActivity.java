@@ -31,6 +31,7 @@ import com.labs.jangkriek.carilahan.POJO.RankingLokasi;
 import com.labs.jangkriek.carilahan.Adapter.RankingLokasiAdapter;
 import com.labs.jangkriek.carilahan.Database.DbRangkingLokasi;
 import com.labs.jangkriek.carilahan.Database.DbSavePencarian;
+import com.labs.jangkriek.carilahan.PrefConfig;
 import com.labs.jangkriek.carilahan.R;
 import com.labs.jangkriek.carilahan.Utils.Utils;
 import com.mapbox.geojson.Feature;
@@ -59,11 +60,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
-import static com.labs.jangkriek.carilahan.Activity.MainActivity.getIdUser;
-import static com.labs.jangkriek.carilahan.Activity.MainActivity.getUsername;
-import static com.labs.jangkriek.carilahan.Activity.MainActivity.loginType;
-import static com.labs.jangkriek.carilahan.MetodeActivity.getListLokasitoProcess;
-import static com.labs.jangkriek.carilahan.MetodeActivity.getListPointtoProcess;
+import static com.labs.jangkriek.carilahan.mainViewFragment.GuestHomeFragment.getListLokasitoProcessGuest;
+import static com.labs.jangkriek.carilahan.mainViewFragment.GuestHomeFragment.getListPointtoProcessGuest;
+import static com.labs.jangkriek.carilahan.mainViewFragment.UsersHomeFragment.getListLokasitoProcess;
+import static com.labs.jangkriek.carilahan.mainViewFragment.UsersHomeFragment.getListPointtoProcess;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.fillColor;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.fillOpacity;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconAllowOverlap;
@@ -91,7 +91,7 @@ public class RankingActivity extends AppCompatActivity implements OnMapReadyCall
     private RecyclerView recyclerView;
     private RankingLokasiAdapter rankingLokasiAdapter;
     public static ArrayList<Prioritas> prioritas = new ArrayList<Prioritas>();
-    public String inputTipe;
+    public String inputTipe, metode;
 
     public MapboxMap mapboxMap;
     private MapView mapView;
@@ -106,6 +106,8 @@ public class RankingActivity extends AppCompatActivity implements OnMapReadyCall
     Date date = new Date();
     String create;
     String idGroup;
+    String saveMetode="";
+    String kriteria="";
 
     //Button btnSaveRank;
 
@@ -134,8 +136,12 @@ public class RankingActivity extends AppCompatActivity implements OnMapReadyCall
 
         lokasiList = getListLokasitoProcess();
         pointLatLongList = getListPointtoProcess();
+        if (PrefConfig.getTypeLogin(getApplicationContext()).equals("GUEST")){
+            lokasiList = getListLokasitoProcessGuest();
+            pointLatLongList = getListPointtoProcessGuest();
+        }
 
-        nilaiVektorBobot = HitungFuzzyAHP.getVektorBobot();
+
         //dbLokasi = new DbUserLokasi(this);
         //dbRangkingLokasi = new DbRangkingLokasi(this);
         dbSavePencarian = new DbSavePencarian(this);
@@ -148,6 +154,7 @@ public class RankingActivity extends AppCompatActivity implements OnMapReadyCall
 
         Intent intent = getIntent();
         inputTipe = intent.getStringExtra(getString(R.string.INPUT_TIPE));
+        metode = intent.getStringExtra(getString(R.string.metode));
         k1 = intent.getBooleanExtra("k1", k1);
         k2 = intent.getBooleanExtra("k2", k2);
         k3 = intent.getBooleanExtra("k3", k3);
@@ -156,8 +163,14 @@ public class RankingActivity extends AppCompatActivity implements OnMapReadyCall
         k6 = intent.getBooleanExtra("k6", k6);
         k7 = intent.getBooleanExtra("k7", k7);
 
-        Toast.makeText(getApplicationContext(),""+prioritas.size(), Toast.LENGTH_SHORT).show();
+        Log.e("eror metode ",""+metode);
+        if (metode.equals("AHP")){
+            nilaiVektorBobot = PilihKriteria.getVektorBobotAhp();
+        }else {
+            nilaiVektorBobot = PilihKriteria.getVektorBobot();
+        }
 
+        //Toast.makeText(getApplicationContext(),""+prioritas.size(), Toast.LENGTH_SHORT).show();
 
     }
 
@@ -170,8 +183,36 @@ public class RankingActivity extends AppCompatActivity implements OnMapReadyCall
     }
 
     private void savePencarian() {
+        Log.e("metode",""+metode);
 
-        String group = idGroup+create+getIdUser();
+        if (k1){
+            kriteria = kriteria + getString(R.string.K1_DAYA_DUKUNG_TANAH);
+        }
+        if (k2){
+            kriteria = kriteria + ", " + getString(R.string.K2_KETERSEDIAAN_AIR);
+        }
+        if (k3){
+            kriteria = kriteria + ", " + getString(R.string.K3_KEMIRINGAN_LERENG);
+        }
+        if (k4){
+            kriteria = kriteria + ", " + getString(R.string.K4_AKSEBILITAS);
+        }
+        if (k5){
+            kriteria = kriteria + ", " + getString(R.string.K5_HARGA_LAHAN);
+        }
+        if (k6){
+            kriteria = kriteria + ", " + getString(R.string.K6_KERAWANAN_BENCANA);
+        }
+        if (k7){
+            kriteria = kriteria + ", " + getString(R.string.K7_JARAK_KE_BANDARA);
+        }
+
+        saveMetode = "FAHP";
+        if (metode.equals("AHP")){
+            saveMetode = "AHP";
+        }
+
+        String group = idGroup+create+ PrefConfig.getLoggedInUser(getApplicationContext());
         Log.e("",""+group);
         for (int i=0;i<3;i++){
             dbSavePencarian.insertSaveLokasi(
@@ -191,7 +232,9 @@ public class RankingActivity extends AppCompatActivity implements OnMapReadyCall
 
                     rangkingLokasiList.get(i).getId_user(),
                     rangkingLokasiList.get(i).getGambar(),
-                    create);
+                    create,
+                    saveMetode,
+                    kriteria);
         }
 
 
@@ -210,11 +253,11 @@ public class RankingActivity extends AppCompatActivity implements OnMapReadyCall
                 if (inputTipe.equals(getString(R.string.INPUT_MANUAL))) {
                     initKriteriaTrue();
                     hitungDataxVektorBobot();
-                    Toast.makeText(getApplicationContext(),""+inputTipe, Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getApplicationContext(),""+inputTipe, Toast.LENGTH_SHORT).show();
                 }
                 if (inputTipe.equals(getString(R.string.INPUT_OTOMATIS))){
                     nilaiBobotxData();
-                    Toast.makeText(getApplicationContext(),""+inputTipe, Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getApplicationContext(),""+inputTipe, Toast.LENGTH_SHORT).show();
                 }
                 insertDbRank();
                 initRecyclerViewRank();
@@ -236,46 +279,16 @@ public class RankingActivity extends AppCompatActivity implements OnMapReadyCall
     private void initKriteriaTrue() {
         Boolean tempK1 = k1, tempK2 = k2, tempK3 = k3, tempK4 = k4, tempK5 = k5, tempK6 = k6, tempK7 = k7;
         for (int i = 0; i < nilaiVektorBobot.length; i++) {
-            if (tempK1) {
-                nilaiK1 = nilaiVektorBobot[i];
-                tempK1 = false;
-                i++;
-            }
-            if (tempK2) {
-                nilaiK2 = nilaiVektorBobot[i];
-                tempK2 = false;
-                i++;
-            }
-            if (tempK3) {
-                nilaiK3 = nilaiVektorBobot[i];
-                tempK3 = false;
-                i++;
-            }
-            if (tempK4) {
-                nilaiK4 = nilaiVektorBobot[i];
-                tempK4 = false;
-                i++;
-            }
-            if (tempK5) {
-                nilaiK5 = nilaiVektorBobot[i];
-                tempK5 = false;
-                i++;
-            }
-            if (tempK6) {
-                nilaiK6 = nilaiVektorBobot[i];
-                tempK6 = false;
-                i++;
-            }
-            if (tempK7) {
-                nilaiK7 = nilaiVektorBobot[i];
-                tempK7 = false;
-                i++;
-            }
+            if (tempK1) { nilaiK1 = nilaiVektorBobot[i]; tempK1 = false; i++; }
+            if (tempK2) { nilaiK2 = nilaiVektorBobot[i]; tempK2 = false; i++; }
+            if (tempK3) { nilaiK3 = nilaiVektorBobot[i]; tempK3 = false; i++; }
+            if (tempK4) { nilaiK4 = nilaiVektorBobot[i]; tempK4 = false; i++; }
+            if (tempK5) { nilaiK5 = nilaiVektorBobot[i]; tempK5 = false; i++; }
+            if (tempK6) { nilaiK6 = nilaiVektorBobot[i]; tempK6 = false; i++; }
+            if (tempK7) { nilaiK7 = nilaiVektorBobot[i]; tempK7 = false; i++; }
         }
     }
 
-    //
-    //
     //nilai vektor bobot dikali dengan list data yang diambil dari database dblokasiuser
     private void hitungDataxVektorBobot() {
 
@@ -375,7 +388,8 @@ public class RankingActivity extends AppCompatActivity implements OnMapReadyCall
         Log.e("nilai bobot 7"," "+nilaiBobotK7);
 
         String kriteria, textKriteria;
-        int nilai = 0;
+        double nilaiK = 0;
+        double nilai = 0;
 
         for (int i = 0; i < lokasiList.size(); i++) {
             if (k1) {
@@ -397,10 +411,16 @@ public class RankingActivity extends AppCompatActivity implements OnMapReadyCall
                 kLereng[i] = nilai * nilaiBobotK3;
             }
             if (k4) {
-                aksebilitas[i] = lokasiList.get(i).getAksebilitas() * nilaiBobotK4;
+                kriteria = "k4";
+                nilaiK = lokasiList.get(i).getAksebilitas();
+                nilai = konversiDoubletoNilai(nilaiK, kriteria);
+                aksebilitas[i] = nilai * nilaiBobotK4;
             }
             if (k5) {
-                pLahan[i] = lokasiList.get(i).getHargaLahan() * nilaiBobotK5;
+                kriteria = "k5";
+                nilaiK = lokasiList.get(i).getHargaLahan();
+                nilai = konversiDoubletoNilai(nilaiK, kriteria);
+                pLahan[i] = nilai * nilaiBobotK5;
             }
             if (k6) {
                 kriteria = "k6";
@@ -409,47 +429,60 @@ public class RankingActivity extends AppCompatActivity implements OnMapReadyCall
                 kBencana[i] = nilai * nilaiBobotK6;
             }
             if (k7) {
-                jBandara[i] = lokasiList.get(i).getJarakKeBandara() * nilaiBobotK7;
+                kriteria = "k7";
+                nilaiK = lokasiList.get(i).getJarakKeBandara();
+                nilai = konversiDoubletoNilai(nilaiK, kriteria);
+                jBandara[i] = nilai * nilaiBobotK7;
             }
             lokasiList.get(i).setJumlah(ddTanah[i] + kAir[i] + kLereng[i] + aksebilitas[i] + pLahan[i] + kBencana[i] + jBandara[i]);
+            Log.i(""+i+" k1 ",""+ddTanah[i]/nilaiBobotK1+" x " +ddTanah[i]);
+            Log.i(""+i+" k2 ",""+ kAir[i]/nilaiBobotK2+" x " +kAir[i]);
+            Log.i(""+i+" k3 ",""+ kLereng[i]/nilaiBobotK3+" x " +kLereng[i]);
+            Log.i(""+i+" k4 ",""+ aksebilitas[i]/nilaiBobotK4+" x " +aksebilitas[i]);
+            Log.i(""+i+" k5 ",""+ pLahan[i]/nilaiBobotK5+" x " +pLahan[i]);
+            Log.i(""+i+" k6 ",""+ kBencana[i]/nilaiBobotK6+" x " +kBencana[i]);
+            Log.i(""+i+" k7 ",""+ jBandara[i]/nilaiBobotK7+" x " +jBandara[i]);
+            Log.i("Jumlah nilai "+i," -- "+lokasiList.get(i).getJumlah());
+
         }
+
     }
 
 
-    private int konversiStringtoNilai(String text, String kriteria) {
+    private double konversiStringtoNilai(String text, String kriteria) {
 
-        int nilai = 0;
+        double nilai = 0;
         if (kriteria.equals("k1")) {
             if (text.equals("Regosol")) {
                 nilai = 1;
-            } else if (text.equals("Latosol")) {
-                nilai = 2;
             } else if (text.equals("Kambisol")) {
-                nilai = 3;
+                nilai = 2;
             } else if (text.equals("Grumusol")) {
+                nilai = 3;
+            } else if (text.equals("Latosol")) {
                 nilai = 4;
             }
         } else if (kriteria.equals("k2")) {
             if (text.equals("5 - 25 liter/detik")) {
-                nilai = 1;
+                nilai = 4;
             } else if (text.equals("< 5 liter/detik")) {
-                nilai = 2;
+                nilai = 2.5;
             } else if (text.equals("Tidak Ada")) {
-                nilai = 3;
+                nilai = 1;
             }
         }else if (kriteria.equals("k3")) {
             if (text.equals("0 - 2 %")) {
-                nilai = 1;
-            } else if (text.equals("2 - 5 %")) {
-                nilai = 2;
-            } else if (text.equals("5 - 15 %")) {
-                nilai = 3;
-            } else if (text.equals("15 - 25 %")) {
                 nilai = 4;
+            } else if (text.equals("2 - 5 %")) {
+                nilai = 3;
+            } else if (text.equals("5 - 15 %")) {
+                nilai = 2.5;
+            } else if (text.equals("15 - 25 %")) {
+                nilai = 2;
             } else if (text.equals("25 - 40 %")) {
-                nilai = 5;
+                nilai = 1.5;
             } else if (text.equals("> 40 %")) {
-                nilai = 6;
+                nilai = 1;
             }
         }else if (kriteria.equals("k6")) {
             if (text.equals("Kekeringan")) {
@@ -461,12 +494,53 @@ public class RankingActivity extends AppCompatActivity implements OnMapReadyCall
             } else if (text.equals("Tsunami")) {
                 nilai = 1;
             } else if (text.equals("Tidak Ada")) {
-                nilai = 2;
+                nilai = 4;
             }
         }
 
             return nilai;
         }
+
+    private int konversiDoubletoNilai(Double text, String kriteria) {
+
+        int nilai = 0;
+        switch (kriteria) {
+            case "k4":
+                if (text < 100) {
+                    nilai = 4;
+                } else if (text >= 100 && text < 500) {
+                    nilai = 3;
+                } else if (text >= 500 && text < 1000) {
+                    nilai = 2;
+                } else if (text >= 1000) {
+                    nilai = 1;
+                }
+                break;
+            case "k5":
+                if (text < 500000) {
+                    nilai = 4;
+                } else if (text >= 500000 && text < 800000) {
+                    nilai = 3;
+                } else if (text >= 800000 && text < 1000000) {
+                    nilai = 2;
+                }else if (text >= 1000000) {
+                    nilai = 1;
+                }
+                break;
+            case "k7":
+                if (text < 5) {
+                    nilai = 4;
+                } else if (text >= 5 && text < 10) {
+                    nilai = 3;
+                } else if (text >= 10 && text < 20) {
+                    nilai = 2;
+                } else if (text >= 20) {
+                    nilai = 1;
+                }
+                break;
+        }
+        return nilai;
+    }
 
     //save hasil ranking
     private void insertDbRank() {
@@ -602,6 +676,9 @@ public class RankingActivity extends AppCompatActivity implements OnMapReadyCall
 
         if (item.getItemId()==R.id.detail){
             int jumlah = dbSavePencarian.getRankLokasiCount();
+            for (int i=0;i<nilaiVektorBobot.length;i++){
+                Log.e("",""+nilaiVektorBobot[i]);
+            }
             Toast.makeText(getApplicationContext(),"Detail Perhitungan : "+jumlah, Toast.LENGTH_SHORT).show();
         }
 
@@ -616,7 +693,7 @@ public class RankingActivity extends AppCompatActivity implements OnMapReadyCall
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
 
-        if (loginType.equals("GUEST")){
+        if (PrefConfig.getTypeLogin(getApplicationContext()).equals("GUEST")){
             menu.findItem(R.id.save).setVisible(false);
             this.invalidateOptionsMenu();
         }
@@ -677,7 +754,6 @@ public class RankingActivity extends AppCompatActivity implements OnMapReadyCall
         super.onBackPressed();
         if (selesai) {
             Intent a = new Intent(this, MainActivity.class);
-            a.putExtra("LOGIN", getUsername());
             a.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(a);
             finish();

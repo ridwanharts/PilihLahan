@@ -10,20 +10,24 @@ import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 import com.labs.jangkriek.carilahan.R;
+import com.labs.jangkriek.carilahan.Utils.Utils;
+
 import java.util.List;
 
 public class PrioritasKriteriaAdapter extends RecyclerView.Adapter<PrioritasKriteriaAdapter.ViewHolder> {
 
     private List<String> listKriteria;
+    private  List<Double> listVektorPrioritas;
     private LayoutInflater mInflater;
     private ItemClickListener mClickListener;
     private Context mContext;
 
     // data is passed into the constructor
-    public PrioritasKriteriaAdapter(Context context, List<String> listKriteria) {
+    public PrioritasKriteriaAdapter(Context context, List<String> listKriteria, List<Double> listVektorPrioritas) {
         this.mContext = context;
         this.mInflater = LayoutInflater.from(context);
         this.listKriteria = listKriteria;
+        this.listVektorPrioritas = listVektorPrioritas;
     }
 
     // inflates the row layout from xml when needed
@@ -37,8 +41,11 @@ public class PrioritasKriteriaAdapter extends RecyclerView.Adapter<PrioritasKrit
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         String kriteria = listKriteria.get(position);
+        double vektorPrioritas = listVektorPrioritas.get(position);
         int no = position+1;
+        Utils a = new Utils();
         holder.tvNamaKriteria.setText(kriteria);
+        holder.tvVektorPrioritas.setText(a.formatDecimal(vektorPrioritas*100)+"");
         if (holder.tvNamaKriteria.getText().toString().equals("Pilihan Masih Kosong")){
             holder.btnNo.setText("-");
         }else {
@@ -49,7 +56,7 @@ public class PrioritasKriteriaAdapter extends RecyclerView.Adapter<PrioritasKrit
             @Override
             public void onClick(View v) {
 
-                Toast.makeText(mContext, ""+no, Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, ""+a.formatDecimal(vektorPrioritas*100), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -63,12 +70,14 @@ public class PrioritasKriteriaAdapter extends RecyclerView.Adapter<PrioritasKrit
     // stores and recycles views as they are scrolled off screen
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView tvNamaKriteria;
+        TextView tvVektorPrioritas;
         Button btnNo;
 
 
         ViewHolder(View itemView) {
             super(itemView);
             tvNamaKriteria = itemView.findViewById(R.id.tv_nama_pkriteria);
+            tvVektorPrioritas = itemView.findViewById(R.id.tv_vektor_prioritas);
             btnNo = itemView.findViewById(R.id.btn_no_prioritas);
             itemView.setOnClickListener(this);
         }
