@@ -1,6 +1,20 @@
 # PilihLahan
 Aplikasi pencarian lahan kosong yang menerapkan SIG menggunakan Mapbox API.
 
+## Feature Project
+
+* Mapbox SDK (Untuk menampilkan map seperti Google Map)
+* Web Service 
+* SQLite
+* MySQL
+* 000webhost (hosting)
+
+
+```java
+
+```
+
+
 ## Screenshoot
 
 <table>
@@ -12,18 +26,4 @@ Aplikasi pencarian lahan kosong yang menerapkan SIG menggunakan Mapbox API.
         <td><img width="200px" src="https://github.com/ridwanharts/PilihLahan/blob/master/sc5.png"></td>
     </tr>
 </table>
-
-## Feature Project
-
-* Mapbox API
-* Web Service
-* SQLite
-* MySQL
-* 
-* 00webhost (hosting)
-
-
-```java
-
-```
 
