@@ -32,6 +32,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="10dp"
+                android:fontFamily="@font/montserrat_regular"
                 android:text="LOGIN"
                 android:textColor="@color/mapboxWhite"
                 android:textSize="20dp" />
@@ -47,69 +48,86 @@
             android:orientation="vertical">
 
             <LinearLayout
+                android:id="@+id/linear_input"
+                android:layout_below="@+id/iv_login_help"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/rect_white"
-                android:orientation="vertical">
-
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:paddingStart="2dp"
+                android:paddingEnd="8dp"
+                android:orientation="horizontal"
+                android:background="@drawable/border_edittext">
+                <ImageView
+                    android:layout_width="45dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_account"
+                    app:tint="@color/colorPrimary" />
                 <EditText
                     android:id="@+id/username_login"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="#00000000"
-                    android:gravity="center"
-                    android:hint="Username"
+                    android:padding="8dp"
+                    android:textSize="15sp"
+                    android:fontFamily="@font/montserrat_regular"
                     android:inputType="text"
-                    android:padding="20dp"
-                    android:textColor="@color/mapboxWhite"
-                    android:textColorHint="@color/mapboxWhite"
-                    android:textSize="14dp" />
+                    android:textColor="@color/colorBorder"
+                    android:textColorHint="@color/colorHint"
+                    android:background="@color/mapboxWhite"
+                    android:hint="Username"/>
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="38.4dp"
-                android:background="@drawable/rect_white"
-                android:orientation="vertical">
-
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginTop="16dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:paddingStart="2dp"
+                android:paddingEnd="8dp"
+                android:orientation="horizontal"
+                android:background="@drawable/border_edittext">
+                <ImageView
+                    android:layout_width="45dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_user"
+                    app:tint="@color/colorPrimary" />
                 <EditText
                     android:id="@+id/password_login"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="#00000000"
-                    android:gravity="center"
-                    android:hint="Password"
+                    android:padding="8dp"
+                    android:textSize="15sp"
+                    android:fontFamily="@font/montserrat_regular"
                     android:inputType="textPassword"
-                    android:maxLength="10"
-                    android:padding="20dp"
-                    android:textColor="@color/mapboxWhite"
-                    android:textColorHint="@color/mapboxWhite"
-                    android:textSize="14dp" />
+                    android:textColor="@color/colorBorder"
+                    android:textColorHint="@color/colorHint"
+                    android:background="@color/mapboxWhite"
+                    android:hint="Password"/>
             </LinearLayout>
 
-
         </LinearLayout>
 
-        <LinearLayout
+        <Button
+            android:id="@+id/tv_login_admin"
+            android:layout_below="@+id/tv_lupa_login"
             android:layout_width="match_parent"
-            android:layout_height="64dp"
-            android:layout_marginLeft="36dp"
-            android:layout_marginRight="36dp"
-            android:layout_weight="0.01"
-            android:background="@drawable/rect_whitefull"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/tv_login_admin"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:padding="22dp"
-                android:text="SIGN IN"
-                android:textColor="#009eee"
-                android:textSize="14dp" />
-        </LinearLayout>
+            android:layout_height="wrap_content"
+            android:layout_marginStart="48dp"
+            android:layout_marginEnd="48dp"
+            android:layout_marginTop="24dp"
+            android:paddingStart="48dp"
+            android:paddingEnd="48dp"
+            android:fontFamily="@font/montserrat_regular"
+            android:text="MASUK"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/white_button"/>
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -124,6 +142,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Don’t have an account ?"
+                android:fontFamily="@font/montserrat_regular"
                 android:textColor="@color/mapboxWhite"
                 android:textSize="14dp" />
 
@@ -134,6 +153,7 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="10.5dp"
                 android:text="Mendaftar"
+                android:fontFamily="@font/montserrat_regular"
                 android:textAllCaps="false"
                 android:textColor="@color/mapboxWhite"
                 android:textSize="14dp"

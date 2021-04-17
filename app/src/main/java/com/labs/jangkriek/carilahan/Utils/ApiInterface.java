@@ -12,7 +12,8 @@ public interface ApiInterface {
     Call<ResponUsers>register(
             @Query("username") String username,
             @Query("email") String email,
-            @Query("password")String password
+            @Query("password")String password,
+            @Query("no_hp")String no_hp
     );
 
     @GET("/login_users.php")

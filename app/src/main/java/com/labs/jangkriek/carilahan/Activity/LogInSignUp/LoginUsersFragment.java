@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -38,11 +39,12 @@ import static com.mapbox.mapboxsdk.Mapbox.getApplicationContext;
  */
 public class LoginUsersFragment extends Fragment {
 
-    private TextView tvSignUp, tvLogin;
+    private TextView tvSignUp;
     private EditText etUsernameLogin, etPasswordLogin;
     public static ApiInterface apiInterface;
     private Context context;
     private RelativeLayout rlLoading;
+    private Button btnLogin;
 
     public LoginUsersFragment() {
         // Required empty public constructor
@@ -58,10 +60,15 @@ public class LoginUsersFragment extends Fragment {
         apiInterface = ApiClient.getApiClientWithLog().create(ApiInterface.class);
 
         tvSignUp = v.findViewById(R.id.tv_signup_admin);
-        tvLogin = v.findViewById(R.id.tv_login_admin);
+        btnLogin = v.findViewById(R.id.tv_login_admin);
         etUsernameLogin = v.findViewById(R.id.username_login);
         etPasswordLogin = v.findViewById(R.id.password_login);
         rlLoading = v.findViewById(R.id.rv_loading);
+
+        if(PrefConfig.getLoggedInStatus(getActivity())){
+            Intent i = new Intent(getActivity(), MainActivity.class);
+            startActivity(i);
+        }
 
         tvSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,7 +78,7 @@ public class LoginUsersFragment extends Fragment {
             }
         });
 
-        tvLogin.setOnClickListener(new View.OnClickListener() {
+        btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 rlLoading.setVisibility(View.VISIBLE);

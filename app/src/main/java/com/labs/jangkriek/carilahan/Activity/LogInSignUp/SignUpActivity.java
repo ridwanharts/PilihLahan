@@ -23,7 +23,7 @@ import retrofit2.Response;
 public class SignUpActivity extends AppCompatActivity {
 
     TextView tvRegister, tvBackLogin;
-    EditText etUsername, etEmail, etPassword;
+    EditText etUsername, etEmail, etPassword, etNoHp;
     RelativeLayout rlLoading;
     public static ApiInterface apiInterface;
 
@@ -39,6 +39,7 @@ public class SignUpActivity extends AppCompatActivity {
         etUsername = findViewById(R.id.et_username);
         etEmail = findViewById(R.id.et_email);
         etPassword = findViewById(R.id.et_password);
+        etNoHp = findViewById(R.id.et_nohp);
         rlLoading = findViewById(R.id.rv_loading);
 
         tvBackLogin.setOnClickListener(new View.OnClickListener() {
@@ -57,7 +58,9 @@ public class SignUpActivity extends AppCompatActivity {
                     Call<ResponUsers> call = apiInterface.register(
                             etUsername.getText().toString(),
                             etEmail.getText().toString(),
-                            etPassword.getText().toString());
+                            etPassword.getText().toString(),
+                            etNoHp.getText().toString()
+                    );
                     call.enqueue(new Callback<ResponUsers>() {
                         @Override
                         public void onResponse(Call<ResponUsers> call, Response<ResponUsers> response) {

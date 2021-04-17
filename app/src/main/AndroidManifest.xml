@@ -18,11 +18,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".Activity.Users.LihatKekeringan"></activity>
+        <activity android:name=".Activity.Users.LihatKekeringan" />
         <activity android:name=".MetodeActivity" />
         <activity android:name=".Activity.Users.LihatKriteriaOnMap" />
         <activity android:name=".Activity.Users.PlottingAreaActivity" />
-        <activity android:name=".Activity.Users.TambahLahanActivity" />
+        <activity android:name="com.labs.jangkriek.carilahan.Activity.Users.TambahLahanActivity" />
         <activity android:name=".Activity.DetailLokasiActivity" />
         <activity
             android:name=".Activity.LogInSignUp.SignUpActivity"

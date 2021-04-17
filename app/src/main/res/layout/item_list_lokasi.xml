@@ -109,12 +109,13 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:id="@+id/tv_pemilik"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="1dp"
                         android:textSize="12sp"
                         android:layout_gravity="start"
-                        android:text="Pemilik" />
+                        android:text="Setiawan" />
 
                     <TextView
                         android:id="@+id/tv_title_lat"
@@ -145,13 +146,13 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/tv_pemilik"
+                        android:id="@+id/tv_nohp_pemilik"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="1dp"
                         android:textSize="12sp"
                         android:gravity="start"
-                        android:text="aaaaaaaaa" />
+                        android:text="089671718178" />
 
                     <TextView
                         android:id="@+id/tv_luas_lahan"

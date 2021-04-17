@@ -56,6 +56,7 @@ public class RankingLokasiAdapter extends RecyclerView.Adapter<RankingLokasiAdap
         public TextView longitude;
         public TextView jumlah;
         TextView pemilikLahan;
+        TextView no_hp;
         TextView hargaLahan;
         TextView luasLahan;
         CardView singleCard;
@@ -74,6 +75,7 @@ public class RankingLokasiAdapter extends RecyclerView.Adapter<RankingLokasiAdap
             luasLahan = view.findViewById(R.id.tv_luas_lahan);
             hargaLahan = view.findViewById(R.id.tv_harga_lahan);
             ivLahan = view.findViewById(R.id.image_lahan);
+            no_hp = view.findViewById(R.id.no_hp_rank);
             linearLayoutDetailLokasi = view.findViewById(R.id.lihat_detail_lokasi);
             singleCard.setOnClickListener(this);
         }
@@ -128,6 +130,7 @@ public class RankingLokasiAdapter extends RecyclerView.Adapter<RankingLokasiAdap
                 if (userList.get(i).getId() == namaLokasi.getId_user()){
                     username = userList.get(i).getUsername();
                     holder.pemilikLahan.setText(username);
+                    holder.no_hp.setText(String.valueOf(userList.get(i).getNo_hp()));
                 }
             }
 
@@ -189,6 +192,15 @@ public class RankingLokasiAdapter extends RecyclerView.Adapter<RankingLokasiAdap
             @Override
             public void onClick(View v) {
                 Toast.makeText(context, "Detail Lokasi ", Toast.LENGTH_SHORT).show();
+                String no_hp="";
+                String username="";
+
+                for (int i=0;i<userList.size();i++){
+                    if (userList.get(i).getId() == rangkingLokasiList.get(position).getId_user()){
+                        no_hp = userList.get(i).getNo_hp();
+                        username = userList.get(i).getUsername();
+                    }
+                }
                 Intent i = new Intent(context, DetailLokasiActivity.class);
                 i.putExtra("is_edit", false);
                 i.putExtra("nama", namaLokasi.getNama());

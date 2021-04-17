@@ -8,11 +8,15 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.Service;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
@@ -816,7 +820,6 @@ public class TambahLahanActivity extends AppCompatActivity implements AdapterVie
                         .addParameter("no",i+"")
                         .addParameter("name", idToUpload)
                         .addParameter("created", created);
-                upload.setNotificationConfig(new UploadNotificationConfig());
                 upload.setMaxRetries(3);
                 upload.startUpload();
             }

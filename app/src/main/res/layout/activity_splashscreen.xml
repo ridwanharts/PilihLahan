@@ -1,48 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:app="http://schemas.android.com/apk/res-auto"
-  xmlns:tools="http://schemas.android.com/tools"
-  android:layout_width="match_parent"
-  android:layout_height="match_parent"
-  android:background="@drawable/gradient1"
-  tools:context=".Activity.SplashscreenActivity">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/gradient1"
+    tools:context=".Activity.SplashscreenActivity">
 
-  <RelativeLayout
-	android:layout_width="match_parent"
-	android:layout_height="match_parent">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-	<ImageView
-	  android:layout_width="100dp"
-	  android:layout_height="100dp"
-	  android:layout_above="@+id/fullscreen_content"
-	  android:layout_centerInParent="true"
-	  app:srcCompat="@drawable/logo"/>
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_above="@+id/fullscreen_content"
+            android:layout_centerInParent="true"
+            app:srcCompat="@drawable/logo" />
 
-	<TextView
-	  android:id="@+id/fullscreen_content"
-	  android:layout_width="wrap_content"
-	  android:layout_height="wrap_content"
-	  android:layout_marginTop="3dp"
-	  android:layout_marginBottom="-5dp"
-	  android:gravity="center"
-	  android:keepScreenOn="true"
-	  android:textAppearance="@style/TextAppearance.AppCompat.Caption"
-	  android:text="CARI LAHAN"
-	  android:textColor="@color/mapboxWhite"
-	  android:textSize="40sp"
-	  android:textStyle="bold"
-	  android:layout_centerInParent="true"/>
+        <TextView
+            android:id="@+id/fullscreen_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="3dp"
+            android:layout_marginBottom="-5dp"
+            android:fontFamily="@font/montserrat_regular"
+            android:gravity="center"
+            android:keepScreenOn="true"
+            android:text="CARI LAHAN"
+            android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+            android:textColor="@color/mapboxWhite"
+            android:textSize="40sp"
+            android:textStyle="bold" />
 
-	<TextView
-	  android:layout_width="wrap_content"
-	  android:layout_height="wrap_content"
-	  android:layout_below="@id/fullscreen_content"
-	  android:gravity="center"
-	  android:keepScreenOn="true"
-	  android:textAppearance="@style/TextAppearance.AppCompat.Small"
-	  android:text="temukan lahan yang cocok"
-	  android:textColor="@color/mapboxWhite"
-	  android:textStyle="italic"
-	  android:layout_centerInParent="true"/>
-  </RelativeLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/fullscreen_content"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+			android:fontFamily="@font/montserrat_regular"
+            android:keepScreenOn="true"
+            android:text="temukan lahan yang cocok"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            android:textColor="@color/mapboxWhite"
+            android:textStyle="italic" />
+    </RelativeLayout>
 </FrameLayout>

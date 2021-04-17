@@ -497,7 +497,6 @@ public class RankingActivity extends AppCompatActivity implements OnMapReadyCall
                 nilai = 4;
             }
         }
-
             return nilai;
         }
 

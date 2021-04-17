@@ -20,4 +20,9 @@
 
   <color name="text_grey">#4B000000</color>
 
+  <color name="colorBorder">#BF00A6FB</color>
+  <color name="colorBackgroundItem">#F3F3F3</color>
+
+  <color name="colorHint">#E2E2E2</color>
+
 </resources>

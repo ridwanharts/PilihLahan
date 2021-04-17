@@ -46,7 +46,7 @@ import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconOffset;
 
 public class DetailLokasiActivity extends AppCompatActivity implements OnMapReadyCallback, MapboxMap.OnMapClickListener {
 
-    private String nama;
+    private String nama, username, no_hp;
     private double lat, longi, harga, k4, k6, luas;
     CarouselView carouselView;
     private List<String> mImages = new ArrayList<>();
@@ -80,6 +80,8 @@ public class DetailLokasiActivity extends AppCompatActivity implements OnMapRead
         TextView tvK5 = findViewById(R.id.k5_5);
         TextView tvK6 = findViewById(R.id.k6_6);
         TextView tvLuas = findViewById(R.id.tv_luas_tanah_detail);
+        TextView tvUsernmae = findViewById(R.id.tv_username);
+        TextView tvNoHp = findViewById(R.id.tv_no_hp);
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(this);
 
@@ -88,6 +90,8 @@ public class DetailLokasiActivity extends AppCompatActivity implements OnMapRead
         lat = intent.getDoubleExtra("latitude", lat);
         longi = intent.getDoubleExtra("longitude", longi);
         harga = intent.getDoubleExtra("harga", harga);
+        no_hp = intent.getStringExtra("no_hp");
+        username = intent.getStringExtra("username");
         String url = intent.getStringExtra("url");
         luas = intent.getDoubleExtra("luas", luas);
         String k1 = intent.getStringExtra("k1");
@@ -111,6 +115,9 @@ public class DetailLokasiActivity extends AppCompatActivity implements OnMapRead
         carouselView.setImageListener(imageListener);
 
         tvNama.setText(nama);
+
+        tvUsernmae.setText(username);
+        tvNoHp.setText(no_hp);
 
         tvHarga.setText(""+kurensiID.format(harga));
         tvLuas.setText(luas+"");

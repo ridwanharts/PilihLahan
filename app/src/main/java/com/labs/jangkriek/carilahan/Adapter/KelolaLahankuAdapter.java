@@ -72,6 +72,7 @@ public class KelolaLahankuAdapter extends RecyclerView.Adapter<KelolaLahankuAdap
         TextView namaLokasi, pemilikLahan;
         TextView hargaLahan;
         TextView luasLahan;
+        TextView nohp;
         ImageButton ibDelete;
         ImageButton ibEdit;
         ImageView ivLahan;
@@ -85,6 +86,7 @@ public class KelolaLahankuAdapter extends RecyclerView.Adapter<KelolaLahankuAdap
             pemilikLahan = view.findViewById(R.id.tv_pemilik);
             luasLahan = view.findViewById(R.id.tv_luas_lahan);
             hargaLahan = view.findViewById(R.id.tv_harga_lahan);
+            nohp = view.findViewById(R.id.tv_nohp_pemilik);
             ibDelete = view.findViewById(R.id.btn_delete);
             ibEdit = view.findViewById(R.id.btn_edit);
             ivLahan = view.findViewById(R.id.image_lahan);
@@ -148,11 +150,13 @@ public class KelolaLahankuAdapter extends RecyclerView.Adapter<KelolaLahankuAdap
         if (mLokasi.getId_user() == PrefConfig.getLoggedInUser(context) && !loginType.equals("GUEST")){
             holder.pemilikLahan.setText("Lahanku");
             holder.pemilikLahan.setTextColor(context.getResources().getColor(R.color.mapboxGreen));
+
         }else{
             for (int i=0;i<userList.size();i++){
                 if (userList.get(i).getId() == mLokasi.getId_user()){
                     username = userList.get(i).getUsername();
                     holder.pemilikLahan.setText(username);
+                    holder.nohp.setText(String.valueOf(userList.get(i).getNo_hp()));
                 }
             }
 
@@ -161,6 +165,7 @@ public class KelolaLahankuAdapter extends RecyclerView.Adapter<KelolaLahankuAdap
 
         holder.luasLahan.setText(String.valueOf(mLokasi.getLuasLahan()));
         holder.hargaLahan.setText(String.valueOf(mLokasi.getHargaLahan()));
+
 
         Glide.with(context)
                 .load(mLokasi.getGambar()+"0.jpg")
@@ -292,11 +297,23 @@ public class KelolaLahankuAdapter extends RecyclerView.Adapter<KelolaLahankuAdap
             holder.linearLayoutDetailLokasi.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
+                    String no_hp="";
+                    String username="";
+
+                    for (int i=0;i<userList.size();i++){
+                        if (userList.get(i).getId() == lokasiList.get(position).getId_user()){
+                            no_hp = userList.get(i).getNo_hp();
+                            username = userList.get(i).getUsername();
+                        }
+                    }
+
                     Toast.makeText(context, "Detail Lokasi ", Toast.LENGTH_SHORT).show();
                     Intent i = new Intent(context, DetailLokasiActivity.class);
                     i.putExtra("is_edit", false);
                     i.putExtra("nama", mLokasi.getNama());
                     i.putExtra("harga", mLokasi.getHargaLahan());
+                    i.putExtra("no_hp", no_hp);
                     i.putExtra("latitude", mLokasi.getLatitude());
                     i.putExtra("longitude", mLokasi.getLongitude());
                     i.putExtra("url", mLokasi.getGambar());
@@ -308,6 +325,9 @@ public class KelolaLahankuAdapter extends RecyclerView.Adapter<KelolaLahankuAdap
                     i.putExtra("k5", mLokasi.getKerawananBencana());
                     i.putExtra("k6", mLokasi.getJarakKeBandara());
                     i.putExtra("luas", mLokasi.getLuasLahan());
+
+                    i.putExtra("no_hp", no_hp);
+                    i.putExtra("username", username);
                     //i.putExtra("nama", nama);
                     context.startActivity(i);
                 }
@@ -333,10 +353,21 @@ public class KelolaLahankuAdapter extends RecyclerView.Adapter<KelolaLahankuAdap
                 public void onClick(View v) {
                     Toast.makeText(context, "Linear ", Toast.LENGTH_SHORT).show();
 
+                    String no_hp="";
+                    String username="";
+
+                    for (int i=0;i<userList.size();i++){
+                        if (userList.get(i).getId() == lokasiList.get(position).getId_user()){
+                            no_hp = userList.get(i).getNo_hp();
+                            username = userList.get(i).getUsername();
+                        }
+                    }
+
                     Intent i = new Intent(context, DetailLokasiActivity.class);
                     i.putExtra("is_edit", false);
                     i.putExtra("nama", mLokasi.getNama());
                     i.putExtra("harga", mLokasi.getHargaLahan());
+
                     i.putExtra("latitude", mLokasi.getLatitude());
                     i.putExtra("longitude", mLokasi.getLongitude());
                     i.putExtra("url", mLokasi.getGambar());
@@ -348,6 +379,9 @@ public class KelolaLahankuAdapter extends RecyclerView.Adapter<KelolaLahankuAdap
                     i.putExtra("k5", mLokasi.getKerawananBencana());
                     i.putExtra("k6", mLokasi.getJarakKeBandara());
                     i.putExtra("luas", mLokasi.getLuasLahan());
+
+                    i.putExtra("no_hp", no_hp);
+                    i.putExtra("username", username);
                     //i.putExtra("nama", nama);
                     context.startActivity(i);
                 }

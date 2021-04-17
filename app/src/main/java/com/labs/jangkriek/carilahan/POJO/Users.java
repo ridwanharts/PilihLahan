@@ -5,11 +5,21 @@ public class Users {
     private int id;
     private String username;
     private String email;
+    private String no_hp;
 
-    public Users(int id, String username, String email){
+    public String getNo_hp() {
+        return no_hp;
+    }
+
+    public void setNo_hp(String no_hp) {
+        this.no_hp = no_hp;
+    }
+
+    public Users(int id, String username, String email, String no_hp){
         this.id = id;
         this.username = username;
         this.email = email;
+        this.no_hp = no_hp;
     }
 
 
