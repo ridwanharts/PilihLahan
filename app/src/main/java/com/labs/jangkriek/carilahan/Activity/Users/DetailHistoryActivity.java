@@ -27,7 +27,6 @@ public class DetailHistoryActivity extends AppCompatActivity {
     private KelolaLahankuAdapter detailHistoryAdapter;
     private List<Lokasi> rankingLokasiList = new ArrayList<>();
     private RecyclerView recyclerView;
-    private static final String URL = "https://ridwanharts.000webhostapp.com/";
     private static List<Users> userList;
 
     String waktu, nama;

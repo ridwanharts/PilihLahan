@@ -49,13 +49,14 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+
+import static com.labs.jangkriek.carilahan.Utils.Constant.URL;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconAllowOverlap;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconImage;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconOffset;
 
 public class UserLokasiActivity extends AppCompatActivity implements OnMapReadyCallback, MapboxMap.OnMapClickListener {
 
-    public static final String URL = "https://ridwanharts.000webhostapp.com/";
     private List<Lokasi> lokasiList = new ArrayList<>();
     private List<Lokasi> lokasiListFromServer = new ArrayList<>();
     private DbUserLokasi dbUserLokasi;

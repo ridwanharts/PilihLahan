@@ -1,15 +1,28 @@
 package com.labs.jangkriek.carilahan.Activity.Users;
 
+import static com.labs.jangkriek.carilahan.Utils.Constant.URL;
+import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.fillColor;
+import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.fillOpacity;
+import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconAllowOverlap;
+import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconImage;
+import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconOffset;
+
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -21,27 +34,17 @@ import androidx.recyclerview.widget.LinearSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SnapHelper;
 
-import android.provider.MediaStore;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.Toast;
-
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.labs.jangkriek.carilahan.Activity.MainActivity;
-import com.labs.jangkriek.carilahan.POJO.Lokasi;
 import com.labs.jangkriek.carilahan.Adapter.KelolaLahankuAdapter;
 import com.labs.jangkriek.carilahan.Database.DbLokasi;
+import com.labs.jangkriek.carilahan.POJO.Lokasi;
 import com.labs.jangkriek.carilahan.POJO.PointLatLong;
 import com.labs.jangkriek.carilahan.POJO.Respon;
 import com.labs.jangkriek.carilahan.PrefConfig;
 import com.labs.jangkriek.carilahan.R;
-import com.labs.jangkriek.carilahan.Utils.RegisterApi;
 import com.labs.jangkriek.carilahan.Utils.RecyclerTouchListener;
+import com.labs.jangkriek.carilahan.Utils.RegisterApi;
 import com.mapbox.geojson.Feature;
 import com.mapbox.geojson.FeatureCollection;
 import com.mapbox.geojson.Point;
@@ -53,12 +56,10 @@ import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.mapboxsdk.maps.Style;
 import com.mapbox.mapboxsdk.style.layers.FillLayer;
-import com.mapbox.mapboxsdk.style.layers.PropertyFactory;
 import com.mapbox.mapboxsdk.style.layers.SymbolLayer;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
 import com.mapbox.mapboxsdk.utils.BitmapUtils;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -72,19 +73,11 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.fillColor;
-import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.fillOpacity;
-import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.fillOutlineColor;
-import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconAllowOverlap;
-import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconImage;
-import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconOffset;
 
 /**
  * Use a recyclerview with a Mapbox map to easily explore content all on one screen
  */
 public class KelolaLahankuActivity extends AppCompatActivity implements OnMapReadyCallback, MapboxMap.OnMapClickListener {
-
-    private static final String URL = "https://ridwanharts.000webhostapp.com/";
     private static final String SYMBOL_ICON_ID = "SYMBOL_ICON_ID";
     private static final String SOURCE_ID = "SOURCE_ID";
     private static final String LAYER_ID = "LAYER_ID";
@@ -104,7 +97,7 @@ public class KelolaLahankuActivity extends AppCompatActivity implements OnMapRea
     private static HashMap<String, List<Point>> dataPointHash = new HashMap<String, List<Point>>();
     ArrayList<String> listCreatedAt = new ArrayList<String>();
     List<List<Point>> POINTS = new ArrayList<>();
-    List<Point> OUTER_POINTS = new ArrayList<>();
+    List<Point> OUTER_POINTS  = new ArrayList<>();
 
     private DbLokasi db;
 

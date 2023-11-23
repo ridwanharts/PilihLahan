@@ -66,6 +66,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+
+import static com.labs.jangkriek.carilahan.Utils.Constant.URL;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.fillColor;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.fillOpacity;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconAllowOverlap;
@@ -75,7 +77,6 @@ import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconOffset;
 
 public class SemuaLahanActivity extends AppCompatActivity implements OnMapReadyCallback, MapboxMap.OnMapClickListener {
 
-    private static final String URL = "https://ridwanharts.000webhostapp.com/";
     private static final String SYMBOL_ICON_ID = "SYMBOL_ICON_ID";
     private static final String SOURCE_ID = "SOURCE_ID";
     private static final String LAYER_ID = "LAYER_ID";

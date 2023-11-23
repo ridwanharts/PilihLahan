@@ -1,5 +1,7 @@
 package com.labs.jangkriek.carilahan.Adapter;
 
+import static com.labs.jangkriek.carilahan.Utils.Constant.URL;
+
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -55,8 +57,6 @@ public class SaveAdapter extends RecyclerView.Adapter<SaveAdapter.MyViewHolder> 
     private SimpleDateFormat formatHour = new SimpleDateFormat("HHmmss");
     private DbSavePencarian dbSavePencarian;
     Date date = null;
-
-    private static final String URL = "https://ridwanharts.000webhostapp.com/";
     private static List<Users> userList;
 
     public static class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

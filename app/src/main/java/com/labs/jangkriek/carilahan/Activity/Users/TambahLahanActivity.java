@@ -1,5 +1,7 @@
 package com.labs.jangkriek.carilahan.Activity.Users;
 
+import static com.labs.jangkriek.carilahan.Utils.Constant.URL;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -75,7 +77,6 @@ public class TambahLahanActivity extends AppCompatActivity implements AdapterVie
     private static final int ADD_IMAGE_GALERI = 10002;
     private static final int ADD_IMAGE_CAMERA = 10003;
     private static final int LOKASI = 10004;
-    private static final String URL = "https://ridwanharts.000webhostapp.com/";
     private DateFormat dateCreated;
     Date date = new Date();
     private String createdAt;

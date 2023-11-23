@@ -1,9 +1,9 @@
 <resources>
     <string name="app_name">Cari Lahan</string>
-    <string name="access_token">pk.eyJ1Ijoicmlkd2FuaGFydHMiLCJhIjoiY2ttNzR3bGgwMHVuZTJ4angxaXh5enh5bCJ9.JfyNOjJmDRZloG5BMDAJ</string>
+    <string name="access_token">pk.eyJ1Ijoicmlkd2FuaGFydHMiLCJhIjoiY2xwYWR0MTd0MDdkNjJpcHJkaGo0MnMwYSJ9.sindRZof_yEPCSLfNKwFDw</string>
 
     <string name="home">Home</string>
-    <string name="map">Map</string>
+    <string name="map">Mappp</string>
     <string name="account">Account</string>
     <string name="building_layer_not_present">This map style doesn\'t have a building layer</string>
     <string name="move_map_around_building_out_instruction">Move map to place red dot on a building</string>
@@ -30,7 +30,7 @@
     <string name="spinner_title">Title</string>
     <string name="select">- pilih -</string>
     <string name="metode">Metode</string>
-    <string name="URL_SERVER">"https://ridwanharts.000webhostapp.com/"</string>
+    <string name="URL_SERVER">"https://pilihlahan.000webhostapp.com/"</string>
 
 
 

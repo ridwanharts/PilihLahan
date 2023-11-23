@@ -1,6 +1,8 @@
 package com.labs.jangkriek.carilahan.mainViewFragment;
 
 
+import static com.labs.jangkriek.carilahan.Utils.Constant.URL;
+
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -62,7 +64,6 @@ public class UsersHomeFragment extends Fragment {
     ArrayList<String> listCreatedAt = new ArrayList<String>();
     List<List<Point>> POINTS = new ArrayList<>();
     private RelativeLayout rvLoading;
-    private static final String URL = "https://ridwanharts.000webhostapp.com/";
     private static List<Users> userList = new ArrayList<Users>();
 
 

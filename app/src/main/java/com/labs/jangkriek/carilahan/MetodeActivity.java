@@ -36,7 +36,7 @@ public class MetodeActivity extends AppCompatActivity {
 
     private CardView cvFahp;
 
-    private static final String URL = "https://ridwanharts.000webhostapp.com/";
+    private static final String URL = "https://pilihlahan.000webhostapp.com/";
 
     private static List<Lokasi> lokasiListUser = new ArrayList<>();
     private static List<Lokasi> lokasiListFromServer = new ArrayList<>();

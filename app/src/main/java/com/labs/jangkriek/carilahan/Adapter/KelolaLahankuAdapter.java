@@ -54,6 +54,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import static com.labs.jangkriek.carilahan.Activity.SemuaLahanActivity.getIsSemuaLahan;
 import static com.labs.jangkriek.carilahan.Activity.SemuaLahanActivity.userList;
 import static com.labs.jangkriek.carilahan.Adapter.SaveAdapter.userListDetailHistory;
+import static com.labs.jangkriek.carilahan.Utils.Constant.URL;
 
 public class KelolaLahankuAdapter extends RecyclerView.Adapter<KelolaLahankuAdapter.MyViewHolder> {
 
@@ -61,7 +62,6 @@ public class KelolaLahankuAdapter extends RecyclerView.Adapter<KelolaLahankuAdap
     private List<Lokasi> lokasiList;
     private List<Users> userList;
     private MapboxMap map;
-    private static final String URL = "https://ridwanharts.000webhostapp.com/";
     private DbLokasi dbLokasi;
     private boolean kondisi = true;
     private static RegisterApi apiInterface;

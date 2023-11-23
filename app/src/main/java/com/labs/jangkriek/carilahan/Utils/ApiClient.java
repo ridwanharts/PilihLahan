@@ -10,7 +10,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class ApiClient {
 
     //public static final String URL = "http://192.168.43.159/skripsi/";
-    public static final String URL = "https://ridwanharts.000webhostapp.com/";
+    public static final String URL = "https://pilihlahan.000webhostapp.com/";
 
     public static Retrofit retrofit = null;
 

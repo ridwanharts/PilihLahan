@@ -29,7 +29,6 @@ public class LokasiUserAdapter extends RecyclerView.Adapter<LokasiUserAdapter.My
     private Context context;
     private List<Lokasi> lokasiList;
     private MapboxMap map;
-    private static final String URL = "https://ridwanharts.000webhostapp.com/";
     private DbUserLokasi dbUserLokasi;
     private boolean history = false;
 
